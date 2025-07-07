@@ -291,7 +291,7 @@
                                     <i class="fas fa-upload"></i>
                                 </div>
                                 <h3 class="feature-title">1. Загрузите файлы УТО</h3>
-                                <p class="feature-description">Витрины должностей (A-R) и справочник должностей (A-X) в форматах Excel или CSV</p>
+                                <p class="feature-description">Витрины должностей (A-R) и справочник должностей (A-X) в форматах Excel (.xlsx, .xlsm, .xls, .ods, .xods) или CSV</p>
                             </div>
                             <div class="feature-card">
                                 <div class="feature-icon">
@@ -493,7 +493,7 @@
                                     <i class="fas fa-chevron-down faq-toggle"></i>
                                 </div>
                                 <div class="faq-answer">
-                                    <p>Поддерживаются Excel файлы (.xlsx, .xlsm, .xls, .ods) и текстовые форматы (.csv, .tsv, .txt).</p>
+                                    <p>Поддерживаются Excel файлы (.xlsx, .xlsm, .xls, .ods, .xods) и текстовые форматы (.csv, .tsv, .txt).</p>
                                 </div>
                             </div>
 
@@ -976,11 +976,11 @@
 
             if (hasXLSX) {
                 formatInfo.className = 'format-info';
-                formatStatus.textContent = '✅ Полная поддержка УТО: Excel (.xlsx, .xlsm, .xls, .ods) и текстовые форматы (.csv, .tsv, .txt)';
-                supportedFormatsVitriny.textContent = 'Поддерживаются: .xlsx, .xlsm, .xls, .ods, .csv, .tsv, .txt';
-                supportedFormatsSprav.textContent = 'Поддерживаются: .xlsx, .xlsm, .xls, .ods, .csv, .tsv, .txt';
-                fileInputVitriny.accept = '.xlsx,.xlsm,.xls,.ods,.csv,.tsv,.txt';
-                fileInputSprav.accept = '.xlsx,.xlsm,.xls,.ods,.csv,.tsv,.txt';
+                formatStatus.textContent = '✅ Полная поддержка УТО: Excel (.xlsx, .xlsm, .xls, .ods, .xods) и текстовые форматы (.csv, .tsv, .txt)';
+                supportedFormatsVitriny.textContent = 'Поддерживаются: .xlsx, .xlsm, .xls, .ods, .xods, .csv, .tsv, .txt';
+                supportedFormatsSprav.textContent = 'Поддерживаются: .xlsx, .xlsm, .xls, .ods, .xods, .csv, .tsv, .txt';
+                fileInputVitriny.accept = '.xlsx,.xlsm,.xls,.ods,.xods,.csv,.tsv,.txt';
+                fileInputSprav.accept = '.xlsx,.xlsm,.xls,.ods,.xods,.csv,.tsv,.txt';
                 exportExcelBtn.style.display = 'inline-block';
                 exportMoyOfficeBtn.style.display = 'inline-block';
             } else {
@@ -1099,7 +1099,7 @@
             updateLoadingProgress(`📁 Чтение файла "${file.name}"...`, 1);
             
             const extension = file.name.toLowerCase().split('.').pop();
-            const excelFormats = ['xlsx', 'xlsm', 'xls', 'ods'];
+            const excelFormats = ['xlsx', 'xlsm', 'xls', 'ods', 'xods'];
             const textFormats = ['csv', 'tsv', 'txt'];
             
             if (excelFormats.includes(extension) && !xlsxAvailable) {
@@ -1135,13 +1135,13 @@
                             dateNF: 'yyyy-mm-dd'
                         };
                         
-                        // Для ODS файлов добавляем дополнительные настройки
-                        if (extension === 'ods') {
+                        // Для ODS и XODS файлов добавляем дополнительные настройки
+                        if (extension === 'ods' || extension === 'xods') {
                             readOptions.codepage = 65001; // UTF-8
                             readOptions.cellText = false;
                             readOptions.raw = false;
                             readOptions.type = 'array';
-                            console.log('📊 Используем специальные настройки для ODS файла УТО');
+                            console.log(`📊 Используем специальные настройки для ${extension.toUpperCase()} файла УТО`);
                         }
                         
                         const workbook = XLSX.read(data, readOptions);
@@ -1162,18 +1162,18 @@
                             dateNF: 'yyyy-mm-dd'
                         };
                         
-                        if (extension === 'ods') {
+                        if (extension === 'ods' || extension === 'xods') {
                             convertOptions.raw = false;
                             convertOptions.defval = '';
                             convertOptions.blankrows = false;
                             convertOptions.cellText = false;
-                            console.log('📊 Использована специальная конвертация для ODS УТО');
+                            console.log(`📊 Использована специальная конвертация для ${extension.toUpperCase()} УТО`);
                         }
                         
                         jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], convertOptions);
                         
-                        // Дополнительная очистка данных для ODS файлов
-                        if (extension === 'ods') {
+                        // Дополнительная очистка данных для ODS и XODS файлов
+                        if (extension === 'ods' || extension === 'xods') {
                             jsonData = jsonData.map(row => {
                                 if (Array.isArray(row)) {
                                     return row.map(cell => {
@@ -1183,7 +1183,7 @@
                                 }
                                 return row;
                             });
-                            console.log('📊 Выполнена дополнительная очистка данных УТО для ODS');
+                            console.log(`📊 Выполнена дополнительная очистка данных УТО для ${extension.toUpperCase()}`);
                         }
                         
                     } else {

@@ -429,20 +429,6 @@
                                 <h3 class="feature-title">Excel (расширенный)</h3>
                                 <p class="feature-description">Полный экспорт с детализацией всех уровней подразделений</p>
                             </div>
-                            <div class="feature-card">
-                                <div class="feature-icon">
-                                    <i class="fas fa-file-csv"></i>
-                                </div>
-                                <h3 class="feature-title">CSV (расширенный)</h3>
-                                <p class="feature-description">Универсальный формат с детализацией подразделений</p>
-                            </div>
-                            <div class="feature-card">
-                                <div class="feature-icon">
-                                    <i class="fas fa-file-alt"></i>
-                                </div>
-                                <h3 class="feature-title">Компактный CSV</h3>
-                                <p class="feature-description">Краткий отчет с основными полями</p>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -659,9 +645,7 @@
                 <h2 class="results-title" id="resultsTitle">Результаты поиска</h2>
                 <div class="export-buttons">
                     <button class="export-btn excel-btn" id="exportExcelBtn" style="display: none;"><i class="fas fa-file-excel"></i> Excel</button>
-                    <button class="export-btn csv-btn" id="exportCSVBtn"><i class="fas fa-file-csv"></i> CSV</button>
                     <button class="export-btn moyoffice-btn" id="exportMoyOfficeBtn" style="display: none;"><i class="fas fa-file-alt"></i> МойОфис</button>
-                    <button class="export-btn compact-btn" id="exportCompactBtn" style="display: none;"><i class="fas fa-file-code"></i> Компактный</button>
                 </div>
             </div>
             <div id="resultsContainer"></div>
@@ -1060,9 +1044,7 @@
             document.getElementById('resetBtn')?.addEventListener('click', resetFilters);
             document.getElementById('clearDataBtn')?.addEventListener('click', clearAllData);
             document.getElementById('exportExcelBtn')?.addEventListener('click', exportToExcel);
-            document.getElementById('exportCSVBtn')?.addEventListener('click', exportToCSV);
             document.getElementById('exportMoyOfficeBtn')?.addEventListener('click', exportToMoyOffice);
-            document.getElementById('exportCompactBtn')?.addEventListener('click', exportCompactCSV);
             
             ['searchInput', 'department'].forEach(id => {
                 const element = document.getElementById(id);
@@ -2279,9 +2261,6 @@
             header.style.display = 'flex';
             document.getElementById('resultsTitle').textContent = `Найдено ${currentResults.length} записей УТО`;
             
-            // Показываем кнопку компактного экспорта
-            document.getElementById('exportCompactBtn').style.display = 'inline-block';
-            
             container.innerHTML = currentResults.map(result => `
                 <div class="result-card">
                     <div class="position-title">${result.position}</div>
@@ -2388,7 +2367,6 @@
             // Скрываем секции и кнопки
             document.getElementById('searchSection').style.display = 'none';
             document.getElementById('clearDataBtn').style.display = 'none';
-            document.getElementById('exportCompactBtn').style.display = 'none';
             
             // Очищаем UI
             displayActiveFilters({});
@@ -2434,7 +2412,6 @@
             // Скрываем UI элементы
             document.getElementById('searchSection').style.display = 'none';
             document.getElementById('clearDataBtn').style.display = 'none';
-            document.getElementById('exportCompactBtn').style.display = 'none';
             
             // Очищаем результаты и фильтры
             clearResults();
@@ -2545,38 +2522,6 @@
         }
 
         // --- ФУНКЦИИ ЭКСПОРТА ---
-        function createExportData() {
-            if (currentResults.length === 0) {
-                alert('Нет данных УТО для экспорта.');
-                return null;
-            }
-
-            const headers = [
-                'Должность', 'Системное имя', 'Полное наименование', 'ОКЗ', 
-                'Блок функции', 'Принадлежность', 
-                'Полный путь подразделения', 'Комментарий', 'Примечания'
-            ];
-            
-            const data = [headers];
-
-            currentResults.forEach(item => {
-                const row = [
-                    item.position || '',
-                    item.systemName || '',
-                    item.fullPositionName || '',
-                    item.okz || '',
-                    item.block || '',
-                    item.belonging || '',
-                    item.department || '',
-                    item.comment || '',
-                    item.note || ''
-                ];
-                data.push(row);
-            });
-
-            return data;
-        }
-
         function createExtendedExportData() {
             if (currentResults.length === 0) {
                 alert('Нет данных УТО для экспорта.');
@@ -2623,33 +2568,6 @@
                     notes[0] || '',
                     notes[1] || '',
                     notes[2] || ''
-                ];
-                data.push(row);
-            });
-
-            return data;
-        }
-
-        function createCompactExportData() {
-            if (currentResults.length === 0) {
-                alert('Нет данных УТО для экспорта.');
-                return null;
-            }
-
-            const headers = [
-                'Должность', 'Системное имя', 'ОКЗ', 'Блок функции', 'Принадлежность', 'Подразделение'
-            ];
-            
-            const data = [headers];
-
-            currentResults.forEach(item => {
-                const row = [
-                    item.position || '',
-                    item.systemName || '',
-                    item.okz || '',
-                    item.block || '',
-                    item.belonging || '',
-                    item.department || ''
                 ];
                 data.push(row);
             });
@@ -2705,43 +2623,6 @@
             }
         }
 
-        function exportToCSV() {
-            try {
-                const data = createExtendedExportData();
-                if (!data) return;
-
-                showLoadingNotification('Экспорт УТО в CSV...', 2);
-                updateLoadingProgress('Подготовка данных УТО...', 1);
-                
-                setTimeout(() => {
-                    updateLoadingProgress('Создание CSV файла УТО...', 2);
-                    
-                    const csvContent = data.map(row => 
-                        row.map(cell => {
-                            const cellStr = cell.toString().replace(/"/g, '""');
-                            return `"${cellStr}"`;
-                        }).join(',')
-                    ).join('\n');
-
-                    const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
-                    const link = document.createElement('a');
-                    link.href = URL.createObjectURL(blob);
-                    
-                    const filename = `export_uto_results_${new Date().toISOString().slice(0, 10)}.csv`;
-                    link.download = filename;
-                    link.click();
-                    
-                    setTimeout(() => {
-                        showUploadStatus(`✅ Экспорт УТО в CSV завершен. Файл: ${filename}`, 'success');
-                    }, 500);
-                }, 500);
-                
-            } catch (error) {
-                console.error('Ошибка экспорта УТО в CSV:', error);
-                showUploadStatus(`❌ Ошибка экспорта УТО в CSV: ${error.message}`, 'error');
-            }
-        }
-
         function exportToMoyOffice() {
             try {
                 if (!xlsxAvailable) {
@@ -2786,31 +2667,6 @@
             } catch (error) {
                 console.error('Ошибка экспорта УТО в МойОфис:', error);
                 showUploadStatus(`❌ Ошибка экспорта УТО в МойОфис: ${error.message}`, 'error');
-            }
-        }
-
-        function exportCompactCSV() {
-            try {
-                const data = createCompactExportData();
-                if (!data) return;
-
-                const csvContent = data.map(row => 
-                    row.map(cell => `"${cell.toString().replace(/"/g, '""')}"`).join(',')
-                ).join('\n');
-
-                const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                
-                const filename = `export_uto_compact_${new Date().toISOString().slice(0, 10)}.csv`;
-                link.download = filename;
-                link.click();
-                
-                showUploadStatus(`✅ Компактный экспорт УТО в CSV завершен. Файл: ${filename}`, 'success');
-                
-            } catch (error) {
-                console.error('Ошибка компактного экспорта УТО в CSV:', error);
-                showUploadStatus(`❌ Ошибка компактного экспорта УТО в CSV: ${error.message}`, 'error');
             }
         }
 

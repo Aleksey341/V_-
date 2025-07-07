@@ -1,0 +1,2820 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Умный поиск должностей для сотрудников УТО</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 0 20px 20px; }
+        .container { max-width: 1400px; margin: 130px auto 20px; background: white; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); overflow: hidden; transition: margin-top 0.3s ease; }
+        .container.with-notification { margin-top: 170px; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px 20px; text-align: center; position: fixed; top: 0; left: 0; right: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: all 0.3s ease; }
+        .header-content { max-width: 1400px; margin: 0 auto; position: relative; }
+        .header h1 { font-size: 2.5rem; margin-bottom: 10px; font-weight: 300; }
+        .header p { font-size: 1.2rem; opacity: 0.9; }
+        
+        /* Кнопка инструкции в заголовке */
+        .help-btn { position: absolute; top: 0; right: 0; background: rgba(255,255,255,0.2); color: white; padding: 12px 20px; border-radius: 50px; text-decoration: none; transition: all 0.3s ease; cursor: pointer; border: none; font-size: 1rem; display: flex; align-items: center; gap: 8px; }
+        .help-btn:hover { background: rgba(255,255,255,0.3); transform: translateY(-2px); }
+        
+        /* Overlay для инструкции */
+        .instruction-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; display: none; overflow-y: auto; }
+        .instruction-overlay.show { display: block; animation: fadeIn 0.3s ease; }
+        .instruction-container { max-width: 1200px; margin: 20px auto; padding: 20px; }
+        .instruction-card { background: white; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); overflow: hidden; margin-bottom: 20px; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .gradient-text { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        
+        /* Заголовок инструкции */
+        .instruction-header { color: white; text-align: center; padding: 40px 20px; position: relative; overflow: hidden; }
+        .instruction-header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><defs><radialGradient id="a" cx="50%" cy="50%"><stop offset="0%" stop-color="rgba(255,255,255,0.1)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/></radialGradient></defs><rect width="100" height="20" fill="url(%23a)"/></svg>') repeat; opacity: 0.3; animation: float 20s ease-in-out infinite; }
+        .instruction-header h1 { font-size: 3rem; margin-bottom: 10px; font-weight: 300; position: relative; z-index: 2; }
+        .instruction-header p { font-size: 1.3rem; opacity: 0.9; position: relative; z-index: 2; }
+        .close-btn { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.2); color: white; padding: 12px 20px; border-radius: 50px; text-decoration: none; transition: all 0.3s ease; z-index: 3; cursor: pointer; border: none; }
+        .close-btn:hover { background: rgba(255,255,255,0.3); transform: translateY(-2px); }
+        
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        /* Навигация табов инструкции */
+        .tab-navigation { background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .tab-buttons { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+        .tab-btn { background: #f8f9fa; color: #6c757d; border: none; padding: 15px 25px; border-radius: 50px; cursor: pointer; transition: all 0.3s ease; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .tab-btn:hover { background: #e9ecef; transform: translateY(-2px); }
+        .tab-btn.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        
+        /* Контент табов инструкции */
+        .tab-content { display: none; animation: fadeInTab 0.5s ease-in-out; }
+        .tab-content.active { display: block; }
+        @keyframes fadeInTab { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Секции инструкций */
+        .instruction-section { background: white; border-radius: 15px; padding: 30px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .section-header { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+        .section-icon { width: 60px; height: 60px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; }
+        .section-title { font-size: 1.8rem; font-weight: 600; color: #333; }
+        
+        /* Шаги инструкций */
+        .steps-container { display: grid; gap: 20px; }
+        .step-item { background: #f8f9ff; border: 2px solid #e9ecef; border-radius: 15px; padding: 25px; transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .step-item:hover { border-color: #667eea; transform: translateY(-5px); box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15); }
+        .step-item::before { content: ''; position: absolute; top: 0; left: 0; width: 5px; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .step-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .step-number { width: 40px; height: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+        .step-title { font-size: 1.2rem; font-weight: 600; color: #333; }
+        .step-description { color: #6c757d; line-height: 1.6; margin-bottom: 15px; }
+        .step-tips { background: #e8f4fd; border: 1px solid #b8daff; border-radius: 10px; padding: 15px; margin-top: 15px; }
+        .step-tips h5 { color: #0c5460; margin-bottom: 8px; font-weight: 600; }
+        .step-tips ul { list-style: none; }
+        .step-tips li { color: #0c5460; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+        .step-tips li::before { content: '✓'; color: #28a745; font-weight: bold; }
+        
+        /* Демонстрационные блоки */
+        .demo-block { background: linear-gradient(135deg, #f8f9ff 0%, #e9ecef 100%); border-radius: 15px; padding: 20px; margin: 15px 0; border: 2px dashed #667eea; position: relative; }
+        .demo-label { position: absolute; top: -12px; left: 20px; background: #667eea; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; font-weight: 600; }
+        .demo-content { display: flex; align-items: center; gap: 15px; }
+        .demo-icon { font-size: 2rem; color: #667eea; }
+        .demo-text { flex: 1; }
+        
+        /* FAQ секция */
+        .faq-item { background: white; border: 1px solid #e9ecef; border-radius: 10px; margin-bottom: 10px; overflow: hidden; transition: all 0.3s ease; }
+        .faq-item:hover { box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .faq-question { background: #f8f9fa; padding: 20px; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: all 0.3s ease; }
+        .faq-question:hover { background: #e9ecef; }
+        .faq-question.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .faq-icon { font-size: 1.2rem; }
+        .faq-text { flex: 1; font-weight: 600; }
+        .faq-toggle { font-size: 1.2rem; transition: transform 0.3s ease; }
+        .faq-question.active .faq-toggle { transform: rotate(180deg); }
+        .faq-answer { padding: 0 20px; max-height: 0; overflow: hidden; transition: all 0.3s ease; }
+        .faq-answer.active { padding: 20px; max-height: 200px; }
+        
+        /* Карточки возможностей */
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0; }
+        .feature-card { background: white; border-radius: 15px; padding: 25px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: all 0.3s ease; }
+        .feature-card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(102, 126, 234, 0.15); }
+        .feature-icon { width: 80px; height: 80px; margin: 0 auto 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; }
+        .feature-title { font-size: 1.3rem; font-weight: 600; color: #333; margin-bottom: 15px; }
+        .feature-description { color: #6c757d; line-height: 1.6; }
+        
+        /* Алерты */
+        .alert { padding: 15px 20px; border-radius: 10px; margin: 15px 0; display: flex; align-items: center; gap: 12px; }
+        .alert-info { background: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; }
+        .alert-warning { background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; }
+        .alert-success { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .alert-icon { font-size: 1.2rem; }
+        
+        /* Кнопки действий */
+        .action-btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 25px; border: none; border-radius: 50px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
+        .action-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3); }
+        .action-btn:active { transform: translateY(0); }
+        
+        /* Стили для основной системы поиска */
+        .loading-notification { position: fixed; top: 0; left: 0; right: 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; z-index: 9999; box-shadow: 0 2px 10px rgba(0,0,0,0.2); transform: translateY(-100%); transition: transform 0.3s ease; }
+        .loading-notification.show { transform: translateY(0); }
+        .loading-notification-content { max-width: 1400px; margin: 0 auto; padding: 15px 20px; display: flex; align-items: center; gap: 15px; }
+        .loading-spinner { width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid white; border-radius: 50%; animation: spin 1s linear infinite; }
+        .loading-text { flex: 1; font-weight: 600; font-size: 1rem; }
+        .loading-progress { width: 200px; }
+        .progress-bar { width: 100%; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #28a745, #20c997); border-radius: 2px; width: 0%; transition: width 0.3s ease; }
+        
+        .search-section { padding: 40px; background: #f8f9fa; }
+        .file-upload-section, .advanced-search { background: white; padding: 30px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #e9ecef; }
+        .upload-row, .search-row { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .upload-section, .search-field { display: flex; flex-direction: column; gap: 15px; }
+        .upload-area { border: 2px dashed #667eea; border-radius: 12px; padding: 40px 20px; text-align: center; background: #f8f9ff; cursor: pointer; transition: all 0.3s ease; position: relative; }
+        .upload-area:hover { border-color: #5a6fd8; background: #f0f2ff; }
+        .upload-area.dragover { border-color: #28a745; background: #f0f9f0; transform: scale(1.02); }
+        .upload-icon { font-size: 3rem; margin-bottom: 15px; opacity: 0.7; }
+        .upload-text strong { display: block; font-size: 1.2rem; color: #333; margin-bottom: 8px; }
+        .upload-text p { color: #6c757d; font-size: 0.9rem; margin: 0; }
+        .upload-btn, .search-btn, .clear-btn, .reset-btn, .clear-data-btn { padding: 12px 24px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+        .upload-btn, .search-btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .clear-data-btn { background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; }
+        .upload-status { padding: 15px; border-radius: 8px; text-align: center; font-weight: 600; margin-top: 15px; }
+        .upload-status.success { background: #d4edda; color: #155724; }
+        .upload-status.error { background: #f8d7da; color: #721c24; }
+        .upload-status.loading { background: #d1ecf1; color: #0c5460; }
+        .upload-status.warning { background: #fff3cd; color: #856404; }
+        .search-field label { font-size: 0.9rem; font-weight: 600; color: #495057; margin-bottom: 8px; }
+        .search-select, .search-input { padding: 12px 15px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; transition: all 0.3s ease; }
+        .search-select:focus, .search-input:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); }
+        .search-select:disabled, .search-input:disabled { background-color: #f8f9fa; color: #6c757d; cursor: not-allowed; border-color: #dee2e6; }
+        .search-select:disabled:focus, .search-input:disabled:focus { border-color: #dee2e6; box-shadow: none; }
+        
+        .search-disabled-notice { background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 15px; margin-bottom: 20px; display: flex; align-items: center; }
+        .search-disabled-notice.hidden { display: none; }
+        .notice-content { display: flex; align-items: center; gap: 10px; color: #856404; font-weight: 500; }
+        .notice-content i { font-size: 1.1rem; }
+        
+        .search-btn:disabled, .clear-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.6; }
+        .search-btn:disabled:hover, .clear-btn:disabled:hover { background: #6c757d; transform: none; }
+        .search-container { display: flex; gap: 15px; margin-bottom: 30px; justify-content: center; }
+        .clear-btn { background: #6c757d; color: white; }
+        .reset-btn { background: #ffc107; color: #212529; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .stat-number { font-size: 2rem; font-weight: 700; color: #667eea; }
+        .stat-label { color: #6c757d; font-size: 0.9rem; margin-top: 5px; }
+        .results-section { padding: 0 40px 40px; }
+        .results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .results-title { font-size: 1.5rem; color: #333; font-weight: 600; }
+        .export-buttons { display: flex; gap: 15px; }
+        .export-btn { padding: 12px 24px; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.95rem; font-weight: 600; transition: all 0.3s ease; }
+        .excel-btn { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); }
+        .csv-btn { background: linear-gradient(135deg, #007bff 0%, #6f42c1 100%); }
+        .moyoffice-btn { background: linear-gradient(135deg, #fd7e14 0%, #e83e8c 100%); }
+        .compact-btn { background: linear-gradient(135deg, #6f42c1 0%, #007bff 100%); }
+        .result-card { background: white; border: 1px solid #e9ecef; border-radius: 12px; padding: 25px; margin-bottom: 20px; transition: all 0.3s ease; }
+        .result-card:hover { box-shadow: 0 8px 25px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .position-title { font-size: 1.3rem; font-weight: 600; color: #333; margin-bottom: 15px; }
+        .result-details { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        .detail-item { display: flex; flex-direction: column; }
+        .detail-label { font-size: 0.85rem; color: #6c757d; font-weight: 600; margin-bottom: 5px; text-transform: uppercase; }
+        .detail-value { font-size: 1rem; color: #333; word-break: break-word; }
+        .department-path { background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #667eea; margin-top: 15px; }
+        .department-levels { background: #d4edda; border-left-color: #28a745; }
+        .comment-section { background: #d1ecf1; border-left-color: #17a2b8; }
+        .notes-section { background: #fff3cd; border-left-color: #ffc107; }
+        .no-results { text-align: center; padding: 60px 20px; color: #6c757d; }
+        .loading { text-align: center; padding: 40px; color: #667eea; font-size: 1.2rem; }
+        .spinner { border: 3px solid #f3f3f3; border-top: 3px solid #667eea; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .initial-message { text-align: center; padding: 40px 20px; background: white; border-radius: 15px; border: 2px dashed #667eea; margin: 20px 0; }
+        .active-filters { background: #e3f2fd; border: 1px solid #2196f3; border-radius: 8px; padding: 15px; margin-bottom: 20px; }
+        .filter-tag { display: inline-block; background: #2196f3; color: white; padding: 4px 10px; border-radius: 15px; font-size: 0.8rem; margin: 2px 5px 2px 0; }
+        .data-info { background: #e8f4fd; border: 1px solid #b8daff; border-radius: 8px; padding: 15px; margin-top: 15px; }
+        .data-info h4 { color: #0c5460; margin-bottom: 10px; }
+        .data-info p { color: #0c5460; margin: 0; }
+        .format-info { background: #d1ecf1; border: 1px solid #bee5eb; border-radius: 8px; padding: 15px; margin-top: 15px; }
+        .format-info h4 { color: #0c5460; margin-bottom: 10px; }
+        .format-info p { color: #0c5460; margin: 0; font-size: 0.9rem; }
+        .format-info.warning { background: #fff3cd; border-color: #ffeaa7; }
+        .format-info.warning h4, .format-info.warning p { color: #856404; }
+        
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .instruction-header h1 { font-size: 2rem; }
+            .tab-buttons { justify-content: flex-start; overflow-x: auto; }
+            .feature-grid { grid-template-columns: 1fr; }
+            .step-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .demo-content { flex-direction: column; text-align: center; }
+            .header h1 { font-size: 2rem; }
+            .help-btn { position: static; margin-top: 15px; }
+            .upload-row, .search-row { grid-template-columns: 1fr; }
+            .export-buttons { flex-direction: column; }
+        }
+        
+        /* Анимации появления */
+        .fade-in { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+    <!-- Уведомление о загрузке -->
+    <div id="loadingNotification" class="loading-notification" style="display: none;">
+        <div class="loading-notification-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">
+                <span id="loadingMessage">Загрузка файла...</span>
+            </div>
+            <div class="loading-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay с инструкцией -->
+    <div id="instructionOverlay" class="instruction-overlay">
+        <div class="instruction-container">
+            <div class="instruction-card">
+                <div class="gradient-bg">
+                    <div class="instruction-header">
+                        <button class="close-btn" onclick="closeInstruction()">
+                            <i class="fas fa-times"></i> Закрыть
+                        </button>
+                        <h1><i class="fas fa-book-open"></i> Инструкция по работе</h1>
+                        <p>Полное руководство по использованию системы поиска должностей УТО</p>
+                    </div>
+                </div>
+
+                <!-- Навигация по разделам инструкции -->
+                <div class="tab-navigation">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" data-tab="quick-start">
+                            <i class="fas fa-rocket"></i> Быстрый старт
+                        </button>
+                        <button class="tab-btn" data-tab="file-upload">
+                            <i class="fas fa-cloud-upload-alt"></i> Загрузка файлов
+                        </button>
+                        <button class="tab-btn" data-tab="search-guide">
+                            <i class="fas fa-search"></i> Поиск данных
+                        </button>
+                        <button class="tab-btn" data-tab="export-data">
+                            <i class="fas fa-download"></i> Экспорт результатов
+                        </button>
+                        <button class="tab-btn" data-tab="troubleshooting">
+                            <i class="fas fa-tools"></i> Решение проблем
+                        </button>
+                        <button class="tab-btn" data-tab="faq">
+                            <i class="fas fa-question-circle"></i> FAQ
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Быстрый старт -->
+                <div class="tab-content active" id="quick-start">
+                    <div class="instruction-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <h2 class="section-title">Быстрый старт</h2>
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle alert-icon"></i>
+                            <div>
+                                <strong>Добро пожаловать!</strong> Система адаптирована для работы с файлами УТО.
+                            </div>
+                        </div>
+
+                        <div class="feature-grid">
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-upload"></i>
+                                </div>
+                                <h3 class="feature-title">1. Загрузите файлы УТО</h3>
+                                <p class="feature-description">Витрины должностей (A-R) и справочник должностей (A-X) в форматах Excel или CSV</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-cogs"></i>
+                                </div>
+                                <h3 class="feature-title">2. Автоматическое сопоставление</h3>
+                                <p class="feature-description">Система найдет соответствия между витринами и справочником по системным наименованиям</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <h3 class="feature-title">3. Поиск и анализ</h3>
+                                <p class="feature-description">Фильтрация по должностям, блокам функций, принадлежности и подразделениям</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Загрузка файлов -->
+                <div class="tab-content" id="file-upload">
+                    <div class="instruction-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <h2 class="section-title">Структура файлов УТО</h2>
+                        </div>
+
+                        <div class="steps-container">
+                            <div class="step-item">
+                                <div class="step-header">
+                                    <div class="step-number">📊</div>
+                                    <h3 class="step-title">Витрины должностей</h3>
+                                </div>
+                                <p class="step-description">Структура витрин УТО (колонки A-R):</p>
+                                
+                                <div class="step-tips">
+                                    <h5><i class="fas fa-table"></i> Структура колонок:</h5>
+                                    <ul>
+                                        <li>A: Блок функции</li>
+                                        <li>B: Принадлежность (КЦ/Филиал/ОЦО)</li>
+                                        <li>C-L: Подразделения (10 уровней)</li>
+                                        <li>M: Должность</li>
+                                        <li>N: ОКЗ</li>
+                                        <li>O: Комментарий</li>
+                                        <li>P-R: Примечания</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="step-item">
+                                <div class="step-header">
+                                    <div class="step-number">📋</div>
+                                    <h3 class="step-title">Справочник должностей</h3>
+                                </div>
+                                <p class="step-description">Структура справочника УТО:</p>
+                                
+                                <div class="step-tips">
+                                    <h5><i class="fas fa-list"></i> Ключевые колонки:</h5>
+                                    <ul>
+                                        <li>B: Системное имя</li>
+                                        <li>G: Системное наименование</li>
+                                        <li>H: Полное наименование</li>
+                                        <li>Q: Код ОКЗ</li>
+                                        <li>F: Код ОКЗ/ОТР (альтернативный)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Поиск данных -->
+                <div class="tab-content" id="search-guide">
+                    <div class="instruction-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h2 class="section-title">Поиск и фильтрация</h2>
+                        </div>
+
+                        <div class="steps-container">
+                            <div class="step-item">
+                                <div class="step-header">
+                                    <div class="step-number">🎯</div>
+                                    <h3 class="step-title">Поиск по должности</h3>
+                                </div>
+                                <p class="step-description">Введите полное или частичное название должности для поиска совпадений.</p>
+                            </div>
+
+                            <div class="step-item">
+                                <div class="step-header">
+                                    <div class="step-number">🏢</div>
+                                    <h3 class="step-title">Фильтр по блоку функции</h3>
+                                </div>
+                                <p class="step-description">Выберите конкретный блок функции из списка, сформированного из витрин.</p>
+                            </div>
+
+                            <div class="step-item">
+                                <div class="step-header">
+                                    <div class="step-number">🏛️</div>
+                                    <h3 class="step-title">Фильтр по принадлежности</h3>
+                                </div>
+                                <p class="step-description">Выберите тип принадлежности: Корпоративный центр, Филиалы или ОЦО.</p>
+                            </div>
+
+                            <div class="step-item">
+                                <div class="step-header">
+                                    <div class="step-number">📁</div>
+                                    <h3 class="step-title">Поиск по подразделению</h3>
+                                </div>
+                                <p class="step-description">Поиск по любому уровню подразделения (от 1 до 10 уровня).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Экспорт данных -->
+                <div class="tab-content" id="export-data">
+                    <div class="instruction-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-download"></i>
+                            </div>
+                            <h2 class="section-title">Экспорт результатов</h2>
+                        </div>
+
+                        <div class="feature-grid">
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-file-excel"></i>
+                                </div>
+                                <h3 class="feature-title">Excel (расширенный)</h3>
+                                <p class="feature-description">Полный экспорт с детализацией всех уровней подразделений</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-file-csv"></i>
+                                </div>
+                                <h3 class="feature-title">CSV (расширенный)</h3>
+                                <p class="feature-description">Универсальный формат с детализацией подразделений</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-file-alt"></i>
+                                </div>
+                                <h3 class="feature-title">Компактный CSV</h3>
+                                <p class="feature-description">Краткий отчет с основными полями</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Решение проблем -->
+                <div class="tab-content" id="troubleshooting">
+                    <div class="instruction-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-tools"></i>
+                            </div>
+                            <h2 class="section-title">Решение проблем</h2>
+                        </div>
+
+                        <div class="steps-container">
+                            <div class="step-item">
+                                <div class="step-header">
+                                    <div class="step-number">❌</div>
+                                    <h3 class="step-title">Файл не загружается</h3>
+                                </div>
+                                <div class="step-tips">
+                                    <ul>
+                                        <li>Проверьте формат файла (Excel, CSV)</li>
+                                        <li>Убедитесь в корректности структуры</li>
+                                        <li>Проверьте размер файла (до 10 МБ)</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="step-item">
+                                <div class="step-header">
+                                    <div class="step-number">🔍</div>
+                                    <h3 class="step-title">Нет совпадений</h3>
+                                </div>
+                                <div class="step-tips">
+                                    <ul>
+                                        <li>Проверьте названия должностей</li>
+                                        <li>Убедитесь в правильности структуры справочника</li>
+                                        <li>Проверьте колонку G в справочнике</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ -->
+                <div class="tab-content" id="faq">
+                    <div class="instruction-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-question-circle"></i>
+                            </div>
+                            <h2 class="section-title">Часто задаваемые вопросы</h2>
+                        </div>
+
+                        <div class="faq-container">
+                            <div class="faq-item">
+                                <div class="faq-question" onclick="toggleFAQ(this)">
+                                    <i class="fas fa-file-import faq-icon"></i>
+                                    <span class="faq-text">Какие форматы файлов поддерживаются?</span>
+                                    <i class="fas fa-chevron-down faq-toggle"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Поддерживаются Excel файлы (.xlsx, .xlsm, .xls, .ods) и текстовые форматы (.csv, .tsv, .txt).</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <div class="faq-question" onclick="toggleFAQ(this)">
+                                    <i class="fas fa-sync faq-icon"></i>
+                                    <span class="faq-text">Как работает сопоставление данных?</span>
+                                    <i class="fas fa-chevron-down faq-toggle"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Система использует 5 стратегий: точное совпадение, по системному имени, нормализованное, по ключевым словам и частичное совпадение.</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <div class="faq-question" onclick="toggleFAQ(this)">
+                                    <i class="fas fa-shield-alt faq-icon"></i>
+                                    <span class="faq-text">Безопасны ли мои данные?</span>
+                                    <i class="fas fa-chevron-down faq-toggle"></i>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Все данные обрабатываются локально в браузере и не передаются на сервер.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Основная система поиска -->
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <button class="help-btn" onclick="showInstruction()">
+                    <i class="fas fa-question-circle"></i> Инструкция
+                </button>
+                <h1><i class="fas fa-search"></i> Умный поиск должностей УТО</h1>
+                <p>Система поиска и сопоставления должностей для УТО</p>
+            </div>
+        </div>
+
+        <div class="search-section">
+            <div class="file-upload-section">
+                <h3 style="margin-bottom: 20px; color: #333; font-weight: 600;"><i class="fas fa-folder-open"></i> Загрузка данных УТО</h3>
+                
+                <div id="formatInfo" class="format-info">
+                    <h4><i class="fas fa-info-circle"></i> Статус поддержки форматов</h4>
+                    <p id="formatStatus">Проверка доступности библиотек...</p>
+                </div>
+                
+                <div class="upload-container">
+                    <div class="upload-row">
+                        <div class="upload-section">
+                            <h4><i class="fas fa-chart-bar"></i> Витрины должностей</h4>
+                            <div class="upload-area" id="uploadAreaVitriny">
+                                <div class="upload-icon"><i class="fas fa-chart-bar"></i></div>
+                                <div class="upload-text">
+                                    <strong>Перетащите файл витрин УТО сюда</strong>
+                                    <p id="supportedFormatsVitriny">Поддерживаются: проверка...</p>
+                                </div>
+                                <input type="file" id="fileInputVitriny" style="display: none;">
+                            </div>
+                            <button class="upload-btn" id="uploadBtnVitriny"><i class="fas fa-file-upload"></i> Выбрать файл витрин</button>
+                        </div>
+                        <div class="upload-section">
+                            <h4><i class="fas fa-list-alt"></i> Справочник должностей</h4>
+                            <div class="upload-area" id="uploadAreaSprav">
+                                <div class="upload-icon"><i class="fas fa-list-alt"></i></div>
+                                <div class="upload-text">
+                                    <strong>Перетащите справочник УТО сюда</strong>
+                                    <p id="supportedFormatsSprav">Поддерживаются: проверка...</p>
+                                </div>
+                                <input type="file" id="fileInputSprav" style="display: none;">
+                            </div>
+                            <button class="upload-btn" id="uploadBtnSprav"><i class="fas fa-file-upload"></i> Выбрать справочник</button>
+                        </div>
+                    </div>
+                    <div class="upload-actions">
+                        <button class="clear-data-btn" id="clearDataBtn" style="display: none;"><i class="fas fa-trash"></i> Очистить все данные</button>
+                    </div>
+                    <div id="uploadStatus" class="upload-status" style="display: none;"></div>
+                </div>
+            </div>
+
+            <div class="advanced-search" id="searchSection" style="display: none;">
+                <h3 style="margin-bottom: 20px; color: #333; font-weight: 600;"><i class="fas fa-search"></i> Параметры поиска</h3>
+                
+                <div id="searchDisabledNotice" class="search-disabled-notice">
+                    <div class="notice-content">
+                        <i class="fas fa-info-circle"></i>
+                        <span id="searchDisabledText">Для активации поиска загрузите файлы витрин и справочника</span>
+                    </div>
+                </div>
+                
+                <div class="search-row">
+                    <div class="search-field">
+                        <label for="blockFunction">Блок функции</label>
+                        <select id="blockFunction" class="search-select" disabled><option value="">-- Все блоки --</option></select>
+                    </div>
+                    <div class="search-field">
+                        <label for="belonging">Принадлежность</label>
+                        <select id="belonging" class="search-select" disabled>
+                            <option value="">-- Все типы --</option>
+                            <option value="Корпоративный центр">Корпоративный центр</option>
+                            <option value="Филиалы">Филиалы</option>
+                            <option value="ОЦО">ОЦО</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="search-row">
+                    <div class="search-field">
+                        <label for="department">Подразделение (любой уровень)</label>
+                        <input type="text" id="department" class="search-input" placeholder="Загрузите файлы для активации..." disabled>
+                    </div>
+                    <div class="search-field">
+                        <label for="searchInput">Название должности</label>
+                        <input type="text" class="search-input" id="searchInput" placeholder="Загрузите файлы для активации..." disabled>
+                    </div>
+                </div>
+            </div>
+
+            <div class="search-container">
+                <button class="search-btn" id="searchBtn" disabled><i class="fas fa-search"></i> ПОИСК</button>
+                <button class="clear-btn" id="clearBtn" disabled><i class="fas fa-eraser"></i> Очистить</button>
+                <button class="reset-btn" id="resetBtn"><i class="fas fa-undo"></i> Сбросить</button>
+            </div>
+
+            <div id="activeFilters" class="active-filters" style="display: none;">
+                <h4>Активные фильтры:</h4>
+                <div id="filtersList"></div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card"><span class="stat-number" id="totalVitrinies">0</span><div class="stat-label">Записей в витринах</div></div>
+                <div class="stat-card"><span class="stat-number" id="totalPositions">0</span><div class="stat-label">Уникальных должностей</div></div>
+                <div class="stat-card"><span class="stat-number" id="totalSprav">0</span><div class="stat-label">Записей в справочнике</div></div>
+                <div class="stat-card"><span class="stat-number" id="searchResults">0</span><div class="stat-label">Результатов поиска</div></div>
+            </div>
+        </div>
+
+        <div class="results-section">
+            <div id="initialMessage" class="initial-message">
+                <h3><i class="fas fa-hand-paper"></i> Добро пожаловать в систему УТО!</h3>
+                <p>Для начала работы загрузите файлы витрин и справочника УТО. Нужна помощь? <button onclick="showInstruction()" style="background: none; border: none; color: #667eea; text-decoration: underline; cursor: pointer; font-weight: 600;">Откройте инструкцию</button></p>
+            </div>
+            <div class="results-header" id="resultsHeader" style="display: none;">
+                <h2 class="results-title" id="resultsTitle">Результаты поиска</h2>
+                <div class="export-buttons">
+                    <button class="export-btn excel-btn" id="exportExcelBtn" style="display: none;"><i class="fas fa-file-excel"></i> Excel</button>
+                    <button class="export-btn csv-btn" id="exportCSVBtn"><i class="fas fa-file-csv"></i> CSV</button>
+                    <button class="export-btn moyoffice-btn" id="exportMoyOfficeBtn" style="display: none;"><i class="fas fa-file-alt"></i> МойОфис</button>
+                    <button class="export-btn compact-btn" id="exportCompactBtn" style="display: none;"><i class="fas fa-file-code"></i> Компактный</button>
+                </div>
+            </div>
+            <div id="resultsContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ---
+        let vitrinyData = [];
+        let spravData = [];
+        let currentResults = [];
+        let vitrinyLoaded = false;
+        let spravLoaded = false;
+        let vitrinyLoadDate = null;
+        let spravLoadDate = null;
+        let vitrinyFileName = '';
+        let spravFileName = '';
+        let xlsxAvailable = false;
+
+        // Переменные для системы уведомлений
+        let loadingSteps = { current: 0, total: 0, messages: [] };
+
+        // --- ФУНКЦИИ УПРАВЛЕНИЯ ИНСТРУКЦИЕЙ ---
+        function showInstruction() {
+            const overlay = document.getElementById('instructionOverlay');
+            overlay.classList.add('show');
+            document.body.style.overflow = 'hidden';
+            console.log('📖 Инструкция открыта');
+        }
+
+        function closeInstruction() {
+            const overlay = document.getElementById('instructionOverlay');
+            overlay.classList.remove('show');
+            document.body.style.overflow = '';
+            console.log('📖 Инструкция закрыта');
+        }
+
+        // Переключение табов инструкции
+        function setupInstructionTabs() {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetTab = btn.dataset.tab;
+                    
+                    // Убираем активные классы
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Добавляем активные классы
+                    btn.classList.add('active');
+                    document.getElementById(targetTab).classList.add('active');
+                });
+            });
+        }
+
+        // FAQ аккордеон
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            const isActive = element.classList.contains('active');
+            
+            // Закрываем все FAQ
+            document.querySelectorAll('.faq-question').forEach(q => {
+                q.classList.remove('active');
+                q.nextElementSibling.classList.remove('active');
+            });
+            
+            // Если элемент не был активным, открываем его
+            if (!isActive) {
+                element.classList.add('active');
+                answer.classList.add('active');
+            }
+        }
+
+        // Закрытие инструкции по клику на overlay
+        document.addEventListener('click', (e) => {
+            const overlay = document.getElementById('instructionOverlay');
+            if (e.target === overlay) {
+                closeInstruction();
+            }
+        });
+
+        // Закрытие инструкции по Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeInstruction();
+            }
+        });
+
+        // --- ФУНКЦИИ УПРАВЛЕНИЯ СОСТОЯНИЕМ ПОИСКА ---
+        function updateSearchAvailability() {
+            const searchElements = {
+                inputs: ['searchInput', 'department'],
+                selects: ['blockFunction', 'belonging'],
+                buttons: ['searchBtn', 'clearBtn'],
+                notice: 'searchDisabledNotice',
+                noticeText: 'searchDisabledText'
+            };
+            
+            const isSearchEnabled = vitrinyLoaded && spravLoaded;
+            const notice = document.getElementById(searchElements.notice);
+            const noticeText = document.getElementById(searchElements.noticeText);
+            
+            // Управление полями ввода
+            searchElements.inputs.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.disabled = !isSearchEnabled;
+                    if (isSearchEnabled) {
+                        element.placeholder = id === 'searchInput' ? 'Например: Эксперт...' : 'Например: Департамент...';
+                    } else {
+                        element.placeholder = 'Загрузите файлы для активации...';
+                        element.value = '';
+                    }
+                }
+            });
+            
+            // Управление выпадающими списками
+            searchElements.selects.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.disabled = !isSearchEnabled;
+                    if (!isSearchEnabled && id === 'blockFunction') {
+                        element.innerHTML = '<option value="">-- Загрузите файлы --</option>';
+                    }
+                }
+            });
+            
+            // Управление кнопками
+            searchElements.buttons.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.disabled = !isSearchEnabled;
+                }
+            });
+            
+            // Управление уведомлением
+            if (notice && noticeText) {
+                if (isSearchEnabled) {
+                    notice.classList.add('hidden');
+                } else {
+                    notice.classList.remove('hidden');
+                    
+                    // Обновляем текст уведомления в зависимости от того, что загружено
+                    if (!vitrinyLoaded && !spravLoaded) {
+                        noticeText.textContent = '📁 Для активации поиска загрузите файлы витрин и справочника УТО';
+                    } else if (!vitrinyLoaded) {
+                        noticeText.textContent = '📊 Для активации поиска загрузите файл витрин УТО';
+                    } else if (!spravLoaded) {
+                        noticeText.textContent = '📋 Для активации поиска загрузите файл справочника УТО';
+                    }
+                }
+            }
+            
+            console.log(`🔍 Состояние поиска: ${isSearchEnabled ? 'активен' : 'неактивен'} (витрины: ${vitrinyLoaded}, справочник: ${spravLoaded})`);
+        }
+
+        function enableSearchInterface() {
+            updateSearchAvailability();
+            if (vitrinyLoaded && spravLoaded) {
+                console.log('🎉 Поиск УТО активирован - все файлы загружены!');
+                showUploadStatus('🔍 Поиск УТО активирован! Все файлы загружены и готовы к использованию.', 'success');
+            }
+        }
+
+        function showLoadingNotification(message, totalSteps = 1) {
+            const notification = document.getElementById('loadingNotification');
+            const container = document.querySelector('.container');
+            const loadingMessage = document.getElementById('loadingMessage');
+            const progressFill = document.getElementById('progressFill');
+            
+            if (!notification) return;
+            
+            loadingSteps.current = 0;
+            loadingSteps.total = totalSteps;
+            loadingSteps.messages = [];
+            
+            loadingMessage.textContent = message;
+            progressFill.style.width = '0%';
+            
+            notification.classList.add('show');
+            container.classList.add('with-notification');
+            
+            console.log(`🔄 Показано уведомление о загрузке: ${message}`);
+        }
+
+        function updateLoadingProgress(message, step) {
+            const loadingMessage = document.getElementById('loadingMessage');
+            const progressFill = document.getElementById('progressFill');
+            
+            if (!loadingMessage || !progressFill) return;
+            
+            if (step !== undefined) {
+                loadingSteps.current = Math.min(step, loadingSteps.total);
+            } else {
+                loadingSteps.current = Math.min(loadingSteps.current + 1, loadingSteps.total);
+            }
+            
+            const progress = (loadingSteps.current / loadingSteps.total) * 100;
+            
+            loadingMessage.textContent = message;
+            progressFill.style.width = `${progress}%`;
+            
+            console.log(`📊 Прогресс загрузки: ${progress.toFixed(1)}% - ${message}`);
+            
+            if (progress >= 100) {
+                setTimeout(() => {
+                    hideLoadingNotification();
+                }, 1000);
+            }
+        }
+
+        function hideLoadingNotification() {
+            const notification = document.getElementById('loadingNotification');
+            const container = document.querySelector('.container');
+            
+            if (!notification) return;
+            
+            notification.classList.remove('show');
+            container.classList.remove('with-notification');
+            
+            loadingSteps.current = 0;
+            loadingSteps.total = 0;
+            loadingSteps.messages = [];
+            
+            console.log('✅ Уведомление о загрузке скрыто');
+        }
+
+        function showLoadingError(message) {
+            const notification = document.getElementById('loadingNotification');
+            const loadingMessage = document.getElementById('loadingMessage');
+            
+            if (!notification || !loadingMessage) return;
+            
+            notification.style.background = 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)';
+            loadingMessage.textContent = `❌ ${message}`;
+            
+            setTimeout(() => {
+                notification.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                hideLoadingNotification();
+            }, 3000);
+        }
+
+        // --- ИНИЦИАЛИЗАЦИЯ ---
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Инициализация системы поиска должностей УТО...');
+            setupInstructionTabs();
+            initializeSystem();
+        });
+
+        function initializeSystem() {
+            showLoadingNotification('Инициализация системы УТО...', 3);
+            updateLoadingProgress('Загрузка библиотек...', 1);
+            loadXLSXLibrary();
+        }
+
+        function loadXLSXLibrary() {
+            console.log('📚 Попытка загрузки библиотеки XLSX...');
+            
+            const xlsxSources = [
+                'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js',
+                'https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js',
+                'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'
+            ];
+            
+            let sourceIndex = 0;
+            
+            function tryLoadSource() {
+                if (sourceIndex >= xlsxSources.length) {
+                    console.warn('⚠️ Не удалось загрузить XLSX библиотеку из всех источников');
+                    initializeWithoutXLSX();
+                    return;
+                }
+                
+                const script = document.createElement('script');
+                script.src = xlsxSources[sourceIndex];
+                script.onload = function() {
+                    console.log('✅ XLSX библиотека загружена из:', xlsxSources[sourceIndex]);
+                    xlsxAvailable = true;
+                    initializeWithXLSX();
+                };
+                script.onerror = function() {
+                    console.warn('❌ Не удалось загрузить из:', xlsxSources[sourceIndex]);
+                    sourceIndex++;
+                    tryLoadSource();
+                };
+                document.head.appendChild(script);
+            }
+            
+            if (typeof XLSX !== 'undefined') {
+                console.log('✅ XLSX библиотека уже доступна');
+                xlsxAvailable = true;
+                initializeWithXLSX();
+            } else {
+                tryLoadSource();
+            }
+        }
+
+        function initializeWithXLSX() {
+            updateLoadingProgress('Настройка поддержки форматов...', 2);
+            console.log('🎉 Полная инициализация УТО с поддержкой всех форматов');
+            xlsxAvailable = true;
+            updateFormatSupport(true);
+            setTimeout(() => {
+                updateLoadingProgress('Система УТО готова к работе!', 3);
+                finishInitialization();
+            }, 500);
+        }
+
+        function initializeWithoutXLSX() {
+            updateLoadingProgress('Настройка базовой поддержки...', 2);
+            console.log('⚠️ Инициализация УТО только с поддержкой текстовых форматов');
+            xlsxAvailable = false;
+            updateFormatSupport(false);
+            setTimeout(() => {
+                updateLoadingProgress('Система УТО готова к работе!', 3);
+                finishInitialization();
+            }, 500);
+        }
+
+        function updateFormatSupport(hasXLSX) {
+            const formatInfo = document.getElementById('formatInfo');
+            const formatStatus = document.getElementById('formatStatus');
+            const supportedFormatsVitriny = document.getElementById('supportedFormatsVitriny');
+            const supportedFormatsSprav = document.getElementById('supportedFormatsSprav');
+            const fileInputVitriny = document.getElementById('fileInputVitriny');
+            const fileInputSprav = document.getElementById('fileInputSprav');
+            const exportExcelBtn = document.getElementById('exportExcelBtn');
+            const exportMoyOfficeBtn = document.getElementById('exportMoyOfficeBtn');
+
+            if (hasXLSX) {
+                formatInfo.className = 'format-info';
+                formatStatus.textContent = '✅ Полная поддержка УТО: Excel (.xlsx, .xlsm, .xls, .ods) и текстовые форматы (.csv, .tsv, .txt)';
+                supportedFormatsVitriny.textContent = 'Поддерживаются: .xlsx, .xlsm, .xls, .ods, .csv, .tsv, .txt';
+                supportedFormatsSprav.textContent = 'Поддерживаются: .xlsx, .xlsm, .xls, .ods, .csv, .tsv, .txt';
+                fileInputVitriny.accept = '.xlsx,.xlsm,.xls,.ods,.csv,.tsv,.txt';
+                fileInputSprav.accept = '.xlsx,.xlsm,.xls,.ods,.csv,.tsv,.txt';
+                exportExcelBtn.style.display = 'inline-block';
+                exportMoyOfficeBtn.style.display = 'inline-block';
+            } else {
+                formatInfo.className = 'format-info warning';
+                formatStatus.textContent = '⚠️ Ограниченная поддержка УТО: только текстовые форматы (.csv, .tsv, .txt). Для Excel файлов сохраните их как CSV.';
+                supportedFormatsVitriny.textContent = 'Поддерживаются: .csv, .tsv, .txt (для Excel сохраните как CSV)';
+                supportedFormatsSprav.textContent = 'Поддерживаются: .csv, .tsv, .txt (для Excel сохраните как CSV)';
+                fileInputVitriny.accept = '.csv,.tsv,.txt';
+                fileInputSprav.accept = '.csv,.tsv,.txt';
+                exportExcelBtn.style.display = 'none';
+                exportMoyOfficeBtn.style.display = 'none';
+            }
+        }
+
+        function finishInitialization() {
+            try {
+                setupFileUpload();
+                setupEventListeners();
+                
+                // Инициализируем состояние поиска (по умолчанию неактивен)
+                updateSearchAvailability();
+                
+                console.log('✅ Система УТО готова к работе');
+                setTimeout(() => {
+                    showUploadStatus('🎉 Система УТО готова! Загрузите файлы для начала работы.', 'success');
+                }, 1500);
+            } catch (error) {
+                console.error('❌ Ошибка при финальной инициализации:', error);
+                showLoadingError(`Ошибка инициализации: ${error.message}`);
+            }
+        }
+
+        // --- НАСТРОЙКА ОБРАБОТЧИКОВ СОБЫТИЙ ---
+        function setupFileUpload() {
+            const setupArea = (type) => {
+                const fileInput = document.getElementById(`fileInput${type}`);
+                const uploadArea = document.getElementById(`uploadArea${type}`);
+                const uploadBtn = document.getElementById(`uploadBtn${type}`);
+                if (!fileInput || !uploadArea || !uploadBtn) return;
+
+                uploadArea.addEventListener('click', () => fileInput.click());
+                uploadBtn.addEventListener('click', () => fileInput.click());
+                fileInput.addEventListener('change', (e) => handleFileSelect(e, type));
+                ['dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    uploadArea.addEventListener(eventName, (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (eventName === 'dragover') uploadArea.classList.add('dragover');
+                        if (eventName === 'dragleave' || eventName === 'drop') uploadArea.classList.remove('dragover');
+                        if (eventName === 'drop') handleFileDrop(e, type);
+                    });
+                });
+            };
+            setupArea('Vitriny');
+            setupArea('Sprav');
+        }
+
+        function setupEventListeners() {
+            document.getElementById('searchBtn')?.addEventListener('click', searchPositions);
+            document.getElementById('clearBtn')?.addEventListener('click', clearResults);
+            document.getElementById('resetBtn')?.addEventListener('click', resetFilters);
+            document.getElementById('clearDataBtn')?.addEventListener('click', clearAllData);
+            document.getElementById('exportExcelBtn')?.addEventListener('click', exportToExcel);
+            document.getElementById('exportCSVBtn')?.addEventListener('click', exportToCSV);
+            document.getElementById('exportMoyOfficeBtn')?.addEventListener('click', exportToMoyOffice);
+            document.getElementById('exportCompactBtn')?.addEventListener('click', exportCompactCSV);
+            
+            ['searchInput', 'department'].forEach(id => {
+                const element = document.getElementById(id);
+                element?.addEventListener('keypress', e => { 
+                    if (e.key === 'Enter' && !element.disabled) searchPositions(); 
+                });
+            });
+            
+            ['blockFunction', 'belonging'].forEach(id => {
+                const element = document.getElementById(id);
+                element?.addEventListener('change', () => {
+                    if (!element.disabled) searchPositions();
+                });
+            });
+        }
+
+        // --- ЛОГИКА ЗАГРУЗКИ ФАЙЛОВ ---
+        function handleFileSelect(event, type) {
+            const file = event.target.files[0];
+            if (file) {
+                const fileTypeName = type === 'Vitriny' ? 'витрин УТО' : 'справочника УТО';
+                console.log(`📁 Выбран файл ${fileTypeName}: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`);
+                
+                // Небольшая задержка для UX
+                setTimeout(() => {
+                    processFileWithNotification(file, type);
+                }, 100);
+            }
+        }
+
+        function handleFileDrop(event, type) {
+            const files = event.dataTransfer.files;
+            if (files.length > 0) {
+                const file = files[0];
+                const fileTypeName = type === 'Vitriny' ? 'витрин УТО' : 'справочника УТО';
+                console.log(`📁 Перетащен файл ${fileTypeName}: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`);
+                
+                // Небольшая задержка для UX
+                setTimeout(() => {
+                    processFileWithNotification(file, type);
+                }, 100);
+            }
+        }
+
+        function processFileWithNotification(file, type) {
+            const fileTypeName = type === 'Vitriny' ? 'витрин УТО' : 'справочника УТО';
+            const fileIcon = type === 'Vitriny' ? '📊' : '📋';
+            
+            // Показываем уведомление с 4 этапами и иконкой типа файла
+            showLoadingNotification(`${fileIcon} Загрузка файла ${fileTypeName}...`, 4);
+            
+            updateLoadingProgress(`📁 Чтение файла "${file.name}"...`, 1);
+            
+            const extension = file.name.toLowerCase().split('.').pop();
+            const excelFormats = ['xlsx', 'xlsm', 'xls', 'ods'];
+            const textFormats = ['csv', 'tsv', 'txt'];
+            
+            if (excelFormats.includes(extension) && !xlsxAvailable) {
+                showLoadingError(`Excel файлы не поддерживаются. Сохраните файл как CSV.`);
+                return;
+            }
+            
+            if (!excelFormats.includes(extension) && !textFormats.includes(extension)) {
+                showLoadingError(`Неподдерживаемый формат файла: .${extension}`);
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    updateLoadingProgress(`⚙️ Парсинг данных УТО из "${file.name}"...`, 2);
+                    
+                    let jsonData;
+                    
+                    if (excelFormats.includes(extension)) {
+                        const data = e.target.result;
+                        
+                        // Специальные настройки для чтения файлов УТО
+                        const readOptions = {
+                            type: 'array',
+                            cellStyles: true,
+                            cellFormulas: true,
+                            cellDates: true,
+                            cellNF: true,
+                            sheetStubs: true,
+                            dense: false,
+                            raw: false,
+                            dateNF: 'yyyy-mm-dd'
+                        };
+                        
+                        // Для ODS файлов добавляем дополнительные настройки
+                        if (extension === 'ods') {
+                            readOptions.codepage = 65001; // UTF-8
+                            readOptions.cellText = false;
+                            readOptions.raw = false;
+                            readOptions.type = 'array';
+                            console.log('📊 Используем специальные настройки для ODS файла УТО');
+                        }
+                        
+                        const workbook = XLSX.read(data, readOptions);
+                        
+                        if (!workbook.SheetNames || workbook.SheetNames.length === 0) {
+                            throw new Error('Файл УТО не содержит листов для обработки');
+                        }
+                        
+                        const sheetName = workbook.SheetNames[0];
+                        console.log(`📊 Обрабатываем лист "${sheetName}" из файла УТО ${fileTypeName}`);
+                        
+                        // Специальные настройки конвертации для разных форматов
+                        const convertOptions = {
+                            header: 1,
+                            raw: false,
+                            defval: '',
+                            blankrows: false,
+                            dateNF: 'yyyy-mm-dd'
+                        };
+                        
+                        if (extension === 'ods') {
+                            convertOptions.raw = false;
+                            convertOptions.defval = '';
+                            convertOptions.blankrows = false;
+                            convertOptions.cellText = false;
+                            console.log('📊 Использована специальная конвертация для ODS УТО');
+                        }
+                        
+                        jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], convertOptions);
+                        
+                        // Дополнительная очистка данных для ODS файлов
+                        if (extension === 'ods') {
+                            jsonData = jsonData.map(row => {
+                                if (Array.isArray(row)) {
+                                    return row.map(cell => {
+                                        if (cell === null || cell === undefined) return '';
+                                        return cleanString(cell.toString());
+                                    });
+                                }
+                                return row;
+                            });
+                            console.log('📊 Выполнена дополнительная очистка данных УТО для ODS');
+                        }
+                        
+                    } else {
+                        const content = e.target.result;
+                        jsonData = parseCSV(content);
+                    }
+                    
+                    if (jsonData.length === 0) {
+                        throw new Error('Файл УТО не содержит данных');
+                    }
+                    
+                    console.log(`📈 Получено ${jsonData.length} строк из файла УТО ${fileTypeName}: ${file.name}`);
+                    updateLoadingProgress(`🔍 Обработка ${jsonData.length} записей УТО ${fileTypeName}...`, 3);
+                    
+                    // Небольшая задержка для демонстрации прогресса
+                    setTimeout(() => {
+                        try {
+                            processTableDataWithNotification(jsonData, file.name, type);
+                        } catch (error) {
+                            showLoadingError(`Ошибка обработки файла УТО ${fileTypeName}: ${error.message}`);
+                        }
+                    }, 500);
+                    
+                } catch (error) {
+                    console.error(`❌ Ошибка парсинга файла УТО ${fileTypeName}:`, error);
+                    showLoadingError(`Ошибка чтения файла УТО ${fileTypeName}: ${error.message}`);
+                }
+            };
+            
+            reader.onerror = () => {
+                console.error(`❌ Ошибка чтения файла УТО ${fileTypeName}: ${file.name}`);
+                showLoadingError(`Не удалось прочитать файл УТО ${fileTypeName}`);
+            };
+            
+            if (excelFormats.includes(extension)) {
+                reader.readAsArrayBuffer(file);
+            } else {
+                reader.readAsText(file, 'UTF-8');
+            }
+        }
+
+        function processTableDataWithNotification(jsonData, fileName, type) {
+            try {
+                const fileTypeName = type === 'Vitriny' ? 'витрин УТО' : 'справочника УТО';
+                
+                if (type === 'Vitriny') {
+                    updateLoadingProgress(`Обработка данных витрин УТО из "${fileName}"...`, 3);
+                    vitrinyData = processVitrinyData(jsonData);
+                    vitrinyLoaded = true;
+                    vitrinyFileName = fileName;
+                    vitrinyLoadDate = new Date();
+                    console.log(`✅ Загружено ${vitrinyData.length} записей витрин УТО из файла: ${fileName}`);
+                } else {
+                    updateLoadingProgress(`Обработка данных справочника УТО из "${fileName}"...`, 3);
+                    spravData = processSpravData(jsonData);
+                    spravLoaded = true;
+                    spravFileName = fileName;
+                    spravLoadDate = new Date();
+                    console.log(`✅ Загружено ${spravData.length} записей справочника УТО из файла: ${fileName}`);
+                }
+                
+                updateLoadingProgress(`✅ Файл УТО ${fileTypeName} "${fileName}" успешно загружен!`, 4);
+                
+                document.getElementById('searchSection').style.display = 'block';
+                document.getElementById('clearDataBtn').style.display = 'inline-block';
+                updateStatsDisplay();
+                
+                // Обновляем доступность поиска после загрузки каждого файла
+                updateSearchAvailability();
+                
+                if (vitrinyLoaded) initializeDropdowns();
+                
+                // Показываем процесс обогащения данных только если оба файла загружены
+                if (vitrinyLoaded && spravLoaded) {
+                    setTimeout(() => {
+                        showLoadingNotification('🔗 Обогащение данных УТО справочником...', 4);
+                        updateLoadingProgress('Анализ совместимости файлов УТО...', 1);
+                        
+                        // Выполняем диагностику
+                        performDataDiagnostics();
+                        
+                        // Выполняем анализ сопоставления
+                        analyzeDataMatching();
+                        
+                        setTimeout(() => {
+                            updateLoadingProgress('Сопоставление должностей УТО...', 2);
+                            setTimeout(() => {
+                                updateLoadingProgress('Обогащение данных УТО...', 3);
+                                enrichVitrinyWithSprav();
+                                updateLoadingProgress('🎉 Обогащение данных УТО завершено!', 4);
+                                
+                                // Активируем поиск после завершения обогащения
+                                setTimeout(() => {
+                                    enableSearchInterface();
+                                }, 1000);
+                            }, 800);
+                        }, 600);
+                    }, 1200);
+                } else {
+                    // Показываем какой файл еще нужно загрузить
+                    const missingFile = !vitrinyLoaded ? 'витрины УТО' : 'справочник УТО';
+                    setTimeout(() => {
+                        showUploadStatus(`📋 Файл ${fileTypeName} загружен. Для полной функциональности загрузите файл ${missingFile}.`, 'success');
+                    }, 1000);
+                }
+                
+                showDataInfo();
+                
+            } catch (error) {
+                const fileTypeName = type === 'Vitriny' ? 'витрин УТО' : 'справочника УТО';
+                console.error(`❌ Ошибка обработки файла УТО ${fileTypeName}:`, error);
+                showLoadingError(`Ошибка обработки файла УТО ${fileTypeName}: ${error.message}`);
+                
+                if (type === 'Vitriny') {
+                    vitrinyLoaded = false;
+                    vitrinyData = [];
+                } else {
+                    spravLoaded = false;
+                    spravData = [];
+                }
+                
+                // Обновляем доступность поиска при ошибке
+                updateSearchAvailability();
+            }
+        }
+
+        // --- ПАРСИНГ CSV ---
+        function parseCSV(csvText) {
+            const lines = csvText.split('\n').filter(line => line.trim());
+            const result = [];
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+                
+                const delimiter = line.includes(';') ? ';' : ',';
+                const cells = [];
+                let currentCell = '';
+                let inQuotes = false;
+                
+                for (let j = 0; j < line.length; j++) {
+                    const char = line[j];
+                    
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === delimiter && !inQuotes) {
+                        cells.push(currentCell.trim());
+                        currentCell = '';
+                    } else {
+                        currentCell += char;
+                    }
+                }
+                cells.push(currentCell.trim());
+                
+                const cleanedCells = cells.map(cell => cell.replace(/^"|"$/g, ''));
+                result.push(cleanedCells);
+            }
+            
+            return result;
+        }
+
+        function cleanString(str) {
+            if (!str) return '';
+            
+            // Преобразуем в строку и убираем различные типы пробелов и невидимых символов
+            let cleaned = str.toString()
+                .replace(/\u00A0/g, ' ')  // Неразрывный пробел
+                .replace(/\u2000-\u200F/g, ' ')  // Различные типы пробелов
+                .replace(/\u202F/g, ' ')  // Узкий неразрывный пробел
+                .replace(/\uFEFF/g, '')  // BOM символ
+                .replace(/\r\n/g, ' ')   // Перенос строки Windows
+                .replace(/\n/g, ' ')     // Перенос строки Unix
+                .replace(/\r/g, ' ')     // Перенос строки Mac
+                .replace(/\t/g, ' ')     // Табуляция
+                .replace(/\s+/g, ' ')    // Множественные пробелы
+                .trim();
+            
+            // Убираем кавычки в начале и конце, если они есть
+            if ((cleaned.startsWith('"') && cleaned.endsWith('"')) || 
+                (cleaned.startsWith("'") && cleaned.endsWith("'"))) {
+                cleaned = cleaned.slice(1, -1);
+            }
+            
+            return cleaned;
+        }
+
+        // --- ОБРАБОТКА ДАННЫХ ВИТРИН УТО ---
+        function findColumnMapping(headers) {
+            const mapping = {};
+            
+            console.log('🔍 Поиск колонок витрины УТО в заголовках:', headers);
+            console.log('📊 Количество колонок:', headers.length);
+            
+            // Точное сопоставление по известным заголовкам витрины УТО
+            const exactMappings = {
+                'Блок функции (в соответствии со справочником кодов функций)': 'block',
+                'Принадлежность (КЦ/Филиал/ОЦО)': 'belonging',
+                'Должность': 'position',
+                'ОКЗ': 'okz',
+                'Комментарий, реквизиты документов': 'comment'
+            };
+            
+            // Сначала ищем точные совпадения
+            headers.forEach((header, index) => {
+                if (!header) return;
+                
+                const cleanHeader = cleanString(header);
+                
+                if (exactMappings[cleanHeader]) {
+                    mapping[exactMappings[cleanHeader]] = index;
+                    console.log(`✅ Точное совпадение найдено - ${exactMappings[cleanHeader]}: индекс ${index}, заголовок "${header}"`);
+                }
+            });
+            
+            // Если точные совпадения не найдены, используем расширенный поиск
+            if (Object.keys(mapping).length === 0) {
+                const keywords = { 
+                    block: ['блок функц', 'функц', 'блок'], 
+                    belonging: ['принадлежност', 'кц/филиал', 'филиал', 'кц'], 
+                    position: ['должност', 'наименование должности', 'название должности'], 
+                    okz: ['окз', 'код окз', 'классификатор'], 
+                    comment: ['комментар', 'реквизит', 'примечан'],
+                    note: ['примечан', 'замечан']
+                };
+                
+                headers.forEach((h, i) => {
+                    if (!h) return;
+                    
+                    const header = cleanString(h).toLowerCase();
+                    console.log(`📋 Анализ заголовка витрины УТО ${i}: "${h}" -> нормализовано: "${header}"`);
+                    
+                    for (const [key, keywordList] of Object.entries(keywords)) {
+                        if (keywordList.some(kw => header.includes(kw.toLowerCase())) && mapping[key] === undefined) {
+                            mapping[key] = i;
+                            console.log(`✅ Найдена колонка витрины УТО ${key}: индекс ${i}, заголовок "${h}"`);
+                        }
+                    }
+                });
+            }
+            
+            // Автоопределение по стандартным позициям витрины УТО
+            if (headers.length > 15) {
+                console.log('📊 Обнаружена стандартная структура витрины УТО, используем известные позиции');
+                
+                const standardPositions = {
+                    block: 0,           // A - Блок функции
+                    belonging: 1,       // B - Принадлежность
+                    position: 12,       // M - Должность
+                    okz: 13,           // N - ОКЗ
+                    comment: 14,       // O - Комментарий
+                    note: 15           // P - Примечание1
+                };
+                
+                for (const [key, index] of Object.entries(standardPositions)) {
+                    if (index < headers.length && headers[index] && !mapping[key]) {
+                        mapping[key] = index;
+                        console.log(`🎯 Автоопределение по позиции УТО ${key}: индекс ${index}, заголовок "${headers[index]}"`);
+                    }
+                }
+            }
+            
+            // Определяем колонки подразделений УТО (C-L, индексы 2-11)
+            const departmentColumns = [];
+            for (let i = 2; i <= 11; i++) {
+                if (i < headers.length && headers[i]) {
+                    const header = cleanString(headers[i]).toLowerCase();
+                    if (header.includes('наименование') && header.includes('структурного') && header.includes('подразделения')) {
+                        departmentColumns.push(i);
+                        console.log(`🏢 Найдена колонка подразделения УТО: индекс ${i}, заголовок "${headers[i]}"`);
+                    }
+                }
+            }
+            
+            mapping.departmentColumns = departmentColumns;
+            
+            // Поиск колонок примечаний УТО (P, Q, R)
+            const noteColumns = [];
+            for (let i = 15; i <= 17; i++) {
+                if (i < headers.length && headers[i]) {
+                    const header = cleanString(headers[i]).toLowerCase();
+                    if (header.includes('примечан')) {
+                        noteColumns.push(i);
+                        console.log(`📝 Найдена колонка примечания УТО: индекс ${i}, заголовок "${headers[i]}"`);
+                    }
+                }
+            }
+            
+            mapping.noteColumns = noteColumns;
+            
+            // Проверяем обязательные поля
+            if (mapping.position === undefined) {
+                console.warn('⚠️ Основное поле "position" не найдено в витрине УТО, пробуем резервные варианты');
+                
+                // Ищем любую колонку с "должность"
+                for (let i = 0; i < headers.length; i++) {
+                    const header = headers[i];
+                    if (header && header.toLowerCase().includes('должност')) {
+                        mapping.position = i;
+                        console.log(`🔄 Резервное определение position УТО: индекс ${i}, заголовок "${header}"`);
+                        break;
+                    }
+                }
+            }
+            
+            console.log('📋 Итоговое сопоставление витрины УТО:', mapping);
+            return mapping;
+        }
+
+        // Обновленная функция обработки данных витрины УТО
+        function processVitrinyData(jsonData) {
+            try {
+                if (!jsonData || jsonData.length < 2) {
+                    throw new Error('Недостаточно данных в файле витрины УТО');
+                }
+
+                let headerRowIndex = 0;
+                let dataStartIndex = 1;
+                
+                // Поиск строки с заголовками
+                console.log('🔍 Поиск заголовков в витрине УТО...');
+                
+                for (let i = 0; i < Math.min(5, jsonData.length); i++) {
+                    const row = jsonData[i];
+                    if (!row || row.length < 10) continue;
+                    
+                    console.log(`📊 Анализ строки ${i}:`, row.slice(0, 8));
+                    
+                    // Проверяем наличие ключевых заголовков витрины УТО
+                    const hasBlockFunction = row.some(cell => {
+                        if (!cell) return false;
+                        const cellStr = cell.toString().toLowerCase();
+                        return cellStr.includes('блок') && cellStr.includes('функц');
+                    });
+                    
+                    const hasBelonging = row.some(cell => {
+                        if (!cell) return false;
+                        const cellStr = cell.toString().toLowerCase();
+                        return cellStr.includes('принадлежност') || (cellStr.includes('кц') && cellStr.includes('филиал'));
+                    });
+                    
+                    const hasPosition = row.some(cell => {
+                        if (!cell) return false;
+                        const cellStr = cell.toString().toLowerCase();
+                        return cellStr.includes('должност') && !cellStr.includes('наименование');
+                    });
+                    
+                    const hasDepartments = row.filter(cell => {
+                        if (!cell) return false;
+                        const cellStr = cell.toString().toLowerCase();
+                        return cellStr.includes('наименование') && cellStr.includes('структурного') && cellStr.includes('подразделения');
+                    }).length >= 3; // Должно быть несколько колонок подразделений
+                    
+                    if ((hasBlockFunction || hasBelonging) && hasPosition && hasDepartments) {
+                        headerRowIndex = i;
+                        dataStartIndex = i + 1;
+                        console.log(`✅ Найдены заголовки витрины УТО в строке ${i}`);
+                        break;
+                    }
+                }
+
+                const headers = jsonData[headerRowIndex];
+                if (!headers || headers.length === 0) {
+                    throw new Error('Не удалось найти заголовки в файле витрины УТО');
+                }
+
+                console.log('📊 Найденные заголовки витрины УТО:', headers);
+                console.log('📊 Количество колонок:', headers.length);
+
+                const mapping = findColumnMapping(headers);
+                console.log('📊 Сопоставление колонок витрины УТО:', mapping);
+                
+                if (mapping.position === undefined) {
+                    console.error('❌ Доступные заголовки витрины УТО:', headers);
+                    throw new Error('Колонка "Должность" не найдена в файле витрины УТО. Проверьте структуру файла.');
+                }
+                
+                const processedData = [];
+                let successfulRows = 0;
+                let emptyRows = 0;
+                
+                for (let i = dataStartIndex; i < jsonData.length; i++) {
+                    const row = jsonData[i];
+                    
+                    if (!row || row.length === 0) {
+                        emptyRows++;
+                        continue;
+                    }
+                    
+                    const position = cleanString(row[mapping.position]);
+                    if (!position) {
+                        emptyRows++;
+                        continue;
+                    }
+                    
+                    // Собираем все уровни подразделений УТО
+                    const departmentParts = [];
+                    if (mapping.departmentColumns && mapping.departmentColumns.length > 0) {
+                        mapping.departmentColumns.forEach(colIndex => {
+                            const dept = cleanString(row[colIndex]);
+                            if (dept) {
+                                departmentParts.push(dept);
+                            }
+                        });
+                    }
+                    
+                    // Собираем все примечания УТО
+                    const notesParts = [];
+                    if (mapping.noteColumns && mapping.noteColumns.length > 0) {
+                        mapping.noteColumns.forEach(colIndex => {
+                            const note = cleanString(row[colIndex]);
+                            if (note) {
+                                notesParts.push(note);
+                            }
+                        });
+                    }
+                    
+                    const result = {
+                        position: position,
+                        systemName: '', // В витрине УТО нет системного имени, будет обогащено из справочника
+                        okz: cleanString(row[mapping.okz]),
+                        block: cleanString(row[mapping.block]),
+                        belonging: cleanString(row[mapping.belonging]),
+                        department: departmentParts.join(' / '), // Объединяем все уровни подразделений
+                        departmentLevels: departmentParts, // Сохраняем отдельные уровни
+                        comment: cleanString(row[mapping.comment]),
+                        note: notesParts.join(' | '), // Объединяем все примечания
+                        notes: notesParts // Сохраняем отдельные примечания
+                    };
+                    
+                    // Диагностика первых записей
+                    if (successfulRows < 5) {
+                        console.log(`📊 Обработка записи витрины УТО ${successfulRows + 1}:`, {
+                            rowIndex: i,
+                            rawData: row.slice(0, 15),
+                            processed: result
+                        });
+                    }
+                    
+                    processedData.push(result);
+                    successfulRows++;
+                }
+
+                console.log(`📊 Обработано записей витрины УТО:`);
+                console.log(`- Успешно обработано: ${successfulRows}`);
+                console.log(`- Пустых строк пропущено: ${emptyRows}`);
+                console.log(`- Общее количество строк: ${jsonData.length}`);
+                
+                // Детальная статистика
+                const uniquePositions = new Set(processedData.map(item => item.position));
+                const uniqueBlocks = new Set(processedData.filter(item => item.block).map(item => item.block));
+                const uniqueBelongings = new Set(processedData.filter(item => item.belonging).map(item => item.belonging));
+                const hasOkz = processedData.filter(item => item.okz && item.okz.trim()).length;
+                const hasDepartments = processedData.filter(item => item.department && item.department.trim()).length;
+                
+                console.log(`📊 Статистика витрины УТО:`);
+                console.log(`- Уникальных должностей: ${uniquePositions.size}`);
+                console.log(`- Уникальных блоков функций: ${uniqueBlocks.size}`);
+                console.log(`- Уникальных принадлежностей: ${uniqueBelongings.size}`);
+                console.log(`- Записей с ОКЗ: ${hasOkz}`);
+                console.log(`- Записей с подразделениями: ${hasDepartments}`);
+                
+                // Примеры данных
+                console.log(`📊 Примеры данных витрины УТО:`);
+                console.log(`- Блоки функций: ${Array.from(uniqueBlocks).slice(0, 3).join(', ')}`);
+                console.log(`- Принадлежности: ${Array.from(uniqueBelongings).join(', ')}`);
+                
+                const exampleWithDepartment = processedData.find(item => item.department && item.department.trim());
+                if (exampleWithDepartment) {
+                    console.log(`- Пример подразделения: "${exampleWithDepartment.department}"`);
+                }
+                
+                return processedData;
+                
+            } catch (error) {
+                console.error('❌ Ошибка обработки витрины УТО:', error);
+                throw error;
+            }
+        }
+
+        // --- ОБРАБОТКА ДАННЫХ СПРАВОЧНИКА УТО ---
+        function findSpravColumnMapping(headers) {
+            const mapping = {};
+            
+            console.log('🔍 Поиск колонок справочника УТО в заголовках:', headers);
+            
+            // Точное сопоставление по известным заголовкам справочника УТО
+            const exactMappings = {
+                'Системное наименование': 'position',
+                'Полное наименование': 'fullName', 
+                'Код ОКЗ': 'okzCode',
+                'Системное имя': 'systemName',
+                'Код ОКЗ/ОТР': 'okzCodeAlt'
+            };
+            
+            // Сначала ищем точные совпадения
+            headers.forEach((header, index) => {
+                if (!header) return;
+                
+                const cleanHeader = cleanString(header);
+                
+                if (exactMappings[cleanHeader]) {
+                    mapping[exactMappings[cleanHeader]] = index;
+                    console.log(`✅ Точное совпадение найдено - ${exactMappings[cleanHeader]}: индекс ${index}, заголовок "${header}"`);
+                }
+            });
+            
+            // Если точные совпадения не найдены, используем расширенный поиск
+            if (Object.keys(mapping).length === 0) {
+                const keywords = { 
+                    position: [
+                        'системное наименование', 'наименование должности', 'наименование', 
+                        'должност', 'название должности', 'название', 'системн наименован'
+                    ], 
+                    systemName: [
+                        'системное имя', 'системн имя', 'код должности', 'код', 
+                        'системн', 'имя'
+                    ], 
+                    fullName: [
+                        'полное наименование', 'полное название', 'полн наименован', 
+                        'полн', 'развернутое наименование', 'описание'
+                    ], 
+                    okzCode: [
+                        'код окз', 'окз', 'код общероссийского классификатора', 
+                        'классификатор', 'okz'
+                    ],
+                    okzCodeAlt: [
+                        'код окз/отр', 'окз/отр', 'код окз отр'
+                    ]
+                };
+                
+                headers.forEach((h, i) => {
+                    if (!h) return;
+                    
+                    const header = cleanString(h).toLowerCase();
+                    console.log(`📋 Анализ заголовка ${i}: "${h}" -> нормализовано: "${header}"`);
+                    
+                    for (const [key, keywordList] of Object.entries(keywords)) {
+                        if (keywordList.some(kw => header.includes(kw.toLowerCase())) && mapping[key] === undefined) {
+                            mapping[key] = i;
+                            console.log(`✅ Найдена колонка справочника УТО ${key}: индекс ${i}, заголовок "${h}"`);
+                        }
+                    }
+                });
+            }
+            
+            // Автоопределение по позициям для стандартной структуры справочника УТО
+            if (headers.length > 20) {
+                console.log('📊 Обнаружена расширенная структура справочника УТО, используем известные позиции');
+                
+                // Для стандартного справочника УТО
+                const standardPositions = {
+                    systemName: 1,      // B - Системное имя
+                    okzCodeAlt: 5,      // F - Код ОКЗ/ОТР  
+                    position: 6,        // G - Системное наименование
+                    fullName: 7,        // H - Полное наименование
+                    okzCode: 16         // Q - Код ОКЗ
+                };
+                
+                for (const [key, index] of Object.entries(standardPositions)) {
+                    if (index < headers.length && headers[index] && !mapping[key]) {
+                        mapping[key] = index;
+                        console.log(`🎯 Автоопределение по позиции УТО ${key}: индекс ${index}, заголовок "${headers[index]}"`);
+                    }
+                }
+            }
+            
+            // Проверяем обязательные поля
+            if (mapping.position === undefined) {
+                console.warn('⚠️ Основное поле "position" не найдено в справочнике УТО, пробуем резервные варианты');
+                
+                // Ищем любую колонку с "наименование" или "должность"
+                for (let i = 0; i < headers.length; i++) {
+                    const header = headers[i];
+                    if (header && (header.toLowerCase().includes('наименован') || header.toLowerCase().includes('должност'))) {
+                        mapping.position = i;
+                        console.log(`🔄 Резервное определение position УТО: индекс ${i}, заголовок "${header}"`);
+                        break;
+                    }
+                }
+            }
+            
+            console.log('📋 Итоговое сопоставление справочника УТО:', mapping);
+            return mapping;
+        }
+
+        // Обновленная функция обработки данных справочника УТО
+        function processSpravData(jsonData) {
+            try {
+                if (!jsonData || jsonData.length < 2) {
+                    throw new Error('Недостаточно данных в файле справочника УТО');
+                }
+
+                let headerRowIndex = 0;
+                let dataStartIndex = 1;
+                
+                // Поиск строки с заголовками
+                console.log('🔍 Поиск заголовков в справочнике УТО...');
+                
+                for (let i = 0; i < Math.min(10, jsonData.length); i++) {
+                    const row = jsonData[i];
+                    if (!row || row.length < 5) continue;
+                    
+                    console.log(`📋 Анализ строки ${i}:`, row.slice(0, 8));
+                    
+                    // Проверяем наличие ключевых заголовков справочника УТО
+                    const hasSystemName = row.some(cell => {
+                        if (!cell) return false;
+                        const cellStr = cell.toString().toLowerCase();
+                        return cellStr.includes('системное') && (cellStr.includes('наименование') || cellStr.includes('имя'));
+                    });
+                    
+                    const hasOkzCode = row.some(cell => {
+                        if (!cell) return false;
+                        const cellStr = cell.toString().toLowerCase();
+                        return cellStr.includes('код') && cellStr.includes('окз');
+                    });
+                    
+                    const hasFullName = row.some(cell => {
+                        if (!cell) return false;
+                        const cellStr = cell.toString().toLowerCase();
+                        return cellStr.includes('полное') && cellStr.includes('наименование');
+                    });
+                    
+                    if (hasSystemName && (hasOkzCode || hasFullName)) {
+                        headerRowIndex = i;
+                        dataStartIndex = i + 1;
+                        console.log(`✅ Найдены заголовки справочника УТО в строке ${i}`);
+                        break;
+                    }
+                }
+
+                const headers = jsonData[headerRowIndex];
+                if (!headers || headers.length === 0) {
+                    throw new Error('Не удалось найти заголовки в файле справочника УТО');
+                }
+
+                console.log('📋 Найденные заголовки справочника УТО:', headers);
+                console.log('📋 Количество колонок:', headers.length);
+
+                const mapping = findSpravColumnMapping(headers);
+                console.log('📋 Сопоставление колонок справочника УТО:', mapping);
+                
+                if (mapping.position === undefined) {
+                    console.error('❌ Доступные заголовки справочника УТО:', headers);
+                    throw new Error('Колонка с названием должности в справочнике УТО не найдена. Проверьте структуру файла.');
+                }
+                
+                const processedData = [];
+                let successfulRows = 0;
+                let emptyRows = 0;
+                
+                for (let i = dataStartIndex; i < jsonData.length; i++) {
+                    const row = jsonData[i];
+                    
+                    if (!row || row.length === 0) {
+                        emptyRows++;
+                        continue;
+                    }
+                    
+                    const position = cleanString(row[mapping.position]);
+                    if (!position) {
+                        emptyRows++;
+                        continue;
+                    }
+                    
+                    const result = {
+                        position: position,
+                        systemName: cleanString(row[mapping.systemName]),
+                        fullName: cleanString(row[mapping.fullName]),
+                        okzCode: cleanString(row[mapping.okzCode]) || cleanString(row[mapping.okzCodeAlt]) // Используем основной или альтернативный код ОКЗ
+                    };
+                    
+                    // Диагностика первых записей
+                    if (successfulRows < 5) {
+                        console.log(`📋 Обработка записи справочника УТО ${successfulRows + 1}:`, {
+                            rowIndex: i,
+                            rawData: row.slice(0, 10),
+                            processed: result
+                        });
+                    }
+                    
+                    processedData.push(result);
+                    successfulRows++;
+                }
+
+                console.log(`📋 Обработано записей справочника УТО:`);
+                console.log(`- Успешно обработано: ${successfulRows}`);
+                console.log(`- Пустых строк пропущено: ${emptyRows}`);
+                console.log(`- Общее количество строк: ${jsonData.length}`);
+                
+                // Детальная статистика
+                const uniquePositions = new Set(processedData.map(item => item.position));
+                const hasSystemNames = processedData.filter(item => item.systemName && item.systemName.trim()).length;
+                const hasOkzCodes = processedData.filter(item => item.okzCode && item.okzCode.trim()).length;
+                const hasFullNames = processedData.filter(item => item.fullName && item.fullName.trim()).length;
+                
+                console.log(`📊 Статистика справочника УТО:`);
+                console.log(`- Уникальных должностей: ${uniquePositions.size}`);
+                console.log(`- Записей с системными именами: ${hasSystemNames}`);
+                console.log(`- Записей с кодами ОКЗ: ${hasOkzCodes}`);
+                console.log(`- Записей с полными наименованиями: ${hasFullNames}`);
+                
+                // Примеры данных
+                const exampleWithSystemName = processedData.find(item => item.systemName && item.systemName.trim());
+                const exampleWithOkz = processedData.find(item => item.okzCode && item.okzCode.trim());
+                const exampleWithFullName = processedData.find(item => item.fullName && item.fullName.trim());
+                
+                console.log(`📋 Примеры полей справочника УТО:`);
+                if (exampleWithSystemName) console.log(`- Системное имя: "${exampleWithSystemName.systemName}"`);
+                if (exampleWithOkz) console.log(`- Код ОКЗ: "${exampleWithOkz.okzCode}"`);
+                if (exampleWithFullName) console.log(`- Полное наименование: "${exampleWithFullName.fullName}"`);
+                
+                return processedData;
+                
+            } catch (error) {
+                console.error('❌ Ошибка обработки справочника УТО:', error);
+                throw error;
+            }
+        }
+
+        // --- ОБОГАЩЕНИЕ ДАННЫХ УТО ---
+        function enrichVitrinyWithSprav() {
+            if (!vitrinyLoaded || !spravLoaded) return;
+
+            try {
+                console.log('🔗 Начинаем обогащение данных витрин УТО справочником');
+                console.log(`📊 Витрины УТО: ${vitrinyData.length} записей, Справочник УТО: ${spravData.length} записей`);
+                
+                // Создаем индексы для быстрого поиска
+                const spravIndexExact = new Map();
+                const spravIndexNormalized = new Map();
+                const spravIndexWords = new Map();
+                const spravIndexSystemName = new Map();
+                const spravIndexPartial = new Map();
+                
+                spravData.forEach((item, index) => {
+                    if (item && item.position) {
+                        const originalKey = item.position.toLowerCase().trim();
+                        const normalizedKey = normalizePosition(item.position);
+                        const wordsKey = getPositionWords(item.position);
+                        
+                        spravIndexExact.set(originalKey, item);
+                        spravIndexNormalized.set(normalizedKey, item);
+                        
+                        if (wordsKey.length > 0) {
+                            spravIndexWords.set(wordsKey, item);
+                        }
+                        
+                        // Индекс по системному имени
+                        if (item.systemName) {
+                            const systemKey = item.systemName.toLowerCase().trim();
+                            spravIndexSystemName.set(systemKey, item);
+                        }
+                        
+                        // Индекс для частичного поиска
+                        const positionWords = item.position.toLowerCase().split(' ');
+                        positionWords.forEach(word => {
+                            if (word.length > 3) {
+                                spravIndexPartial.set(word, item);
+                            }
+                        });
+                    }
+                });
+
+                console.log(`📋 Создан расширенный индекс справочника УТО:`);
+                console.log(`- Точные совпадения: ${spravIndexExact.size}`);
+                console.log(`- Нормализованные: ${spravIndexNormalized.size}`);
+                console.log(`- По ключевым словам: ${spravIndexWords.size}`);
+                console.log(`- По системному имени: ${spravIndexSystemName.size}`);
+                console.log(`- Частичные совпадения: ${spravIndexPartial.size}`);
+                
+                let matches = 0;
+                let enrichedSystemName = 0;
+                let enrichedOkz = 0;
+                let enrichedFullName = 0;
+
+                vitrinyData.forEach((item, index) => {
+                    if (!item || !item.position) return;
+
+                    let match = null;
+                    let matchType = '';
+
+                    // Стратегия 1: Точное совпадение по названию должности
+                    const exactKey = item.position.toLowerCase().trim();
+                    match = spravIndexExact.get(exactKey);
+                    if (match) {
+                        matchType = 'точное совпадение';
+                    }
+
+                    // Стратегия 2: Поиск по системному имени
+                    if (!match && item.systemName) {
+                        const systemKey = item.systemName.toLowerCase().trim();
+                        match = spravIndexSystemName.get(systemKey);
+                        if (match) {
+                            matchType = 'совпадение по системному имени';
+                        }
+                    }
+
+                    // Стратегия 3: Нормализованное совпадение
+                    if (!match) {
+                        const normalizedKey = normalizePosition(item.position);
+                        match = spravIndexNormalized.get(normalizedKey);
+                        if (match) {
+                            matchType = 'нормализованное совпадение';
+                        }
+                    }
+
+                    // Стратегия 4: Поиск по ключевым словам
+                    if (!match) {
+                        const wordsKey = getPositionWords(item.position);
+                        if (wordsKey.length > 0) {
+                            match = spravIndexWords.get(wordsKey);
+                            if (match) {
+                                matchType = 'совпадение по ключевым словам';
+                            }
+                        }
+                    }
+
+                    // Стратегия 5: Частичное совпадение по словам
+                    if (!match) {
+                        const itemWords = item.position.toLowerCase().split(' ');
+                        for (const word of itemWords) {
+                            if (word.length > 3) {
+                                const partialMatch = spravIndexPartial.get(word);
+                                if (partialMatch) {
+                                    match = partialMatch;
+                                    matchType = 'частичное совпадение';
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (match) {
+                        matches++;
+                        
+                        // Обогащаем данные
+                        if (match.systemName && match.systemName.trim() && (!item.systemName || !item.systemName.trim())) {
+                            item.systemName = match.systemName;
+                            enrichedSystemName++;
+                        }
+                        
+                        if (match.okzCode && match.okzCode.trim()) {
+                            item.okz = match.okzCode;
+                            enrichedOkz++;
+                        }
+                        
+                        if (match.fullName && match.fullName.trim()) {
+                            item.fullPositionName = match.fullName;
+                            enrichedFullName++;
+                        }
+                        
+                        // Логирование первых совпадений
+                        if (matches <= 10) {
+                            console.log(`✅ Совпадение УТО ${matches} (${matchType}): "${item.position}" -> "${match.position}"`);
+                        }
+                    }
+                });
+
+                console.log(`📈 Результаты обогащения УТО:`);
+                console.log(`- Найдено совпадений: ${matches}`);
+                console.log(`- Обогащено системных имен: ${enrichedSystemName}`);
+                console.log(`- Обогащено ОКЗ: ${enrichedOkz}`);
+                console.log(`- Обогащено полных наименований: ${enrichedFullName}`);
+
+                const successRate = ((matches / vitrinyData.length) * 100).toFixed(1);
+                
+                if (matches > 0) {
+                    showUploadStatus(`🔗 Обогащение УТО завершено! Найдено совпадений: ${matches} из ${vitrinyData.length} (${successRate}%). Обогащено: системных имен ${enrichedSystemName}, ОКЗ ${enrichedOkz}, полных наименований ${enrichedFullName}`, 'success');
+                } else {
+                    showUploadStatus('⚠️ Соответствий между витринами и справочником УТО не найдено. Проверьте структуру файлов.', 'warning');
+                }
+                
+            } catch (error) {
+                console.error('❌ Ошибка при обогащении данных УТО:', error);
+                showUploadStatus(`❌ Ошибка при обогащении данных УТО: ${error.message}`, 'error');
+            }
+        }
+
+        function normalizePosition(position) {
+            if (!position) return '';
+            
+            return position
+                .toLowerCase()
+                .trim()
+                // Убираем различные типы кавычек и скобок
+                .replace(/[«»""''`´]/g, '')
+                // Убираем специальные символы, кроме букв, цифр и пробелов
+                .replace(/[^\w\s\u0400-\u04FF\u0401\u0451]/g, ' ')
+                // Заменяем множественные пробелы на один
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        function getPositionWords(position) {
+            if (!position) return '';
+            
+            const stopWords = ['по', 'в', 'на', 'с', 'для', 'от', 'к', 'и', 'или', 'а', 'но', 'да', 'нет', 'не', 'как', 'что', 'где', 'при', 'без', 'под', 'над', 'за', 'из', 'до', 'после', 'через', 'между'];
+            
+            const words = normalizePosition(position)
+                .split(' ')
+                .filter(word => word.length > 2 && !stopWords.includes(word))
+                .sort()
+                .join(' ');
+            
+            return words;
+        }
+
+        // --- ДИАГНОСТИКА ДАННЫХ ---
+        function performDataDiagnostics() {
+            if (!vitrinyLoaded || !spravLoaded) return;
+            
+            console.log('🔍 === ДИАГНОСТИКА ДАННЫХ УТО ===');
+            
+            // Анализ витрин УТО
+            console.log('📊 Анализ витрин УТО:');
+            const vitrinyWithSystemName = vitrinyData.filter(item => item.systemName && item.systemName.trim()).length;
+            const vitrinyWithOkz = vitrinyData.filter(item => item.okz && item.okz.trim()).length;
+            const vitrinyWithFullName = vitrinyData.filter(item => item.fullPositionName && item.fullPositionName.trim()).length;
+            console.log(`- Всего записей: ${vitrinyData.length}`);
+            console.log(`- С системными именами: ${vitrinyWithSystemName}`);
+            console.log(`- С ОКЗ: ${vitrinyWithOkz}`);
+            console.log(`- С полными наименованиями: ${vitrinyWithFullName}`);
+            
+            // Анализ справочника УТО
+            console.log('📋 Анализ справочника УТО:');
+            const spravWithSystemName = spravData.filter(item => item.systemName && item.systemName.trim()).length;
+            const spravWithOkz = spravData.filter(item => item.okzCode && item.okzCode.trim()).length;
+            const spravWithFullName = spravData.filter(item => item.fullName && item.fullName.trim()).length;
+            console.log(`- Всего записей: ${spravData.length}`);
+            console.log(`- С системными именами: ${spravWithSystemName}`);
+            console.log(`- С кодами ОКЗ: ${spravWithOkz}`);
+            console.log(`- С полными наименованиями: ${spravWithFullName}`);
+            
+            console.log('🔍 === КОНЕЦ ДИАГНОСТИКИ УТО ===');
+        }
+
+        function analyzeDataMatching() {
+            if (!vitrinyLoaded || !spravLoaded) return;
+            
+            console.log('🔍 === АНАЛИЗ СОПОСТАВЛЕНИЯ ДАННЫХ УТО ===');
+            
+            // Берем первые 5 записей из витрин для анализа
+            const testItems = vitrinyData.slice(0, 5);
+            
+            testItems.forEach((vitrinyItem, index) => {
+                console.log(`\n📊 Анализ записи УТО ${index + 1} из витрин:`);
+                console.log(`- Должность: "${vitrinyItem.position}"`);
+                console.log(`- Системное имя: "${vitrinyItem.systemName}"`);
+                console.log(`- ОКЗ: "${vitrinyItem.okz}"`);
+                
+                // Поиск потенциальных совпадений
+                let foundMatches = [];
+                
+                // 1. Точное совпадение
+                const exactMatch = spravData.find(spravItem => 
+                    spravItem.position && spravItem.position.toLowerCase().trim() === vitrinyItem.position.toLowerCase().trim()
+                );
+                if (exactMatch) {
+                    foundMatches.push({
+                        type: 'Точное совпадение',
+                        match: exactMatch,
+                        reason: 'Полное совпадение названий должностей'
+                    });
+                }
+                
+                // 2. Нормализованное совпадение
+                const normalizedVitriny = normalizePosition(vitrinyItem.position);
+                const normalizedMatch = spravData.find(spravItem => 
+                    spravItem.position && normalizePosition(spravItem.position) === normalizedVitriny
+                );
+                if (normalizedMatch && !foundMatches.some(m => m.match === normalizedMatch)) {
+                    foundMatches.push({
+                        type: 'Нормализованное совпадение',
+                        match: normalizedMatch,
+                        reason: `Совпадение после нормализации: "${normalizedVitriny}"`
+                    });
+                }
+                
+                // Выводим результаты
+                if (foundMatches.length > 0) {
+                    console.log(`✅ Найдено ${foundMatches.length} потенциальных совпадений УТО:`);
+                    foundMatches.forEach((match, i) => {
+                        console.log(`  ${i + 1}. ${match.type}:`);
+                        console.log(`     Справочник: "${match.match.position}"`);
+                        console.log(`     Системное имя: "${match.match.systemName}"`);
+                        console.log(`     ОКЗ: "${match.match.okzCode}"`);
+                        console.log(`     Полное наименование: "${match.match.fullName}"`);
+                    });
+                } else {
+                    console.log(`❌ Совпадений УТО не найдено`);
+                }
+            });
+            
+            console.log('\n🔍 === КОНЕЦ АНАЛИЗА СОПОСТАВЛЕНИЯ УТО ===');
+        }
+
+        // --- ЛОГИКА ПОИСКА ---
+        function searchPositions() {
+            // Проверяем доступность поиска
+            if (!vitrinyLoaded || !spravLoaded) {
+                const missingFiles = [];
+                if (!vitrinyLoaded) missingFiles.push('витрины УТО');
+                if (!spravLoaded) missingFiles.push('справочник УТО');
+                
+                alert(`⚠️ Для выполнения поиска загрузите файлы: ${missingFiles.join(' и ')}`);
+                console.log('❌ Попытка поиска без загруженных файлов УТО');
+                return;
+            }
+            
+            try {
+                showLoadingNotification('Выполняется поиск УТО...', 3);
+                updateLoadingProgress('Применение фильтров УТО...', 1);
+                
+                setTimeout(() => {
+                    try {
+                        updateLoadingProgress('Обработка результатов УТО...', 2);
+                        
+                        const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+                        const block = document.getElementById('blockFunction').value;
+                        const belonging = document.getElementById('belonging').value;
+                        const department = document.getElementById('department').value.trim().toLowerCase();
+                        
+                        currentResults = vitrinyData.filter(item => {
+                            if (!item) return false;
+                            
+                            const matchesSearchTerm = !searchTerm || 
+                                (item.position && item.position.toLowerCase().includes(searchTerm)) || 
+                                (item.systemName && item.systemName.toLowerCase().includes(searchTerm));
+                                
+                            const matchesBlock = !block || item.block === block;
+                            const matchesBelonging = !belonging || item.belonging === belonging;
+                            const matchesDepartment = !department || 
+                                (item.department && item.department.toLowerCase().includes(department));
+                            
+                            return matchesSearchTerm && matchesBlock && matchesBelonging && matchesDepartment;
+                        });
+                        
+                        setTimeout(() => {
+                            updateLoadingProgress(`Найдено ${currentResults.length} результатов УТО`, 3);
+                            displayResults();
+                            updateStatsDisplay();
+                            displayActiveFilters({searchTerm, block, belonging, department});
+                        }, 300);
+                        
+                    } catch (error) {
+                        console.error('Ошибка при выполнении поиска УТО:', error);
+                        showLoadingError(`Ошибка поиска УТО: ${error.message}`);
+                        document.getElementById('resultsContainer').innerHTML = `
+                            <div class="no-results">
+                                <h3><i class="fas fa-exclamation-triangle"></i> Ошибка поиска УТО</h3>
+                                <p>Произошла ошибка при выполнении поиска: ${error.message}</p>
+                            </div>`;
+                    }
+                }, 200);
+                
+            } catch (error) {
+                console.error('Ошибка инициализации поиска УТО:', error);
+                showLoadingError('Ошибка инициализации поиска УТО');
+            }
+        }
+
+        // --- ОТОБРАЖЕНИЕ РЕЗУЛЬТАТОВ ---
+        function displayResults() {
+            const container = document.getElementById('resultsContainer');
+            const header = document.getElementById('resultsHeader');
+            document.getElementById('initialMessage').style.display = 'none';
+
+            if (currentResults.length === 0) {
+                container.innerHTML = `<div class="no-results"><h3><i class="fas fa-search"></i> Результаты УТО не найдены</h3><p>Попробуйте изменить параметры поиска.</p></div>`;
+                header.style.display = 'none';
+                return;
+            }
+
+            header.style.display = 'flex';
+            document.getElementById('resultsTitle').textContent = `Найдено ${currentResults.length} записей УТО`;
+            
+            // Показываем кнопку компактного экспорта
+            document.getElementById('exportCompactBtn').style.display = 'inline-block';
+            
+            container.innerHTML = currentResults.map(result => `
+                <div class="result-card">
+                    <div class="position-title">${result.position}</div>
+                    <div class="result-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Системное имя</div>
+                            <div class="detail-value">${result.systemName || '—'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Полное наименование</div>
+                            <div class="detail-value">${result.fullPositionName || '—'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">ОКЗ</div>
+                            <div class="detail-value">${result.okz || '—'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Блок функции</div>
+                            <div class="detail-value">${result.block || '—'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Принадлежность</div>
+                            <div class="detail-value">${result.belonging || '—'}</div>
+                        </div>
+                    </div>
+                    
+                    ${result.department ? `
+                        <div class="department-path">
+                            <div class="detail-label">Структура подразделений УТО</div>
+                            <div class="detail-value">${result.department}</div>
+                        </div>
+                    ` : ''}
+                    
+                    ${result.departmentLevels && result.departmentLevels.length > 0 ? `
+                        <div class="department-path department-levels">
+                            <div class="detail-label">Уровни подразделений УТО</div>
+                            <div class="detail-value">
+                                ${result.departmentLevels.map((level, index) => 
+                                    `<div style="margin-bottom: 5px;"><strong>Уровень ${index + 1}:</strong> ${level}</div>`
+                                ).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    ${result.comment ? `
+                        <div class="department-path comment-section">
+                            <div class="detail-label">Комментарий</div>
+                            <div class="detail-value">${result.comment}</div>
+                        </div>
+                    ` : ''}
+                    
+                    ${result.note ? `
+                        <div class="department-path notes-section">
+                            <div class="detail-label">Примечания УТО</div>
+                            <div class="detail-value">${result.note}</div>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+        
+        function clearResults() {
+            // Проверяем доступность очистки
+            if (!vitrinyLoaded || !spravLoaded) {
+                console.log('⚠️ Очистка результатов УТО недоступна - не все файлы загружены');
+                return;
+            }
+            
+            currentResults = [];
+            document.getElementById('resultsContainer').innerHTML = '';
+            document.getElementById('resultsHeader').style.display = 'none';
+            document.getElementById('initialMessage').style.display = 'block';
+            updateStatsDisplay();
+            
+            console.log('🧹 Результаты поиска УТО очищены');
+        }
+
+        function resetFilters() {
+            if (!confirm('Вы уверены, что хотите сбросить все данные УТО и фильтры?')) {
+                return;
+            }
+            
+            // Очищаем поля фильтров
+            document.getElementById('searchInput').value = '';
+            document.getElementById('department').value = '';
+            document.getElementById('blockFunction').value = '';
+            document.getElementById('belonging').value = '';
+            
+            // ВАЖНО: Очищаем input файлов для возможности повторной загрузки
+            document.getElementById('fileInputVitriny').value = '';
+            document.getElementById('fileInputSprav').value = '';
+            
+            // Очищаем загруженные данные УТО
+            vitrinyData = [];
+            spravData = [];
+            vitrinyLoaded = false;
+            spravLoaded = false;
+            vitrinyLoadDate = null;
+            spravLoadDate = null;
+            vitrinyFileName = '';
+            spravFileName = '';
+            currentResults = [];
+            
+            // Скрываем секции и кнопки
+            document.getElementById('searchSection').style.display = 'none';
+            document.getElementById('clearDataBtn').style.display = 'none';
+            document.getElementById('exportCompactBtn').style.display = 'none';
+            
+            // Очищаем UI
+            displayActiveFilters({});
+            clearResults();
+            
+            // Обновляем статистику и информацию о данных
+            updateStatsDisplay();
+            showDataInfo();
+            
+            // Сбрасываем выпадающие списки
+            const blockSelect = document.getElementById('blockFunction');
+            blockSelect.innerHTML = '<option value="">-- Все блоки --</option>';
+            
+            // Скрываем любые активные уведомления о загрузке
+            hideLoadingNotification();
+            
+            // ВАЖНО: Обновляем доступность поиска (деактивируем)
+            updateSearchAvailability();
+            
+            // Показываем сообщение об успешном сбросе
+            showUploadStatus('🔄 Все данные УТО и фильтры сброшены. Загрузите файлы для начала работы.', 'success');
+            
+            console.log('🔄 Система УТО полностью сброшена и готова к новой загрузке');
+        }
+        
+        function clearAllData() {
+            if (!confirm('Вы уверены, что хотите очистить все загруженные данные УТО?')) return;
+            
+            // Очищаем input файлов
+            document.getElementById('fileInputVitriny').value = '';
+            document.getElementById('fileInputSprav').value = '';
+            
+            // Очищаем данные УТО
+            vitrinyData = []; 
+            spravData = [];
+            vitrinyLoaded = false; 
+            spravLoaded = false;
+            vitrinyLoadDate = null; 
+            spravLoadDate = null;
+            vitrinyFileName = ''; 
+            spravFileName = '';
+            
+            // Скрываем UI элементы
+            document.getElementById('searchSection').style.display = 'none';
+            document.getElementById('clearDataBtn').style.display = 'none';
+            document.getElementById('exportCompactBtn').style.display = 'none';
+            
+            // Очищаем результаты и фильтры
+            clearResults();
+            document.getElementById('searchInput').value = '';
+            document.getElementById('department').value = '';
+            document.getElementById('blockFunction').value = '';
+            document.getElementById('belonging').value = '';
+            displayActiveFilters({});
+            
+            // Сбрасываем выпадающие списки
+            const blockSelect = document.getElementById('blockFunction');
+            blockSelect.innerHTML = '<option value="">-- Все блоки --</option>';
+            
+            // Обновляем отображение
+            updateStatsDisplay();
+            showDataInfo();
+            
+            // Скрываем уведомления о загрузке
+            hideLoadingNotification();
+            
+            // ВАЖНО: Обновляем доступность поиска (деактивируем)
+            updateSearchAvailability();
+            
+            showUploadStatus('🗑️ Все данные УТО очищены. Система готова к новой загрузке.', 'success');
+            console.log('🗑️ Все данные УТО очищены, система готова к работе');
+        }
+
+        function updateStatsDisplay() {
+            document.getElementById('totalVitrinies').textContent = vitrinyData.length;
+            document.getElementById('totalPositions').textContent = new Set(vitrinyData.map(i => i.position)).size;
+            document.getElementById('totalSprav').textContent = spravData.length;
+            document.getElementById('searchResults').textContent = currentResults.length;
+        }
+        
+        function initializeDropdowns() {
+            const blockSelect = document.getElementById('blockFunction');
+            if (!blockSelect) return;
+            
+            if (vitrinyLoaded && !blockSelect.disabled) {
+                const uniqueBlocks = [...new Set(vitrinyData.map(item => item.block).filter(Boolean))].sort();
+                blockSelect.innerHTML = '<option value="">-- Все блоки --</option>';
+                uniqueBlocks.forEach(block => {
+                    const option = document.createElement('option');
+                    option.value = block;
+                    option.textContent = block;
+                    blockSelect.appendChild(option);
+                });
+                console.log(`📋 Инициализированы опции блоков функций УТО: ${uniqueBlocks.length} вариантов`);
+            } else if (blockSelect.disabled) {
+                // Если select заблокирован, показываем соответствующий текст
+                blockSelect.innerHTML = '<option value="">-- Загрузите файлы УТО --</option>';
+            }
+        }
+        
+        function displayActiveFilters(filters) {
+            const container = document.getElementById('activeFilters');
+            const list = document.getElementById('filtersList');
+            list.innerHTML = '';
+            let hasFilters = false;
+            for (const key in filters) {
+                if (filters[key]) {
+                    hasFilters = true;
+                    const tag = document.createElement('span');
+                    tag.className = 'filter-tag';
+                    tag.textContent = `${key}: ${filters[key]}`;
+                    list.appendChild(tag);
+                }
+            }
+            container.style.display = hasFilters ? 'block' : 'none';
+        }
+        
+        function showUploadStatus(message, type) {
+            const statusDiv = document.getElementById('uploadStatus');
+            if (!statusDiv) return;
+            statusDiv.textContent = message;
+            statusDiv.className = `upload-status ${type}`;
+            statusDiv.style.display = 'block';
+            if (type !== 'loading') setTimeout(() => { statusDiv.style.display = 'none'; }, 5000);
+        }
+
+        function showDataInfo() {
+            const uploadContainer = document.querySelector('.upload-container');
+            if (!uploadContainer) return;
+
+            let infoDiv = uploadContainer.querySelector('.data-info');
+            if (infoDiv) {
+                infoDiv.remove();
+            }
+
+            if (!vitrinyLoaded && !spravLoaded) return;
+
+            infoDiv = document.createElement('div');
+            infoDiv.className = 'data-info';
+            
+            let infoHTML = '<h4><i class="fas fa-info-circle"></i> Информация о файлах УТО</h4>';
+            
+            if (vitrinyLoaded) {
+                const dateStr = vitrinyLoadDate ? vitrinyLoadDate.toLocaleString('ru-RU') : 'неизвестно';
+                infoHTML += `<p style="margin-bottom: 5px;"><strong>Витрины УТО:</strong> ${vitrinyFileName} (загружено: ${dateStr})</p>`;
+            }
+            if (spravLoaded) {
+                 const dateStr = spravLoadDate ? spravLoadDate.toLocaleString('ru-RU') : 'неизвестно';
+                infoHTML += `<p><strong>Справочник УТО:</strong> ${spravFileName} (загружено: ${dateStr})</p>`;
+            }
+            
+            infoDiv.innerHTML = infoHTML;
+            uploadContainer.appendChild(infoDiv);
+        }
+
+        // --- ФУНКЦИИ ЭКСПОРТА ---
+        function createExportData() {
+            if (currentResults.length === 0) {
+                alert('Нет данных УТО для экспорта.');
+                return null;
+            }
+
+            const headers = [
+                'Должность', 'Системное имя', 'Полное наименование', 'ОКЗ', 
+                'Блок функции', 'Принадлежность', 
+                'Полный путь подразделения', 'Комментарий', 'Примечания'
+            ];
+            
+            const data = [headers];
+
+            currentResults.forEach(item => {
+                const row = [
+                    item.position || '',
+                    item.systemName || '',
+                    item.fullPositionName || '',
+                    item.okz || '',
+                    item.block || '',
+                    item.belonging || '',
+                    item.department || '',
+                    item.comment || '',
+                    item.note || ''
+                ];
+                data.push(row);
+            });
+
+            return data;
+        }
+
+        function createExtendedExportData() {
+            if (currentResults.length === 0) {
+                alert('Нет данных УТО для экспорта.');
+                return null;
+            }
+
+            const headers = [
+                'Должность', 'Системное имя', 'Полное наименование', 'ОКЗ', 
+                'Блок функции', 'Принадлежность', 
+                'Полный путь подразделения', 
+                'Подразделение уровень 1', 'Подразделение уровень 2', 'Подразделение уровень 3', 
+                'Подразделение уровень 4', 'Подразделение уровень 5', 'Подразделение уровень 6',
+                'Подразделение уровень 7', 'Подразделение уровень 8', 'Подразделение уровень 9',
+                'Подразделение уровень 10',
+                'Комментарий', 'Примечания', 'Примечание 1', 'Примечание 2', 'Примечание 3'
+            ];
+            
+            const data = [headers];
+
+            currentResults.forEach(item => {
+                const levels = item.departmentLevels || [];
+                const notes = item.notes || [];
+                
+                const row = [
+                    item.position || '',
+                    item.systemName || '',
+                    item.fullPositionName || '',
+                    item.okz || '',
+                    item.block || '',
+                    item.belonging || '',
+                    item.department || '',
+                    levels[0] || '',
+                    levels[1] || '',
+                    levels[2] || '',
+                    levels[3] || '',
+                    levels[4] || '',
+                    levels[5] || '',
+                    levels[6] || '',
+                    levels[7] || '',
+                    levels[8] || '',
+                    levels[9] || '',
+                    item.comment || '',
+                    item.note || '',
+                    notes[0] || '',
+                    notes[1] || '',
+                    notes[2] || ''
+                ];
+                data.push(row);
+            });
+
+            return data;
+        }
+
+        function createCompactExportData() {
+            if (currentResults.length === 0) {
+                alert('Нет данных УТО для экспорта.');
+                return null;
+            }
+
+            const headers = [
+                'Должность', 'Системное имя', 'ОКЗ', 'Блок функции', 'Принадлежность', 'Подразделение'
+            ];
+            
+            const data = [headers];
+
+            currentResults.forEach(item => {
+                const row = [
+                    item.position || '',
+                    item.systemName || '',
+                    item.okz || '',
+                    item.block || '',
+                    item.belonging || '',
+                    item.department || ''
+                ];
+                data.push(row);
+            });
+
+            return data;
+        }
+
+        function exportToExcel() {
+            try {
+                if (!xlsxAvailable) {
+                    alert('Excel экспорт недоступен. Используйте CSV экспорт.');
+                    return;
+                }
+                
+                const data = createExtendedExportData();
+                if (!data) return;
+
+                showLoadingNotification('Экспорт УТО в Excel...', 3);
+                updateLoadingProgress('Подготовка данных УТО...', 1);
+                
+                setTimeout(() => {
+                    updateLoadingProgress('Создание Excel файла УТО...', 2);
+                    
+                    const ws = XLSX.utils.aoa_to_sheet(data);
+                    
+                    // Настройка ширины колонок
+                    const colWidths = [
+                        {wch: 35}, {wch: 30}, {wch: 40}, {wch: 15}, {wch: 25}, {wch: 20}, {wch: 50},
+                        {wch: 25}, {wch: 25}, {wch: 25}, {wch: 25}, {wch: 25}, {wch: 25}, {wch: 25},
+                        {wch: 25}, {wch: 25}, {wch: 25}, {wch: 40}, {wch: 40}, {wch: 30}, {wch: 30}, {wch: 30}
+                    ];
+                    
+                    ws['!cols'] = colWidths;
+                    
+                    const wb = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(wb, ws, "Результаты УТО");
+                    
+                    setTimeout(() => {
+                        updateLoadingProgress('Сохранение файла УТО...', 3);
+                        
+                        const filename = `export_uto_results_${new Date().toISOString().slice(0, 10)}.xlsx`;
+                        XLSX.writeFile(wb, filename);
+                        
+                        setTimeout(() => {
+                            showUploadStatus(`✅ Экспорт УТО в Excel завершен. Файл: ${filename}`, 'success');
+                        }, 1000);
+                    }, 500);
+                }, 500);
+                
+            } catch (error) {
+                console.error('Ошибка экспорта УТО в Excel:', error);
+                showLoadingError(`Ошибка экспорта УТО в Excel: ${error.message}`);
+            }
+        }
+
+        function exportToCSV() {
+            try {
+                const data = createExtendedExportData();
+                if (!data) return;
+
+                showLoadingNotification('Экспорт УТО в CSV...', 2);
+                updateLoadingProgress('Подготовка данных УТО...', 1);
+                
+                setTimeout(() => {
+                    updateLoadingProgress('Создание CSV файла УТО...', 2);
+                    
+                    const csvContent = data.map(row => 
+                        row.map(cell => {
+                            const cellStr = cell.toString().replace(/"/g, '""');
+                            return `"${cellStr}"`;
+                        }).join(',')
+                    ).join('\n');
+
+                    const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    
+                    const filename = `export_uto_results_${new Date().toISOString().slice(0, 10)}.csv`;
+                    link.download = filename;
+                    link.click();
+                    
+                    setTimeout(() => {
+                        showUploadStatus(`✅ Экспорт УТО в CSV завершен. Файл: ${filename}`, 'success');
+                    }, 500);
+                }, 500);
+                
+            } catch (error) {
+                console.error('Ошибка экспорта УТО в CSV:', error);
+                showUploadStatus(`❌ Ошибка экспорта УТО в CSV: ${error.message}`, 'error');
+            }
+        }
+
+        function exportToMoyOffice() {
+            try {
+                if (!xlsxAvailable) {
+                    alert('МойОфис экспорт недоступен. Используйте CSV экспорт.');
+                    return;
+                }
+                
+                const data = createExtendedExportData();
+                if (!data) return;
+
+                showLoadingNotification('Экспорт УТО в МойОфис...', 3);
+                updateLoadingProgress('Подготовка данных УТО...', 1);
+                
+                setTimeout(() => {
+                    updateLoadingProgress('Создание ODS файла УТО...', 2);
+                    
+                    const ws = XLSX.utils.aoa_to_sheet(data);
+                    
+                    const colWidths = [
+                        {wch: 35}, {wch: 30}, {wch: 40}, {wch: 15}, {wch: 25}, {wch: 20}, {wch: 50},
+                        {wch: 25}, {wch: 25}, {wch: 25}, {wch: 25}, {wch: 25}, {wch: 25}, {wch: 25},
+                        {wch: 25}, {wch: 25}, {wch: 25}, {wch: 40}, {wch: 40}, {wch: 30}, {wch: 30}, {wch: 30}
+                    ];
+                    
+                    ws['!cols'] = colWidths;
+
+                    const wb = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(wb, ws, "Результаты УТО");
+                    
+                    setTimeout(() => {
+                        updateLoadingProgress('Сохранение файла УТО...', 3);
+                        
+                        const filename = `export_uto_results_${new Date().toISOString().slice(0, 10)}.ods`;
+                        XLSX.writeFile(wb, filename, { bookType: 'ods' });
+                        
+                        setTimeout(() => {
+                            showUploadStatus(`✅ Экспорт УТО в МойОфис завершен. Файл: ${filename}`, 'success');
+                        }, 1000);
+                    }, 500);
+                }, 500);
+                
+            } catch (error) {
+                console.error('Ошибка экспорта УТО в МойОфис:', error);
+                showUploadStatus(`❌ Ошибка экспорта УТО в МойОфис: ${error.message}`, 'error');
+            }
+        }
+
+        function exportCompactCSV() {
+            try {
+                const data = createCompactExportData();
+                if (!data) return;
+
+                const csvContent = data.map(row => 
+                    row.map(cell => `"${cell.toString().replace(/"/g, '""')}"`).join(',')
+                ).join('\n');
+
+                const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                
+                const filename = `export_uto_compact_${new Date().toISOString().slice(0, 10)}.csv`;
+                link.download = filename;
+                link.click();
+                
+                showUploadStatus(`✅ Компактный экспорт УТО в CSV завершен. Файл: ${filename}`, 'success');
+                
+            } catch (error) {
+                console.error('Ошибка компактного экспорта УТО в CSV:', error);
+                showUploadStatus(`❌ Ошибка компактного экспорта УТО в CSV: ${error.message}`, 'error');
+            }
+        }
+
+        console.log('🎉 Интегрированная система поиска должностей УТО с полной адаптацией готова к работе!');
+    </script>
+</body>
+</html>

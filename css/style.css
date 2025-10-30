@@ -1702,7 +1702,7 @@ body {
 /* Фиксируем навигацию под hero */
 .nav-sticky {
     position: fixed;
-    top: 95px; /* Высота уменьшенного hero (примерно) */
+    top: 120px; /* Высота уменьшенного hero с запасом */
     left: 0;
     right: 0;
     width: 100%;
@@ -1711,20 +1711,20 @@ body {
 
 /* Компенсируем высоту фиксированной шапки и навигации */
 body {
-    padding-top: 155px; /* hero (~95px) + nav (~60px) */
+    padding-top: 180px; /* hero (~120px) + nav (~60px) */
 }
 
 /* Корректируем отступ для первой секции */
 #realized {
-    scroll-margin-top: 160px; /* Чтобы якорные ссылки учитывали fixed header */
+    scroll-margin-top: 185px; /* Чтобы якорные ссылки учитывали fixed header */
 }
 
 #improvements {
-    scroll-margin-top: 160px;
+    scroll-margin-top: 185px;
 }
 
 #development {
-    scroll-margin-top: 160px;
+    scroll-margin-top: 185px;
 }
 
 
@@ -1744,11 +1744,11 @@ body {
     }
     
     .nav-sticky {
-        top: 75px;
+        top: 95px;
     }
     
     body {
-        padding-top: 135px;
+        padding-top: 155px;
     }
 }
 

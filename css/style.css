@@ -1513,3 +1513,61 @@ body {
     background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(20, 184, 166, 0.02) 100%);
     backdrop-filter: blur(10px);
 }
+
+/* Global KZ/HRS Headers */
+.global-headers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin: 2rem 0 0 0;
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg-secondary);
+}
+
+.global-header {
+    padding: 1.5rem 2rem;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.75rem;
+    font-weight: 700;
+    backdrop-filter: blur(10px);
+}
+
+.global-header-left {
+    background: linear-gradient(135deg, rgba(119, 0, 255, 0.1) 0%, rgba(119, 0, 255, 0.05) 100%);
+    border: 2px solid rgba(119, 0, 255, 0.3);
+    color: rgba(119, 0, 255, 0.9);
+}
+
+.global-header-right {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(20, 184, 166, 0.05) 100%);
+    border: 2px solid rgba(16, 185, 129, 0.3);
+    color: #10b981;
+}
+
+.global-header i {
+    font-size: 2rem;
+}
+
+/* Remove individual column titles when global headers are present */
+.with-global-headers .realized-column-title {
+    display: none;
+}
+
+/* Adjust spacing */
+.with-global-headers .realized-container {
+    margin-top: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+    .global-headers {
+        grid-template-columns: 1fr;
+    }
+}

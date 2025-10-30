@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Section Switching</title>
+    <style>
+        .section { display: none; padding: 20px; margin: 20px; border: 2px solid #333; }
+        .section.active { display: block; background: #f0f0f0; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        button.active { background: #007bff; color: white; }
+    </style>
+</head>
+<body>
+    <div>
+        <button onclick="showSection('section1')" data-section="section1">Section 1</button>
+        <button onclick="showSection('section2')" data-section="section2">Section 2</button>
+        <button onclick="showSection('section3')" data-section="section3">Section 3</button>
+    </div>
+    
+    <div id="section1" class="section">Section 1 Content</div>
+    <div id="section2" class="section">Section 2 Content</div>
+    <div id="section3" class="section">Section 3 Content</div>
+    
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+            document.getElementById(sectionId).style.display = 'block';
+            document.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+            document.querySelector('[data-section="' + sectionId + '"]').classList.add('active');
+        }
+        document.addEventListener('DOMContentLoaded', () => showSection('section1'));
+    </script>
+</body>
+</html>

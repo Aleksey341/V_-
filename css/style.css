@@ -1620,3 +1620,23 @@ body {
 .global-header-right {
     color: #10b981 !important;
 }
+
+/* Show column titles again (they are now inside sections) */
+.with-global-headers .realized-column-title {
+    display: flex !important;
+}
+
+/* Section-specific sticky headers at top of each section */
+.with-global-headers .realized-container {
+    position: relative;
+}
+
+/* Enhanced sticky behavior for column titles */
+.with-global-headers .realized-column-title {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    margin-top: 0;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}

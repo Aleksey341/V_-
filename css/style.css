@@ -372,6 +372,15 @@ body {
     color: white;
 }
 
+.badge-hrs {
+    background: linear-gradient(135deg, #10b981, #14b8a6);
+    color: white;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.6rem;
+    margin-left: 0.5rem;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
 /* ========================================
    Strategic Choice Section
 ======================================== */

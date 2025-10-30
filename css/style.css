@@ -384,6 +384,18 @@ body {
     z-index: 10;
 }
 
+.badge-kz {
+    background: rgba(119, 0, 255, 0.39);
+    color: white;
+    font-size: 0.7rem;
+    padding: 0.3rem 0.7rem;
+    box-shadow: 0 2px 8px rgba(119, 0, 255, 0.3);
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+}
+
 .highlight-date {
     background: linear-gradient(135deg, #fef3c7, #fde68a);
     color: #92400e;
@@ -1346,3 +1358,53 @@ body {
 
 .hidden { display: none; }
 .visible { display: block; }
+/* ========================================
+   Two-Column Layout for Realized Section
+======================================== */
+.realized-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.realized-column {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    box-shadow: var(--shadow-lg);
+}
+
+.realized-column-left {
+    background: linear-gradient(135deg, rgba(119, 0, 255, 0.05) 0%, rgba(119, 0, 255, 0.02) 100%);
+    border: 2px solid rgba(119, 0, 255, 0.2);
+}
+
+.realized-column-right {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(20, 184, 166, 0.02) 100%);
+    border: 2px solid rgba(16, 185, 129, 0.2);
+}
+
+.realized-column-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.realized-column-left .realized-column-title {
+    color: rgba(119, 0, 255, 0.8);
+}
+
+.realized-column-right .realized-column-title {
+    color: #10b981;
+}
+
+/* Responsive Design */
+@media (max-width: 968px) {
+    .realized-container {
+        grid-template-columns: 1fr;
+    }
+}

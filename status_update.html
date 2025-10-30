@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Статус БП Увольнение - 30.10.2025</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header .date {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .critical-decision {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.3);
+        }
+
+        .critical-decision h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .critical-decision .decision-text {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .status-card {
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .status-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .status-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-active {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-left: 5px solid #00d084;
+        }
+
+        .status-cancelled {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-left: 5px solid #ff4757;
+        }
+
+        .status-progress {
+            background: linear-gradient(135deg, #ffdde1 0%, #ee9ca7 100%);
+            border-left: 5px solid #ffa502;
+        }
+
+        .status-planned {
+            background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%);
+            border-left: 5px solid #5f27cd;
+        }
+
+        .timeline {
+            margin: 40px 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 30px;
+            bottom: -30px;
+            width: 2px;
+            background: linear-gradient(to bottom, #667eea, #764ba2);
+        }
+
+        .timeline-item:last-child::before {
+            display: none;
+        }
+
+        .timeline-icon {
+            position: absolute;
+            left: 0;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            color: white;
+            z-index: 1;
+        }
+
+        .timeline-icon.completed {
+            background: #00d084;
+        }
+
+        .timeline-icon.active {
+            background: #ffa502;
+            animation: pulse 2s infinite;
+        }
+
+        .timeline-icon.scheduled {
+            background: #5f27cd;
+        }
+
+        .timeline-icon.planned {
+            background: #a29bfe;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .timeline-date {
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .section-title {
+            font-size: 2em;
+            margin: 40px 0 20px 0;
+            color: #2d3436;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .tasks-list {
+            margin: 20px 0;
+        }
+
+        .task-item {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border-left: 4px solid;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .task-high { border-color: #ff4757; }
+        .task-medium { border-color: #ffa502; }
+        .task-low { border-color: #00d084; }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .task-title {
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .task-status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .task-status.in-progress {
+            background: #ffeaa7;
+            color: #d63031;
+        }
+
+        .task-status.completed {
+            background: #55efc4;
+            color: #00b894;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin: 5px 5px 5px 0;
+        }
+
+        .badge-deadline {
+            background: #ff7675;
+            color: white;
+        }
+
+        .badge-responsible {
+            background: #74b9ff;
+            color: white;
+        }
+
+        .risks-grid {
+            display: grid;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .risk-item {
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            gap: 15px;
+            align-items: start;
+        }
+
+        .risk-low {
+            background: #d1f2eb;
+            border-left: 4px solid #00d084;
+        }
+
+        .risk-medium {
+            background: #ffecd2;
+            border-left: 4px solid #ffa502;
+        }
+
+        .risk-high {
+            background: #ffe5e5;
+            border-left: 4px solid #ff4757;
+        }
+
+        .risk-icon {
+            font-size: 1.5em;
+        }
+
+        .footer {
+            background: #2d3436;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .link-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            margin: 10px;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+        }
+
+        .link-button:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-chart-line"></i> Статус БП "Увольнение"</h1>
+            <p class="date">Обновлено: 30 октября 2025</p>
+        </div>
+
+        <div class="content">
+            <!-- Критическое решение -->
+            <div class="critical-decision">
+                <h2>
+                    <i class="fas fa-exclamation-triangle"></i>
+                    КРИТИЧЕСКОЕ РЕШЕНИЕ от 30.10.2025
+                </h2>
+                <div class="decision-text">
+                    ❌ ВРЕМЕННОЕ РЕШЕНИЕ ОТМЕНЕНО<br>
+                    ✅ Переход сразу к целевому решению
+                </div>
+                <p><strong>Инициатор:</strong> Команда RPA (Трошина Е.П.)</p>
+                <p><strong>Обоснование:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Избежание двойных трудозатрат (временное + целевое)</li>
+                    <li>Снижение ручной нагрузки на ЦУО</li>
+                    <li>Согласие КЦ (Бестужева А.) - "терпимо" до 2026</li>
+                </ul>
+            </div>
+
+            <!-- Статус компонентов -->
+            <h2 class="section-title">
+                <i class="fas fa-clipboard-check"></i>
+                Текущий статус компонентов
+            </h2>
+
+            <div class="status-grid">
+                <div class="status-card status-active">
+                    <h3><i class="fas fa-check-circle"></i> Текущий процесс</h3>
+                    <p><strong>Статус:</strong> 🟢 Активен</p>
+                    <p><strong>Срок:</strong> До Q1 2026</p>
+                    <p>RPA049 + RPA107 + ручная работа ЦДС/ЦУО</p>
+                </div>
+
+                <div class="status-card status-cancelled">
+                    <h3><i class="fas fa-times-circle"></i> Временное решение</h3>
+                    <p><strong>Статус:</strong> 🔴 Отменено</p>
+                    <p><strong>Причина:</strong> Нецелесообразно</p>
+                    <p>Отказ от промежуточного этапа</p>
+                </div>
+
+                <div class="status-card status-progress">
+                    <h3><i class="fas fa-spinner"></i> Целевая схема БП</h3>
+                    <p><strong>Статус:</strong> 🟡 В проработке</p>
+                    <p><strong>Встреча:</strong> 01.11.2025</p>
+                    <p>Согласование с ТП ИМЗ ЕСЭД</p>
+                </div>
+
+                <div class="status-card status-planned">
+                    <h3><i class="fas fa-robot"></i> Целевое RPA</h3>
+                    <p><strong>Статус:</strong> 🔵 Планируется</p>
+                    <p><strong>Срок:</strong> Q1 2026</p>
+                    <p>Разработка: 2-3 месяца после утверждения</p>
+                </div>
+            </div>
+
+            <!-- Timeline -->
+            <h2 class="section-title">
+                <i class="fas fa-calendar-alt"></i>
+                Временная шкала проекта
+            </h2>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-icon completed">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">09.10.2025</div>
+                        <strong>Обсуждение целевой схемы</strong>
+                        <p>Обсуждена часть целевой схемы БП (шаги 1-13)</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-icon completed">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">24.10.2025</div>
+                        <strong>Предложение временного решения</strong>
+                        <p>Рассмотрено предложение о внедрении временного решения</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-icon completed">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">30.10.2025</div>
+                        <strong>🔴 РЕШЕНИЕ: Отказ от временного решения</strong>
+                        <p>Утверждена стратегия перехода сразу к целевому решению</p>
+                        <p style="margin-top: 10px;"><em>Команда RPA оценила трудозатраты и признала временное решение нецелесообразным</em></p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-icon active">
+                        <i class="fas fa-hourglass-half"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">31.10.2025</div>
+                        <strong>⏰ Дедлайн: Информирование об ошибках RPA107</strong>
+                        <p>Ответственные: ЦУО</p>
+                        <p>Определить необходимость и адресатов информирования</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-icon scheduled">
+                        <i class="fas fa-calendar"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">01.11.2025</div>
+                        <strong>📅 Встреча: Статус целевой схемы</strong>
+                        <p>Ответственные: Полякова И., ЦДС, ЦУО, ДУУ</p>
+                        <p>Выравнивание после согласования с ТП ИМЗ ЕСЭД</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-icon planned">
+                        <i class="fas fa-flag-checkered"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">Q1 2026</div>
+                        <strong>🎯 Целевой запуск RPA-решения</strong>
+                        <p>Полная автоматизация бизнес-процесса увольнения</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Задачи -->
+            <h2 class="section-title">
+                <i class="fas fa-tasks"></i>
+                Актуальные задачи
+            </h2>
+
+            <div class="tasks-list">
+                <div class="task-item task-high">
+                    <div class="task-header">
+                        <div class="task-title">Финализация целевой схемы БП</div>
+                        <span class="task-status in-progress">В работе</span>
+                    </div>
+                    <p>Проработка финальной схемы бизнес-процесса "Увольнение"</p>
+                    <div>
+                        <span class="badge badge-responsible">ЦДС, ЦУО, ДУУ</span>
+                        <span class="badge badge-deadline">01.11.2025</span>
+                    </div>
+                    <p style="margin-top: 10px;"><strong>Блокер:</strong> Согласование с ТП ИМЗ ЕСЭД</p>
+                </div>
+
+                <div class="task-item task-high">
+                    <div class="task-header">
+                        <div class="task-title">Информирование об ошибках RPA107</div>
+                        <span class="task-status in-progress">В работе</span>
+                    </div>
+                    <p>Определить необходимость информирования об ошибке проверки задолженности и адресатов</p>
+                    <div>
+                        <span class="badge badge-responsible">ЦУО</span>
+                        <span class="badge badge-deadline">31.10.2025</span>
+                    </div>
+                </div>
+
+                <div class="task-item task-medium">
+                    <div class="task-header">
+                        <div class="task-title">Отчёт по уведомлениям из HR-сервисов</div>
+                        <span class="task-status in-progress">В работе</span>
+                    </div>
+                    <p>Уточнить возможность выгрузки отчета и определить срок хранения уведомлений</p>
+                    <div>
+                        <span class="badge badge-responsible">ЦУО</span>
+                        <span class="badge badge-responsible">Денисов А.</span>
+                    </div>
+                </div>
+
+                <div class="task-item task-low">
+                    <div class="task-header">
+                        <div class="task-title">Оценка целесообразности временного решения</div>
+                        <span class="task-status completed">Завершено</span>
+                    </div>
+                    <p>Результат: Отказ от временного решения ✅</p>
+                    <div>
+                        <span class="badge" style="background: #dfe6e9; color: #2d3436;">30.10.2025</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Риски -->
+            <h2 class="section-title">
+                <i class="fas fa-exclamation-circle"></i>
+                Управление рисками
+            </h2>
+
+            <div class="risks-grid">
+                <div class="risk-item risk-low">
+                    <div class="risk-icon">🟢</div>
+                    <div>
+                        <strong>Двойное информирование</strong>
+                        <p>Сохранение дублирования (почта + ИМЗ ЕСЭД)</p>
+                        <p><strong>Митигация:</strong> Согласовано с КЦ как "терпимое" до начала 2026</p>
+                        <p><strong>Статус:</strong> Принято ✅</p>
+                    </div>
+                </div>
+
+                <div class="risk-item risk-medium">
+                    <div class="risk-icon">🟡</div>
+                    <div>
+                        <strong>Отсутствие финальной схемы БП</strong>
+                        <p>Целевая схема всё ещё в проработке</p>
+                        <p><strong>Митигация:</strong> Встреча 01.11.2025 для выравнивания</p>
+                        <p><strong>Статус:</strong> Под контролем 🔍</p>
+                    </div>
+                </div>
+
+                <div class="risk-item risk-medium">
+                    <div class="risk-icon">🟡</div>
+                    <div>
+                        <strong>Задержка согласования с ТП ИМЗ ЕСЭД</strong>
+                        <p>Может повлиять на сроки запуска целевого решения</p>
+                        <p><strong>Митигация:</strong> Активная работа ЦДС, ЦУО, ДУУ с ТП</p>
+                        <p><strong>Статус:</strong> Мониторинг 📊</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ссылки -->
+            <div style="text-align: center; margin: 40px 0;">
+                <a href="index.html" class="link-button">
+                    <i class="fas fa-home"></i> Главная презентация
+                </a>
+                <a href="https://github.com/Aleksey341/V_-" class="link-button" target="_blank">
+                    <i class="fab fa-github"></i> GitHub репозиторий
+                </a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>Проект:</strong> БП Увольнение - Миграция OTRS → HRS</p>
+            <p><strong>Последнее обновление:</strong> 30.10.2025 | <strong>Статус:</strong> 🟢 На треке</p>
+        </div>
+    </div>
+
+    <script>
+        // Smooth scrolling для навигации
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

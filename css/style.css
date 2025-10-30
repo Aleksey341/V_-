@@ -1429,3 +1429,68 @@ body {
 .realized-column-right .subsection-title i {
     color: #10b981;
 }
+
+/* Card icons color customization for realized columns */
+.realized-column-left .card-icon {
+    background: linear-gradient(135deg, rgba(119, 0, 255, 0.15), rgba(119, 0, 255, 0.08)) !important;
+    color: #7700FF !important;
+}
+
+.realized-column-right .card-icon {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(20, 184, 166, 0.08)) !important;
+    color: #10b981 !important;
+}
+
+/* Scrollable columns */
+.realized-column {
+    max-height: 800px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+/* Custom scrollbar styling */
+.realized-column::-webkit-scrollbar {
+    width: 8px;
+}
+
+.realized-column-left::-webkit-scrollbar-track {
+    background: rgba(119, 0, 255, 0.05);
+    border-radius: 10px;
+}
+
+.realized-column-left::-webkit-scrollbar-thumb {
+    background: rgba(119, 0, 255, 0.3);
+    border-radius: 10px;
+}
+
+.realized-column-left::-webkit-scrollbar-thumb:hover {
+    background: rgba(119, 0, 255, 0.5);
+}
+
+.realized-column-right::-webkit-scrollbar-track {
+    background: rgba(16, 185, 129, 0.05);
+    border-radius: 10px;
+}
+
+.realized-column-right::-webkit-scrollbar-thumb {
+    background: rgba(16, 185, 129, 0.3);
+    border-radius: 10px;
+}
+
+.realized-column-right::-webkit-scrollbar-thumb:hover {
+    background: rgba(16, 185, 129, 0.5);
+}
+
+/* Firefox scrollbar */
+.realized-column {
+    scrollbar-width: thin;
+}
+
+.realized-column-left {
+    scrollbar-color: rgba(119, 0, 255, 0.3) rgba(119, 0, 255, 0.05);
+}
+
+.realized-column-right {
+    scrollbar-color: rgba(16, 185, 129, 0.3) rgba(16, 185, 129, 0.05);
+}

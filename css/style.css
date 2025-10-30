@@ -1640,3 +1640,124 @@ body {
     padding-top: 1rem;
     padding-bottom: 1rem;
 }
+/* ========================================
+   ИСПРАВЛЕНИЯ - 30.10.2025
+   1. Непрозрачный фон для sticky заголовков КЗ/HRS
+   2. Фиксированная шапка + уменьшенная ширина
+======================================== */
+
+/* ===== ИСПРАВЛЕНИЕ 1: Непрозрачный фон для заголовков ===== */
+/* Заменяем полупрозрачный gradient на solid background */
+
+.realized-column-left .realized-column-title {
+    background: rgba(249, 245, 255, 0.98) !important; /* Почти белый с фиолетовым оттенком */
+    backdrop-filter: none !important;
+    border-bottom: 2px solid rgba(119, 0, 255, 0.2);
+}
+
+.realized-column-right .realized-column-title {
+    background: rgba(240, 253, 250, 0.98) !important; /* Почти белый с зеленым оттенком */
+    backdrop-filter: none !important;
+    border-bottom: 2px solid rgba(16, 185, 129, 0.2);
+}
+
+/* Для секций с with-global-headers */
+.with-global-headers .realized-column-left .realized-column-title {
+    background: rgba(249, 245, 255, 0.98) !important;
+    backdrop-filter: none !important;
+    border-bottom: 2px solid rgba(119, 0, 255, 0.2);
+}
+
+.with-global-headers .realized-column-right .realized-column-title {
+    background: rgba(240, 253, 250, 0.98) !important;
+    backdrop-filter: none !important;
+    border-bottom: 2px solid rgba(16, 185, 129, 0.2);
+}
+
+
+/* ===== ИСПРАВЛЕНИЕ 2: Фиксированная шапка ===== */
+
+/* Фиксируем hero section */
+.hero {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 1.5rem 0; /* Уменьшили с 3rem */
+}
+
+/* Уменьшаем ширину заголовка на 50% */
+.hero-title {
+    font-size: 1.5rem !important; /* Было 3rem */
+    font-weight: 700;
+}
+
+/* Уменьшаем подзаголовок пропорционально */
+.hero-subtitle {
+    font-size: 1rem !important; /* Было 1.5rem */
+}
+
+/* Фиксируем навигацию под hero */
+.nav-sticky {
+    position: fixed;
+    top: 95px; /* Высота уменьшенного hero (примерно) */
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 999;
+}
+
+/* Компенсируем высоту фиксированной шапки и навигации */
+body {
+    padding-top: 155px; /* hero (~95px) + nav (~60px) */
+}
+
+/* Корректируем отступ для первой секции */
+#realized {
+    scroll-margin-top: 160px; /* Чтобы якорные ссылки учитывали fixed header */
+}
+
+#improvements {
+    scroll-margin-top: 160px;
+}
+
+#development {
+    scroll-margin-top: 160px;
+}
+
+
+/* ===== АДАПТИВНОСТЬ ===== */
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 1.2rem !important;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.875rem !important;
+    }
+    
+    .hero {
+        padding: 1rem 0;
+    }
+    
+    .nav-sticky {
+        top: 75px;
+    }
+    
+    body {
+        padding-top: 135px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 1rem !important;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.75rem !important;
+    }
+}

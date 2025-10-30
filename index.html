@@ -100,20 +100,60 @@
             </div>
 
             <div class="status-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 40px 0;">
-                <div style="background: rgba(255,255,255,0.95); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.2);">
+                <div class="status-card" data-status="completed" style="background: rgba(255,255,255,0.95); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative;">
                     <h4 style="color: #28a745; margin-top: 0;"><i class="fas fa-check-circle"></i> Завершено</h4>
                     <p style="color: #666; font-size: 32px; font-weight: bold; margin: 10px 0;">13</p>
                     <p style="color: #666; margin: 0;">задач выполнено</p>
+                    <div class="tooltip" style="display: none; position: absolute; background: white; border: 2px solid #28a745; border-radius: 10px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 1000; min-width: 300px; max-width: 400px; left: 50%; transform: translateX(-50%); top: 100%; margin-top: 10px;">
+                        <h5 style="color: #28a745; margin: 0 0 10px 0; font-size: 14px; border-bottom: 1px solid #28a745; padding-bottom: 8px;">Завершенные задачи:</h5>
+                        <ul style="margin: 0; padding-left: 20px; font-size: 12px; line-height: 1.6; color: #333;">
+                            <li>Реализация вида "Собственное желание"</li>
+                            <li>Отчет для ОКА (Excel)</li>
+                            <li>HR-формы (ДУО КЦ, ОКП)</li>
+                            <li>Email ТМЦ (объединенный ящик)</li>
+                            <li>Оповещения служб (БЕ, табельные)</li>
+                            <li>Оповещения сотрудников</li>
+                            <li>Отзыв заявления на увольнение</li>
+                            <li>Увольнение с испытательного срока</li>
+                            <li>Перевод в другую компанию</li>
+                            <li>Выход на пенсию</li>
+                            <li>Внешнее совместительство</li>
+                            <li>В связи с призывом на военную службу</li>
+                            <li>Оценка целесообразности временного решения</li>
+                        </ul>
+                    </div>
                 </div>
-                <div style="background: rgba(255,255,255,0.95); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.2);">
+                <div class="status-card" data-status="postponed" style="background: rgba(255,255,255,0.95); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative;">
                     <h4 style="color: #ffc107; margin-top: 0;"><i class="fas fa-pause-circle"></i> Отложено</h4>
                     <p style="color: #666; font-size: 32px; font-weight: bold; margin: 10px 0;">2</p>
                     <p style="color: #666; margin: 0;">задачи на паузе</p>
+                    <div class="tooltip" style="display: none; position: absolute; background: white; border: 2px solid #ffc107; border-radius: 10px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 1000; min-width: 300px; max-width: 400px; left: 50%; transform: translateX(-50%); top: 100%; margin-top: 10px;">
+                        <h5 style="color: #ffc107; margin: 0 0 10px 0; font-size: 14px; border-bottom: 1px solid #ffc107; padding-bottom: 8px;">Отложенные задачи:</h5>
+                        <ul style="margin: 0; padding-left: 20px; font-size: 12px; line-height: 1.6; color: #333;">
+                            <li>Временное решение для RPA049/RPA107 (отменено)</li>
+                            <li>Замещение сотрудников (на стадии реализации)</li>
+                        </ul>
+                    </div>
                 </div>
-                <div style="background: rgba(255,255,255,0.95); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.2);">
+                <div class="status-card" data-status="planned" style="background: rgba(255,255,255,0.95); padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative;">
                     <h4 style="color: #667eea; margin-top: 0;"><i class="fas fa-calendar-alt"></i> Запланировано</h4>
                     <p style="color: #666; font-size: 32px; font-weight: bold; margin: 10px 0;">10</p>
                     <p style="color: #666; margin: 0;">задач на 2026</p>
+                    <div class="tooltip" style="display: none; position: absolute; background: white; border: 2px solid #667eea; border-radius: 10px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 1000; min-width: 300px; max-width: 400px; left: 50%; transform: translateX(-50%); top: 100%; margin-top: 10px;">
+                        <h5 style="color: #667eea; margin: 0 0 10px 0; font-size: 14px; border-bottom: 1px solid #667eea; padding-bottom: 8px;">Запланированные задачи на 2026:</h5>
+                        <ul style="margin: 0; padding-left: 20px; font-size: 12px; line-height: 1.6; color: #333;">
+                            <li>Согласование руководителя при увольнении с испытательного</li>
+                            <li>Подача срочного увольнения HR BP за себя</li>
+                            <li>Внутреннее совместительство</li>
+                            <li>Соглашение сторон</li>
+                            <li>По медицинским основаниям</li>
+                            <li>По случаю смерти (Ст. 83)</li>
+                            <li>По дисциплинарным основаниям</li>
+                            <li>Сокращение штата</li>
+                            <li>Истечение срока договора</li>
+                            <li>Интеграция OTRS-HRServ</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
@@ -947,6 +987,30 @@
         // При загрузке страницы показываем секцию статусов
         document.addEventListener('DOMContentLoaded', function() {
             showSection('status');
+            
+            // Добавляем обработчики для tooltip на карточках статусов
+            const statusCards = document.querySelectorAll('.status-card');
+            statusCards.forEach(card => {
+                const tooltip = card.querySelector('.tooltip');
+                
+                // Показываем tooltip при наведении
+                card.addEventListener('mouseenter', function() {
+                    if (tooltip) {
+                        tooltip.style.display = 'block';
+                        card.style.transform = 'translateY(-5px)';
+                        card.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
+                    }
+                });
+                
+                // Скрываем tooltip при уходе курсора
+                card.addEventListener('mouseleave', function() {
+                    if (tooltip) {
+                        tooltip.style.display = 'none';
+                        card.style.transform = '';
+                        card.style.boxShadow = '0 5px 20px rgba(0,0,0,0.2)';
+                    }
+                });
+            });
         });
     </script>
     <script src="js/script.js"></script>

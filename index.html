@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>БП Увольнение - Статусы 30.10.2025</title>
+    <title>БП Увольнение - Развитие проекта 2026</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
@@ -17,7 +17,12 @@
                 БП Увольнение
             </h1>
             <p class="hero-subtitle">Развитие проекта в 2026 году</p>
-            <div class="hero-badge">Актуальные статусы проекта</div>
+            <div class="hero-badge">Стратегический выбор пути развития</div>
+            <div style="margin-top: 20px;">
+                <a href="#status" onclick="showSection('status'); return false;" style="display: inline-block; padding: 12px 30px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; text-decoration: none; border-radius: 25px; font-weight: 600; box-shadow: 0 5px 15px rgba(245, 87, 108, 0.3); transition: transform 0.3s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    <i class="fas fa-exclamation-triangle"></i> ОБНОВЛЕНИЕ 30.10.2025: Актуальные статусы
+                </a>
+            </div>
         </div>
     </header>
 
@@ -25,18 +30,18 @@
     <nav class="nav-sticky" id="navigation">
         <div class="container">
             <ul class="nav-menu">
-                <li><a href="index.html" class="nav-link active" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;"><i class="fas fa-chart-line"></i> Статусы 30.10.2025</a></li>
-                <li><a href="realized.html" class="nav-link">Реализовано</a></li>
-                <li><a href="improvements.html" class="nav-link">Доработки 2026</a></li>
-                <li><a href="other-types.html" class="nav-link">Другие виды</a></li>
-                <li><a href="vacation-scenarios.html" class="nav-link">Сценарии отпуска</a></li>
-                <li><a href="comparison.html" class="nav-link">Сравнение</a></li>
+                <li><a href="#status" class="nav-link" data-section="status" onclick="showSection('status'); return false;"><i class="fas fa-chart-line"></i> Статусы 30.10.2025</a></li>
+                <li><a href="#realized" class="nav-link" data-section="realized" onclick="showSection('realized'); return false;">Реализовано</a></li>
+                <li><a href="#improvements" class="nav-link" data-section="improvements" onclick="showSection('improvements'); return false;">Доработки 2026</a></li>
+                <li><a href="#other-types" class="nav-link" data-section="other-types" onclick="showSection('other-types'); return false;">Другие виды</a></li>
+                <li><a href="#vacation-scenarios" class="nav-link" data-section="vacation-scenarios" onclick="showSection('vacation-scenarios'); return false;">Сценарии отпуска</a></li>
+                <li><a href="#comparison" class="nav-link" data-section="comparison" onclick="showSection('comparison'); return false;">Сравнение</a></li>
             </ul>
         </div>
     </nav>
 
     <!-- Status Update Section - 30.10.2025 -->
-    <section id="status" class="section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; min-height: calc(100vh - 300px);">
+    <section id="status" class="section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
         <div class="container">
             <h2 class="section-title" style="color: white;">
                 <i class="fas fa-exclamation-circle"></i>
@@ -141,6 +146,812 @@
         </div>
     </section>
 
+    <!-- Realized in HRS Section -->
+    <section id="realized" class="section section-realized">
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-check-circle"></i>
+                Реализовано в HRS
+            </h2>
+            
+            <div class="subsection">
+                <h3 class="subsection-title">
+                    <i class="fas fa-user-tie"></i>
+                    Вид увольнения "Собственное желание"
+                </h3>
+                <div class="card-grid">
+                    <div class="card card-success">
+                        <div class="card-icon"><i class="fas fa-file-signature"></i></div>
+                        <h4>Заявление на увольнение</h4>
+                        <p>По собственному желанию</p>
+                    </div>
+                    <div class="card card-success">
+                        <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
+                        <h4>В связи с призывом</h4>
+                        <p>На военную службу</p>
+                    </div>
+                    <div class="card card-success">
+                        <div class="card-icon"><i class="fas fa-building"></i></div>
+                        <h4>Перевод</h4>
+                        <p>В другую компанию</p>
+                    </div>
+                    <div class="card card-success">
+                        <div class="card-icon"><i class="fas fa-user-clock"></i></div>
+                        <h4>С испытательного срока</h4>
+                        <p>Увольнение</p>
+                    </div>
+                    <div class="card card-success">
+                        <div class="card-icon"><i class="fas fa-umbrella-beach"></i></div>
+                        <h4>Выход на пенсию</h4>
+                        <p>В связи с выходом на пенсию</p>
+                    </div>
+                    <div class="card card-success">
+                        <div class="card-icon"><i class="fas fa-user-plus"></i></div>
+                        <h4>Внешнее совместительство</h4>
+                        <p>Увольнение с внешнего совместительства</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">
+                    <i class="fas fa-cogs"></i>
+                    Реализованные функции
+                </h3>
+                <div class="card-grid">
+                    <div class="card card-success">
+                        <div class="card-icon"><i class="fas fa-file-excel"></i></div>
+                        <h4>Отчет для ОКА</h4>
+                        <p>Excel таблица</p>
+                    </div>
+                    <div class="card card-success">
+                        <div class="card-icon"><i class="fas fa-clipboard-list"></i></div>
+                        <h4>HR-формы</h4>
+                        <p>Отчеты ДУО КЦ, ОКП</p>
+                    </div>
+                    <div class="card card-success">
+                        <div class="card-icon"><i class="fas fa-envelope"></i></div>
+                        <h4>Email ТМЦ</h4>
+                        <p>Объединенный ящик</p>
+                    </div>
+                    <div class="card card-success">
+                        <div class="card-icon"><i class="fas fa-bell"></i></div>
+                        <h4>Оповещения служб</h4>
+                        <p>Корректировка БЕ, табельных</p>
+                    </div>
+                    <div class="card card-success">
+                        <div class="card-icon"><i class="fas fa-user-check"></i></div>
+                        <h4>Оповещения сотрудников</h4>
+                        <p>Корректировка уведомлений</p>
+                    </div>
+                    <div class="card card-progress">
+                        <div class="card-icon"><i class="fas fa-user-shield"></i></div>
+                        <h4>Замещение</h4>
+                        <p>На стадии реализации</p>
+                        <span class="badge badge-progress">В работе</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">
+                    <i class="fas fa-undo"></i>
+                    Дополнительно реализовано
+                </h3>
+                <div class="card-grid">
+                    <div class="card card-success">
+                        <div class="card-icon"><i class="fas fa-file-contract"></i></div>
+                        <h4>Отзыв заявления</h4>
+                        <p>Заявление на отзыв заявления на увольнение</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Improvements 2026 Section -->
+    <section id="improvements" class="section section-improvements">
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-wrench"></i>
+                Доработки на 2026 год
+            </h2>
+            <div class="card-grid">
+                <div class="card card-warning">
+                    <div class="card-icon"><i class="fas fa-user-graduate"></i></div>
+                    <h4>Увольнение с испытательного срока</h4>
+                    <p>Добавить согласование руководителя</p>
+                    <span class="badge badge-warning">2026</span>
+                </div>
+                <div class="card card-warning">
+                    <div class="card-icon"><i class="fas fa-bolt"></i></div>
+                    <h4>Подача срочного увольнения HR BP</h4>
+                    <p>Подача заявления на срочное увольнение за себя</p>
+                    <span class="badge badge-warning">2026</span>
+                </div>
+                <div class="card card-warning">
+                    <div class="card-icon"><i class="fas fa-users"></i></div>
+                    <h4>Внутреннее совместительство</h4>
+                    <p>Увольнение с внутреннего совместительства</p>
+                    <span class="badge badge-warning">2026</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Other Termination Types Section -->
+    <section id="other-types" class="section section-other-types">
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-route"></i>
+                6 видов увольнения: выбор стратегии развития
+            </h2>
+            
+            <div class="card-grid">
+                <div class="card card-decision">
+                    <div class="card-icon bg-purple"><i class="fas fa-handshake"></i></div>
+                    <h4>Соглашение сторон</h4>
+                    <p>Запрос на подготовку СС, шаблон вводных данных</p>
+                    <span class="badge badge-decision">Требует решения</span>
+                </div>
+                <div class="card card-decision">
+                    <div class="card-icon bg-red"><i class="fas fa-stethoscope"></i></div>
+                    <h4>По медицинским основаниям</h4>
+                    <p>Направление мед. документов, уведомление</p>
+                    <span class="badge badge-decision">Требует решения</span>
+                </div>
+                <div class="card card-decision">
+                    <div class="card-icon bg-gray"><i class="fas fa-cross"></i></div>
+                    <h4>По случаю смерти (Ст. 83)</h4>
+                    <p>Свидетельство о смерти, реквизиты для перечисления</p>
+                    <span class="badge badge-decision">Требует решения</span>
+                </div>
+                <div class="card card-decision">
+                    <div class="card-icon bg-orange"><i class="fas fa-gavel"></i></div>
+                    <h4>По дисциплинарным основаниям</h4>
+                    <p>Приказ на увольнение</p>
+                    <span class="badge badge-decision">Требует решения</span>
+                </div>
+                <div class="card card-decision">
+                    <div class="card-icon bg-blue"><i class="fas fa-chart-line-down"></i></div>
+                    <h4>Сокращение штата</h4>
+                    <p>Уведомление, скан документов "Ознакомление с Вакансиями"</p>
+                    <span class="badge badge-decision">Требует решения</span>
+                </div>
+                <div class="card card-decision">
+                    <div class="card-icon bg-teal"><i class="fas fa-calendar-times"></i></div>
+                    <h4>Истечение срока договора</h4>
+                    <p>Уведомление работника об истечении срока трудового договора</p>
+                    <span class="badge badge-decision">Требует решения</span>
+                </div>
+            </div>
+
+            <div class="strategic-choice">
+                <h3 class="strategic-title">
+                    <i class="fas fa-code-branch"></i>
+                    Стратегическая развилка: OTRS vs HRS
+                </h3>
+                
+                <div class="choice-container">
+                    <div class="choice-path choice-otrs">
+                        <div class="choice-header">
+                            <h4><i class="fas fa-server"></i> ПУТЬ OTRS</h4>
+                            <span class="choice-badge recommended">⭐ Рекомендуемый</span>
+                        </div>
+                        <div class="choice-content">
+                            <div class="choice-feature">
+                                <i class="fas fa-check-circle"></i>
+                                <span><strong>НЕ ТРЕБУЕТСЯ</strong> разработка каждого вида в HR-сервисах</span>
+                            </div>
+                            <div class="choice-feature">
+                                <i class="fas fa-bullseye"></i>
+                                <span><strong>Единая точка:</strong> Приказ в ОКА = триггер для всех</span>
+                            </div>
+                            <div class="choice-feature">
+                                <i class="fas fa-envelope-open-text"></i>
+                                <span><strong>Автооповещения</strong> через OTRS</span>
+                            </div>
+                            <div class="choice-feature">
+                                <i class="fas fa-sync"></i>
+                                <span><strong>Весь документооборот</strong> переходит из ЕСЭД в OTRS</span>
+                            </div>
+                            <div class="choice-feature">
+                                <i class="fas fa-bolt"></i>
+                                <span><strong>Быстро:</strong> Экономия 12-18 месяцев</span>
+                            </div>
+                            <div class="choice-feature">
+                                <i class="fas fa-coins"></i>
+                                <span><strong>Экономично:</strong> Снижение затрат в 6 раз</span>
+                            </div>
+                            <div class="choice-result">
+                                <i class="fas fa-trophy"></i>
+                                <strong>Результат:</strong> Все 6 видов работают автоматически!
+                            </div>
+                        </div>
+                        <button class="btn btn-otrs" onclick="openModal('modal-otrs')">
+                            <i class="fas fa-info-circle"></i> Подробнее про OTRS
+                        </button>
+                    </div>
+
+                    <div class="choice-path choice-hrs">
+                        <div class="choice-header">
+                            <h4><i class="fas fa-users-cog"></i> ПУТЬ HRS</h4>
+                            <span class="choice-badge long">Долгий путь</span>
+                        </div>
+                        <div class="choice-content">
+                            <div class="choice-feature warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span><strong>ТРЕБУЕТСЯ</strong> разработка КАЖДОГО вида отдельно</span>
+                            </div>
+                            <div class="choice-feature warning">
+                                <i class="fas fa-tools"></i>
+                                <span><strong>6 отдельных проектов</strong> разработки</span>
+                            </div>
+                            <div class="choice-feature warning">
+                                <i class="fas fa-hourglass-half"></i>
+                                <span><strong>12-18+ месяцев</strong> на все виды</span>
+                            </div>
+                            <div class="choice-feature warning">
+                                <i class="fas fa-dollar-sign"></i>
+                                <span><strong>Дорого:</strong> × 6 стоимость разработки</span>
+                            </div>
+                            <div class="choice-result">
+                                <i class="fas fa-clipboard-check"></i>
+                                <strong>Результат:</strong> Каждый вид требует индивидуальной разработки, тестирования и внедрения
+                            </div>
+                        </div>
+                        <button class="btn btn-hrs" onclick="openModal('modal-hrs')">
+                            <i class="fas fa-info-circle"></i> Подробнее про HRS
+                        </button>
+                    </div>
+                </div>
+
+                <div class="visual-comparison">
+                    <h4 class="comparison-title">Визуальное сравнение объёма работ</h4>
+                    <div class="comparison-diagram">
+                        <div class="diagram-column">
+                            <div class="diagram-label">OTRS</div>
+                            <div class="diagram-box single-trigger">
+                                <i class="fas fa-bolt"></i>
+                                <span>1 ТРИГГЕР</span>
+                                <small>в ОКА</small>
+                            </div>
+                            <div class="diagram-arrow">↓</div>
+                            <div class="diagram-result success">
+                                <i class="fas fa-check"></i>
+                                ГОТОВО!
+                                <small>3-6 месяцев</small>
+                            </div>
+                        </div>
+                        <div class="diagram-column">
+                            <div class="diagram-label">HRS</div>
+                            <div class="diagram-box multiple-dev">
+                                <div class="dev-grid">
+                                    <span class="dev-item">1</span>
+                                    <span class="dev-item">2</span>
+                                    <span class="dev-item">3</span>
+                                    <span class="dev-item">4</span>
+                                    <span class="dev-item">5</span>
+                                    <span class="dev-item">6</span>
+                                </div>
+                                <small>6 РАЗРАБОТОК</small>
+                            </div>
+                            <div class="diagram-arrow">↓</div>
+                            <div class="diagram-result warning">
+                                <i class="fas fa-hourglass-half"></i>
+                                В РАБОТЕ
+                                <small>12-18+ месяцев</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="strategic-recommendation">
+                    <i class="fas fa-lightbulb"></i>
+                    <div class="recommendation-content">
+                        <h4>Стратегическая рекомендация</h4>
+                        <p><strong>Выбор пути OTRS</strong> позволяет запустить все 6 видов увольнения <strong>БЕЗ отдельной разработки каждого</strong>, используя единую точку интеграции (приказ в ОКА) и автоматические оповещения через OTRS.</p>
+                        <div class="recommendation-benefits">
+                            <span><i class="fas fa-check"></i> Экономия 12-18 месяцев</span>
+                            <span><i class="fas fa-check"></i> Снижение затрат в 6 раз</span>
+                            <span><i class="fas fa-check"></i> Быстрый запуск</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vacation Scenarios Section -->
+    <section id="vacation-scenarios" class="section section-scenarios">
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-umbrella-beach"></i>
+                5 сценариев "Отпуск с последующим увольнением"
+            </h2>
+            
+            <div class="scenarios-grid">
+                <div class="scenario-card scenario-1">
+                    <div class="scenario-header">
+                        <span class="scenario-number">1</span>
+                        <h3>К3 Быстрое решение</h3>
+                        <span class="scenario-badge green">До 1 месяца</span>
+                    </div>
+                    <div class="scenario-content">
+                        <p><strong>Доработка:</strong> Автоматический контроль срока больше 5 раб. дней</p>
+                        <p><strong>Путь:</strong> Сотрудник → ОКА → HR BP → ОКА → ОП (ЕСЭД)</p>
+                        <p><strong>Особенность:</strong> Исключение УТО, передача проверки на ОКА</p>
+                    </div>
+                    <button class="btn btn-scenario" onclick="openModal('modal-scenario-1')">
+                        <i class="fas fa-info-circle"></i> Подробнее
+                    </button>
+                </div>
+
+                <div class="scenario-card scenario-2">
+                    <div class="scenario-header">
+                        <span class="scenario-number">2</span>
+                        <h3>К3 Долгое решение</h3>
+                        <span class="scenario-badge yellow">2-3 месяца</span>
+                    </div>
+                    <div class="scenario-content">
+                        <p><strong>Доработка:</strong> Аналогично Сценарию 1</p>
+                        <p><strong>Срок:</strong> Более длительные сроки реализации</p>
+                        <p><strong>Сложность:</strong> Средняя</p>
+                    </div>
+                    <button class="btn btn-scenario" onclick="openModal('modal-scenario-2')">
+                        <i class="fas fa-info-circle"></i> Подробнее
+                    </button>
+                </div>
+
+                <div class="scenario-card scenario-3">
+                    <div class="scenario-header">
+                        <span class="scenario-number">3</span>
+                        <h3>To Be HR-S</h3>
+                        <span class="scenario-badge orange">~4 кв 2026</span>
+                    </div>
+                    <div class="scenario-content">
+                        <p><strong>Переход:</strong> На новый функционал HR-S</p>
+                        <p><strong>Функции:</strong> Автоматическая проверка баланса отпусков</p>
+                        <p><strong>Уровень:</strong> Расширенная автоматизация</p>
+                    </div>
+                    <button class="btn btn-scenario" onclick="openModal('modal-scenario-3')">
+                        <i class="fas fa-info-circle"></i> Подробнее
+                    </button>
+                </div>
+
+                <div class="scenario-card scenario-4">
+                    <div class="scenario-header">
+                        <span class="scenario-number">4</span>
+                        <h3>#wait To Be HR-S</h3>
+                        <span class="scenario-badge blue">2026-2027</span>
+                    </div>
+                    <div class="scenario-content">
+                        <p><strong>Автоматизация:</strong> Максимальная</p>
+                        <p><strong>Функции:</strong> Автоматический вылет категории работников</p>
+                        <p><strong>Интеграция:</strong> Полная интеграция в HR-S</p>
+                    </div>
+                    <button class="btn btn-scenario" onclick="openModal('modal-scenario-4')">
+                        <i class="fas fa-info-circle"></i> Подробнее
+                    </button>
+                </div>
+
+                <div class="scenario-card scenario-5">
+                    <div class="scenario-header">
+                        <span class="scenario-number">5</span>
+                        <h3>OTRS</h3>
+                        <span class="scenario-badge purple">⭐ Рекомендуемый</span>
+                    </div>
+                    <div class="scenario-content">
+                        <p><strong>Ключевое решение:</strong> Дождаться переноса кадрового документооборота из ЕСЭД в OTRS</p>
+                        <p><strong>Преимущества:</strong> Единая точка интеграции, снижение затрат</p>
+                        <p><strong>Результат:</strong> Не требуется разработка 6 видов увольнений</p>
+                    </div>
+                    <button class="btn btn-scenario" onclick="openModal('modal-scenario-5')">
+                        <i class="fas fa-info-circle"></i> Подробнее
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Table Section -->
+    <section id="comparison" class="section section-comparison">
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-table"></i>
+                Сравнительная таблица сценариев
+            </h2>
+            
+            <div class="table-responsive">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Критерий</th>
+                            <th class="col-scenario-1">Сценарий 1<br>К3 Быстрое</th>
+                            <th class="col-scenario-2">Сценарий 2<br>К3 Долгое</th>
+                            <th class="col-scenario-3">Сценарий 3<br>To Be HR-S</th>
+                            <th class="col-scenario-4">Сценарий 4<br>#wait HR-S</th>
+                            <th class="col-scenario-5">Сценарий 5<br>OTRS ⭐</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Срок реализации</strong></td>
+                            <td class="col-scenario-1">До 1 месяца</td>
+                            <td class="col-scenario-2">2-3 месяца</td>
+                            <td class="col-scenario-3">~4 кв 2026</td>
+                            <td class="col-scenario-4">2026-2027</td>
+                            <td class="col-scenario-5">Зависит от OTRS</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Сложность</strong></td>
+                            <td class="col-scenario-1">Низкая</td>
+                            <td class="col-scenario-2">Средняя</td>
+                            <td class="col-scenario-3">Высокая</td>
+                            <td class="col-scenario-4">Очень высокая</td>
+                            <td class="col-scenario-5">Средняя</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Автоматизация</strong></td>
+                            <td class="col-scenario-1">Частичная</td>
+                            <td class="col-scenario-2">Частичная</td>
+                            <td class="col-scenario-3">Расширенная</td>
+                            <td class="col-scenario-4">Полная</td>
+                            <td class="col-scenario-5">Полная</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Затраты</strong></td>
+                            <td class="col-scenario-1">Низкие</td>
+                            <td class="col-scenario-2">Средние</td>
+                            <td class="col-scenario-3">Высокие</td>
+                            <td class="col-scenario-4">Очень высокие</td>
+                            <td class="col-scenario-5">Низкие</td>
+                        </tr>
+                        <tr>
+                            <td><strong>6 видов увольнения</strong></td>
+                            <td class="col-scenario-1">Требуют разработки</td>
+                            <td class="col-scenario-2">Требуют разработки</td>
+                            <td class="col-scenario-3">Требуют разработки</td>
+                            <td class="col-scenario-4">Требуют разработки</td>
+                            <td class="col-scenario-5 highlight">НЕ требуют! ⭐</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Интеграция</strong></td>
+                            <td class="col-scenario-1">Локальная</td>
+                            <td class="col-scenario-2">Локальная</td>
+                            <td class="col-scenario-3">HR-S</td>
+                            <td class="col-scenario-4">HR-S полная</td>
+                            <td class="col-scenario-5 highlight">OTRS единая точка</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Масштабируемость</strong></td>
+                            <td class="col-scenario-1">Ограниченная</td>
+                            <td class="col-scenario-2">Ограниченная</td>
+                            <td class="col-scenario-3">Средняя</td>
+                            <td class="col-scenario-4">Высокая</td>
+                            <td class="col-scenario-5 highlight">Очень высокая</td>
+                        </tr>
+                        <tr class="recommendation-row">
+                            <td><strong>Рекомендация</strong></td>
+                            <td class="col-scenario-1">Быстрый старт</td>
+                            <td class="col-scenario-2">Временное решение</td>
+                            <td class="col-scenario-3">Среднесрочно</td>
+                            <td class="col-scenario-4">Долгосрочно</td>
+                            <td class="col-scenario-5 highlight"><strong>⭐ ОПТИМАЛЬНО</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modals -->
+    <!-- Modal OTRS -->
+    <div id="modal-otrs" class="modal">
+        <div class="modal-content modal-large">
+            <span class="modal-close" onclick="closeModal('modal-otrs')">&times;</span>
+            <div class="modal-header">
+                <h3><i class="fas fa-server"></i> ПУТЬ OTRS (Рекомендуемый) ⭐</h3>
+                <span class="modal-badge recommended">Оптимальное решение</span>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h4><i class="fas fa-bullseye"></i> Ключевое преимущество</h4>
+                    <p><strong>Единая точка интеграции:</strong> Приказ на увольнение в ОКА становится триггером для автоматического запуска всех процессов увольнения.</p>
+                </div>
+                
+                <div class="modal-section">
+                    <h4><i class="fas fa-check-double"></i> Что НЕ требует разработки</h4>
+                    <ul class="check-list">
+                        <li><i class="fas fa-check"></i> Соглашение сторон</li>
+                        <li><i class="fas fa-check"></i> По медицинским основаниям</li>
+                        <li><i class="fas fa-check"></i> По случаю смерти работника/работодателя (Ст. 83)</li>
+                        <li><i class="fas fa-check"></i> По дисциплинарным основаниям</li>
+                        <li><i class="fas fa-check"></i> Сокращение штата</li>
+                        <li><i class="fas fa-check"></i> Истечение срока трудового договора</li>
+                    </ul>
+                </div>
+
+                <div class="modal-section">
+                    <h4><i class="fas fa-cogs"></i> Как это работает</h4>
+                    <ol>
+                        <li>Весь кадровый документооборот переходит из ЕСЭД в OTRS</li>
+                        <li>Приказ на увольнение в ОКА запускает автоматический процесс</li>
+                        <li>OTRS автоматически рассылает оповещения всем службам</li>
+                        <li>Централизованное управление всеми видами увольнений</li>
+                    </ol>
+                </div>
+
+                <div class="modal-section benefits">
+                    <h4><i class="fas fa-trophy"></i> Преимущества</h4>
+                    <div class="benefits-grid">
+                        <div class="benefit-item">
+                            <i class="fas fa-bolt"></i>
+                            <span><strong>Быстро:</strong> Экономия 12-18 месяцев разработки</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-coins"></i>
+                            <span><strong>Экономично:</strong> Снижение затрат в 6 раз</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-sync"></i>
+                            <span><strong>Централизовано:</strong> Всё в одной системе</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-envelope-open-text"></i>
+                            <span><strong>Автоматизировано:</strong> Автооповещения через OTRS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-section result">
+                    <h4><i class="fas fa-star"></i> Итоговый результат</h4>
+                    <p class="highlight-box">Все 6 видов увольнения работают автоматически через единый триггер без необходимости разработки каждого вида отдельно в HR-сервисах!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal HRS -->
+    <div id="modal-hrs" class="modal">
+        <div class="modal-content modal-large">
+            <span class="modal-close" onclick="closeModal('modal-hrs')">&times;</span>
+            <div class="modal-header">
+                <h3><i class="fas fa-users-cog"></i> ПУТЬ HRS (Долгий путь)</h3>
+                <span class="modal-badge warning">Требует значительных ресурсов</span>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Основная проблема</h4>
+                    <p><strong>Каждый вид увольнения требует отдельной разработки в HR-сервисах.</strong> Это означает 6 параллельных проектов с собственными циклами разработки, тестирования и внедрения.</p>
+                </div>
+                
+                <div class="modal-section">
+                    <h4><i class="fas fa-list-ol"></i> Что требует разработки</h4>
+                    <ol class="warning-list">
+                        <li><i class="fas fa-wrench"></i> Соглашение сторон - отдельный модуль</li>
+                        <li><i class="fas fa-wrench"></i> По медицинским основаниям - отдельный модуль</li>
+                        <li><i class="fas fa-wrench"></i> По случаю смерти - отдельный модуль</li>
+                        <li><i class="fas fa-wrench"></i> По дисциплинарным основаниям - отдельный модуль</li>
+                        <li><i class="fas fa-wrench"></i> Сокращение штата - отдельный модуль</li>
+                        <li><i class="fas fa-wrench"></i> Истечение срока договора - отдельный модуль</li>
+                    </ol>
+                </div>
+
+                <div class="modal-section">
+                    <h4><i class="fas fa-clock"></i> Временные затраты</h4>
+                    <p>Общий срок реализации: <strong>12-18+ месяцев</strong></p>
+                    <ul>
+                        <li>Разработка каждого модуля: 2-3 месяца</li>
+                        <li>Тестирование: 1-2 месяца</li>
+                        <li>Интеграция: 2-4 месяца</li>
+                        <li>Внедрение и поддержка: постоянно</li>
+                    </ul>
+                </div>
+
+                <div class="modal-section drawbacks">
+                    <h4><i class="fas fa-minus-circle"></i> Недостатки</h4>
+                    <div class="drawbacks-grid">
+                        <div class="drawback-item">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span><strong>Дорого:</strong> × 6 стоимость разработки</span>
+                        </div>
+                        <div class="drawback-item">
+                            <i class="fas fa-hourglass-half"></i>
+                            <span><strong>Долго:</strong> 12-18+ месяцев</span>
+                        </div>
+                        <div class="drawback-item">
+                            <i class="fas fa-tools"></i>
+                            <span><strong>Сложно:</strong> Множество интеграций</span>
+                        </div>
+                        <div class="drawback-item">
+                            <i class="fas fa-users"></i>
+                            <span><strong>Ресурсоёмко:</strong> Большая команда</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-section result">
+                    <h4><i class="fas fa-chart-bar"></i> Итоговый результат</h4>
+                    <p class="warning-box">Каждый вид увольнения требует индивидуальной разработки, тестирования и внедрения, что приводит к значительным временным и финансовым затратам.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scenario Modals -->
+    <div id="modal-scenario-1" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('modal-scenario-1')">&times;</span>
+            <div class="modal-header">
+                <h3><i class="fas fa-bolt"></i> Сценарий 1: К3 Быстрое решение</h3>
+                <span class="modal-badge green">До 1 месяца</span>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h4>Основные характеристики</h4>
+                    <ul>
+                        <li><strong>Срок:</strong> До 1 месяца</li>
+                        <li><strong>Сложность:</strong> Низкая</li>
+                        <li><strong>Автоматизация:</strong> Частичная</li>
+                    </ul>
+                </div>
+                <div class="modal-section">
+                    <h4>Доработки</h4>
+                    <p>Автоматический контроль срока больше 5 рабочих дней. Исключение УТО, передача проверки на ОКА.</p>
+                </div>
+                <div class="modal-section">
+                    <h4>Процесс</h4>
+                    <p>Сотрудник → ОКА → HR BP → ОКА → ОП (ЕСЭД)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-scenario-2" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('modal-scenario-2')">&times;</span>
+            <div class="modal-header">
+                <h3><i class="fas fa-clock"></i> Сценарий 2: К3 Долгое решение</h3>
+                <span class="modal-badge yellow">2-3 месяца</span>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h4>Основные характеристики</h4>
+                    <ul>
+                        <li><strong>Срок:</strong> 2-3 месяца</li>
+                        <li><strong>Сложность:</strong> Средняя</li>
+                        <li><strong>Автоматизация:</strong> Частичная</li>
+                    </ul>
+                </div>
+                <div class="modal-section">
+                    <h4>Особенности</h4>
+                    <p>Аналогично Сценарию 1, но с более длительными сроками реализации и дополнительными проверками.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-scenario-3" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('modal-scenario-3')">&times;</span>
+            <div class="modal-header">
+                <h3><i class="fas fa-forward"></i> Сценарий 3: To Be HR-S</h3>
+                <span class="modal-badge orange">~4 кв 2026</span>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h4>Основные характеристики</h4>
+                    <ul>
+                        <li><strong>Срок:</strong> ~4 квартал 2026</li>
+                        <li><strong>Сложность:</strong> Высокая</li>
+                        <li><strong>Автоматизация:</strong> Расширенная</li>
+                    </ul>
+                </div>
+                <div class="modal-section">
+                    <h4>Новый функционал</h4>
+                    <p>Переход на новый функционал HR-S с автоматической проверкой баланса отпусков и расширенной автоматизацией процессов.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-scenario-4" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('modal-scenario-4')">&times;</span>
+            <div class="modal-header">
+                <h3><i class="fas fa-pause-circle"></i> Сценарий 4: #wait To Be HR-S</h3>
+                <span class="modal-badge blue">2026-2027</span>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h4>Основные характеристики</h4>
+                    <ul>
+                        <li><strong>Срок:</strong> 2026-2027</li>
+                        <li><strong>Сложность:</strong> Очень высокая</li>
+                        <li><strong>Автоматизация:</strong> Полная</li>
+                    </ul>
+                </div>
+                <div class="modal-section">
+                    <h4>Максимальная автоматизация</h4>
+                    <p>Автоматический вылет категории работников, полная интеграция в HR-S с максимальным уровнем автоматизации всех процессов.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-scenario-5" class="modal">
+        <div class="modal-content modal-large">
+            <span class="modal-close" onclick="closeModal('modal-scenario-5')">&times;</span>
+            <div class="modal-header">
+                <h3><i class="fas fa-server"></i> Сценарий 5: OTRS</h3>
+                <span class="modal-badge purple">⭐ Рекомендуемый</span>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h4>Ключевое решение</h4>
+                    <p><strong>Дождаться переноса кадрового документооборота из ЕСЭД в OTRS</strong></p>
+                </div>
+                <div class="modal-section">
+                    <h4>Преимущества</h4>
+                    <ul class="check-list">
+                        <li><i class="fas fa-check"></i> Единая точка интеграции</li>
+                        <li><i class="fas fa-check"></i> Снижение затрат на разработку</li>
+                        <li><i class="fas fa-check"></i> Не требуется разработка 6 видов увольнений</li>
+                        <li><i class="fas fa-check"></i> Автоматические оповещения через OTRS</li>
+                        <li><i class="fas fa-check"></i> Централизованный документооборот</li>
+                        <li><i class="fas fa-check"></i> Экономия 12-18 месяцев</li>
+                    </ul>
+                </div>
+                <div class="modal-section result">
+                    <h4>Итоговый результат</h4>
+                    <p class="highlight-box">Приказ в ОКА становится единым триггером для всех видов увольнений. Все процессы автоматизированы через OTRS без необходимости отдельной разработки каждого вида в HR-сервисах.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Функция переключения секций
+        function showSection(sectionId) {
+            // Скрываем все секции
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Показываем нужную секцию
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.style.display = 'block';
+            }
+            
+            // Обновляем активную кнопку в навигации
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                link.style.background = '';
+                link.style.color = '';
+            });
+            
+            const activeLink = document.querySelector(`[data-section="${sectionId}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+                if (sectionId === 'status') {
+                    activeLink.style.background = 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)';
+                    activeLink.style.color = 'white';
+                }
+            }
+            
+            // Прокручиваем к началу страницы
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // При загрузке страницы показываем секцию статусов
+        document.addEventListener('DOMContentLoaded', function() {
+            showSection('status');
+        });
+    </script>
     <script src="js/script.js"></script>
 </body>
 </html>

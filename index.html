@@ -365,12 +365,12 @@
 
             <div class="strategic-choice">
                 <h3 class="strategic-title collapsible" onclick="toggleCollapse(this)" style="cursor: pointer; user-select: none;">
-                    <i class="fas fa-chevron-down collapse-icon" style="transition: transform 0.3s ease;"></i>
+                    <i class="fas fa-chevron-down collapse-icon" style="transition: transform 0.3s ease; transform: rotate(-90deg);"></i>
                     <i class="fas fa-code-branch"></i>
                     Стратегическая развилка: OTRS vs HRS
                 </h3>
                 
-                <div class="choice-container collapsible-content">
+                <div class="choice-container collapsible-content" style="display: none;">
                     <div class="choice-path choice-otrs">
                         <div class="choice-header">
                             <h4><i class="fas fa-server"></i> ПУТЬ OTRS</h4>
@@ -445,8 +445,11 @@
                 </div>
 
                 <div class="visual-comparison">
-                    <h4 class="comparison-title">Визуальное сравнение объёма работ</h4>
-                    <div class="comparison-diagram">
+                    <h4 class="comparison-title collapsible" onclick="toggleCollapse(this)" style="cursor: pointer; user-select: none;">
+                        <i class="fas fa-chevron-down collapse-icon" style="transition: transform 0.3s ease; transform: rotate(-90deg);"></i>
+                        Визуальное сравнение объёма работ
+                    </h4>
+                    <div class="comparison-diagram collapsible-content" style="display: none;">
                         <div class="diagram-column">
                             <div class="diagram-label">OTRS</div>
                             <div class="diagram-box single-trigger">
@@ -485,7 +488,12 @@
                 </div>
 
                 <div class="strategic-recommendation">
-                    <i class="fas fa-lightbulb"></i>
+                    <h4 class="recommendation-header collapsible" onclick="toggleCollapse(this)" style="cursor: pointer; user-select: none; display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                        <i class="fas fa-chevron-down collapse-icon" style="transition: transform 0.3s ease; transform: rotate(-90deg);"></i>
+                        <i class="fas fa-lightbulb"></i>
+                        <span>Стратегическая рекомендация</span>
+                    </h4>
+                    <div class="collapsible-content" style="display: none;">
                     <div class="recommendation-content">
                         <h4>Стратегическая рекомендация</h4>
                         <p><strong>Выбор пути OTRS</strong> позволяет запустить все 6 видов увольнения <strong>БЕЗ отдельной разработки каждого</strong>, используя единую точку интеграции (приказ в ОКА) и автоматические оповещения через OTRS.</p>
@@ -494,6 +502,7 @@
                             <span><i class="fas fa-check"></i> Снижение затрат в 6 раз</span>
                             <span><i class="fas fa-check"></i> Быстрый запуск</span>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>

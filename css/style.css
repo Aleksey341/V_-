@@ -1394,6 +1394,11 @@ body {
     gap: 0.75rem;
 }
 
+.realized-column-title i {
+    font-size: 1.8rem;
+    opacity: 1;
+}
+
 .realized-column-left .realized-column-title {
     color: rgba(119, 0, 255, 0.8);
 }

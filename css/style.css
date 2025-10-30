@@ -1571,3 +1571,8 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* Hide section titles when global headers are present */
+.with-global-headers .section-title {
+    display: none;
+}

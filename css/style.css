@@ -1576,3 +1576,23 @@ body {
 .with-global-headers .section-title {
     display: none;
 }
+
+/* Stick global headers to sections - remove gaps */
+.global-headers {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.with-global-headers {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+.with-global-headers .container {
+    padding-top: 0 !important;
+}
+
+/* Remove extra spacing */
+.with-global-headers .realized-container {
+    margin-top: 0 !important;
+}

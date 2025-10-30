@@ -1413,3 +1413,19 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* Subsections inside realized columns */
+.realized-column .subsection-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.realized-column-left .subsection-title i {
+    color: rgba(119, 0, 255, 0.7);
+}
+
+.realized-column-right .subsection-title i {
+    color: #10b981;
+}

@@ -1596,3 +1596,27 @@ body {
 .with-global-headers .realized-container {
     margin-top: 0 !important;
 }
+
+/* Remove borders and backgrounds from global headers - simple text only */
+.global-header {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 1rem 0.5rem !important;
+    backdrop-filter: none !important;
+}
+
+.global-header-left,
+.global-header-right {
+    background: none !important;
+    border: none !important;
+}
+
+/* Keep text colors */
+.global-header-left {
+    color: rgba(119, 0, 255, 0.9) !important;
+}
+
+.global-header-right {
+    color: #10b981 !important;
+}

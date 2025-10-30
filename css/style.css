@@ -384,6 +384,23 @@ body {
     z-index: 10;
 }
 
+.highlight-date {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    color: #92400e;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    border-left: 3px solid #f59e0b;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.highlight-date i {
+    color: #f59e0b;
+}
+
 /* ========================================
    Strategic Choice Section
 ======================================== */

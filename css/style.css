@@ -2337,3 +2337,30 @@ html, body {
 #status h2.section-title i {
     font-size: 1.2rem !important; /* Пропорционально уменьшаем иконку */
 }
+/* ========================================
+   Одинаковые заголовки и иконки
+======================================== */
+
+/* Делаем h2 и h3 абсолютно одинаковыми */
+#status h2.section-title,
+#status h3 {
+    font-size: 1.75rem !important; /* Одинаковый размер */
+    margin-bottom: 0.5rem !important;
+    padding: 0.5rem 0 !important;
+    line-height: 1.3 !important;
+    font-weight: 700 !important;
+    color: white !important;
+}
+
+/* Одинаковые белые иконки */
+#status h2.section-title i,
+#status h3 i {
+    font-size: 1.5rem !important; /* Одинаковый размер */
+    color: white !important; /* Одинаковый белый цвет */
+    margin-right: 0.5rem !important;
+}
+
+/* Уменьшаем отступ между заголовками */
+#status h3 {
+    margin-top: 0.75rem !important;
+}

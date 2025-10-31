@@ -2211,3 +2211,90 @@ html, body {
         padding: 0.375rem !important;
     }
 }
+/* ========================================
+   Компактный дизайн секции Статус
+======================================== */
+
+/* Уменьшаем отступы между заголовками в секции Status */
+#status h2.section-title {
+    font-size: 2rem !important; /* Было 2.5rem */
+    margin-bottom: 1.5rem !important; /* Было 2rem */
+    padding: 1rem 0 !important;
+}
+
+#status h3 {
+    font-size: 2rem !important; /* Делаем одинаковым с h2 */
+    margin-top: 2rem !important; /* Было 50px */
+    margin-bottom: 1.5rem !important;
+    font-weight: 700 !important;
+}
+
+/* Уменьшаем отступы у alert-box */
+#status .alert-box {
+    margin: 1.5rem 0 !important; /* Было 30px 0 */
+    padding: 1.5rem !important; /* Было 30px */
+}
+
+/* Уменьшаем отступы внутри alert-box */
+#status .alert-box > div:first-child {
+    margin-bottom: 1rem !important; /* Было 20px */
+    gap: 1rem !important; /* Было 20px */
+}
+
+#status .alert-box h3 {
+    font-size: 1.5rem !important; /* Было 24px */
+}
+
+#status .alert-box h4 {
+    font-size: 1.2rem !important;
+}
+
+/* Уменьшаем отступы у блоков обоснования */
+#status .alert-box > div[style*="background: #fff3cd"],
+#status .alert-box > div[style*="background: #d4edda"] {
+    padding: 1rem !important; /* Было 20px */
+    margin: 1rem 0 !important; /* Было 20px 0 */
+}
+
+/* Уменьшаем отступы у timeline */
+#status .timeline {
+    margin: 2rem 0 !important; /* Было 40px 0 */
+}
+
+#status .timeline-item {
+    padding: 1.25rem !important; /* Было 25px */
+    margin: 1rem 0 !important; /* Было 20px 0 */
+}
+
+/* Уменьшаем отступы у status-cards */
+#status .status-cards {
+    gap: 1rem !important; /* Было 20px */
+    margin: 2rem 0 !important; /* Было 40px 0 */
+}
+
+#status .status-card {
+    padding: 1.25rem !important; /* Было 25px */
+}
+
+/* Уменьшаем размер шрифта в карточках */
+#status .status-card h4 {
+    font-size: 1.2rem !important;
+}
+
+#status .status-card p:nth-of-type(1) {
+    font-size: 2rem !important; /* Было 32px */
+}
+
+/* Уменьшаем отступы у блока рисков */
+#status > .container > div[style*="background: rgba(255,255,255,0.95)"]:last-of-type {
+    padding: 1.5rem !important; /* Было 30px */
+    margin: 1.5rem 0 !important; /* Было 30px 0 */
+}
+
+#status > .container > div[style*="background: rgba(255,255,255,0.95)"]:last-of-type > div {
+    gap: 0.75rem !important; /* Было 15px */
+}
+
+#status > .container > div[style*="background: rgba(255,255,255,0.95)"]:last-of-type > div > div {
+    padding: 0.75rem !important; /* Было 15px */
+}

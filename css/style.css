@@ -2081,3 +2081,133 @@ html, body {
 .realized-column-right::-webkit-scrollbar-thumb:hover {
     background: rgba(16, 185, 129, 0.6) !important;
 }
+
+/* ========================================
+   Уменьшение расстояний на 50%
+======================================== */
+
+/* Gap между колонками: 2rem → 1rem */
+.realized-container {
+    gap: 1rem !important;
+}
+
+/* Padding колонок: 2rem → 1rem */
+.realized-column {
+    padding: 0 1rem 1.5rem 1rem !important;
+}
+
+/* Заголовки колонок */
+.realized-column-title {
+    margin-left: -1rem !important;
+    margin-right: -1rem !important;
+    padding: 0.75rem 1rem !important;
+    margin-bottom: 0 !important;
+}
+
+/* Отступ контента после заголовка */
+.realized-column > *:not(.realized-column-title) {
+    margin-top: 0.75rem !important;
+}
+
+.realized-column .card-grid:first-of-type,
+.realized-column .subsection:first-of-type,
+.realized-column .methodology-content:first-of-type {
+    margin-top: 0.75rem !important;
+}
+
+/* Gap между карточками: var(--spacing-md) → 0.75rem */
+.card-grid {
+    gap: 0.75rem !important;
+}
+
+/* Padding карточек: var(--spacing-md) → 0.75rem */
+.card {
+    padding: 0.75rem !important;
+}
+
+/* Отступы внутри карточек */
+.card-icon {
+    margin-bottom: 0.5rem !important;
+}
+
+.card h4 {
+    margin-bottom: 0.25rem !important;
+}
+
+.card ul {
+    margin-top: 0.5rem !important;
+}
+
+/* Subsection отступы */
+.subsection {
+    margin-bottom: 1.5rem !important;
+}
+
+.subsection-title {
+    margin-bottom: 0.75rem !important;
+}
+
+/* Methodology content */
+.methodology-content {
+    gap: 0.75rem !important;
+}
+
+/* Отступы списков */
+.card ul li {
+    margin-bottom: 0.25rem !important;
+}
+
+/* Padding-bottom колонок для последней карточки */
+.realized-column {
+    padding-bottom: 1.5rem !important;
+}
+
+.realized-column .card-grid:last-child,
+.realized-column .subsection:last-child,
+.realized-column .methodology-content:last-child {
+    margin-bottom: 1rem !important;
+}
+
+/* Section padding */
+.section .container {
+    padding-top: 1.5rem !important;
+}
+
+/* Адаптивность */
+@media (max-width: 968px) {
+    .realized-column {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+    }
+    
+    .realized-column-title {
+        margin-left: -0.75rem !important;
+        margin-right: -0.75rem !important;
+        padding: 0.625rem 0.75rem !important;
+    }
+    
+    .card-grid {
+        gap: 0.5rem !important;
+    }
+    
+    .card {
+        padding: 0.5rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .realized-column {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
+    
+    .realized-column-title {
+        margin-left: -0.5rem !important;
+        margin-right: -0.5rem !important;
+        padding: 0.5rem !important;
+    }
+    
+    .card {
+        padding: 0.375rem !important;
+    }
+}

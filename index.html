@@ -494,7 +494,7 @@
                                         <!-- Задача 1: Интеграция OTRS-R12 -->
                                         <div style="background: #f0f9ff; padding: 0.75rem; border-radius: 8px; border-left: 3px solid #3b82f6;">
                                             <div style="display: flex; align-items: start; gap: 0.5rem;">
-                                                <input type="checkbox" disabled style="margin-top: 0.25rem;">
+                                                <input type="checkbox" style="margin-top: 0.25rem;">
                                                 <div style="flex: 1;">
                                                     <strong style="color: #1e40af; font-size: 0.85rem;">Интеграция OTRS-R12</strong>
                                                     <p style="margin: 0.25rem 0 0 0; font-size: 0.8rem; color: #64748b;">
@@ -515,7 +515,7 @@
                                         <!-- Задача 2: Определить владельца процесса -->
                                         <div style="background: #fef3c7; padding: 0.75rem; border-radius: 8px; border-left: 3px solid #f59e0b;">
                                             <div style="display: flex; align-items: start; gap: 0.5rem;">
-                                                <input type="checkbox" disabled style="margin-top: 0.25rem;">
+                                                <input type="checkbox" style="margin-top: 0.25rem;">
                                                 <div style="flex: 1;">
                                                     <strong style="color: #92400e; font-size: 0.85rem;">Определить владельца процесса</strong>
                                                     <p style="margin: 0.25rem 0 0 0; font-size: 0.8rem; color: #64748b;">
@@ -533,7 +533,7 @@
                                         <!-- Задача 3: Оценка емкости процесса -->
                                         <div style="background: #fce7f3; padding: 0.75rem; border-radius: 8px; border-left: 3px solid #ec4899;">
                                             <div style="display: flex; align-items: start; gap: 0.5rem;">
-                                                <input type="checkbox" disabled style="margin-top: 0.25rem;">
+                                                <input type="checkbox" style="margin-top: 0.25rem;">
                                                 <div style="flex: 1;">
                                                     <strong style="color: #9f1239; font-size: 0.85rem;">Оценка емкости процесса</strong>
                                                     <p style="margin: 0.25rem 0 0 0; font-size: 0.8rem; color: #64748b;">
@@ -551,7 +551,7 @@
                                         <!-- Задача 4: Условие роботизации -->
                                         <div style="background: #f3f4f6; padding: 0.75rem; border-radius: 8px; border-left: 3px solid #6b7280;">
                                             <div style="display: flex; align-items: start; gap: 0.5rem;">
-                                                <input type="checkbox" disabled style="margin-top: 0.25rem;">
+                                                <input type="checkbox" style="margin-top: 0.25rem;">
                                                 <div style="flex: 1;">
                                                     <strong style="color: #374151; font-size: 0.85rem;">Условие для роботизации</strong>
                                                     <p style="margin: 0.25rem 0 0 0; font-size: 0.8rem; color: #64748b;">
@@ -1251,6 +1251,185 @@
             }
         }
     </script>
+    
+    <!-- Логика для чекбоксов в бэклоге задач -->
+    <script>
+        // Логика для чекбоксов в бэклоге задач
+        document.addEventListener('DOMContentLoaded', function() {
+            // Найти карточку "Соглашение сторон"
+            const backlogCard = document.querySelector('.card.card-decision[onclick*="expanded"]');
+            
+            if (!backlogCard) return;
+            
+            // Найти все чекбоксы внутри бэклога
+            const checkboxes = backlogCard.querySelectorAll('.backlog-content input[type="checkbox"]');
+            
+            // Убрать disabled у всех чекбоксов
+            checkboxes.forEach(checkbox => {
+                checkbox.disabled = false;
+                checkbox.style.cursor = 'pointer';
+                checkbox.style.opacity = '1';
+            });
+            
+            // Загрузить состояние из localStorage
+            loadCheckboxState();
+            
+            // Обработчик для каждого чекбокса
+            checkboxes.forEach((checkbox, index) => {
+                checkbox.addEventListener('change', function(e) {
+                    e.stopPropagation(); // Предотвратить сворачивание карточки при клике на checkbox
+                    
+                    if (this.checked) {
+                        // Получить текущую дату
+                        const currentDate = new Date().toLocaleDateString('ru-RU', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric'
+                        });
+                        
+                        // Сохранить состояние в localStorage
+                        saveCheckboxState(index, currentDate);
+                        
+                        // Проверить, все ли чекбоксы отмечены
+                        const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                        
+                        if (allChecked) {
+                            // Все задачи выполнены - свернуть карточку и показать бейдж
+                            setTimeout(() => {
+                                backlogCard.classList.remove('expanded');
+                                showCompletedBadge(backlogCard, currentDate);
+                            }, 300);
+                        }
+                    } else {
+                        // Убрать из localStorage
+                        removeCheckboxState(index);
+                        
+                        // Убрать бейдж "Выполнено", если он есть
+                        removeCompletedBadge(backlogCard);
+                    }
+                });
+            });
+            
+            // Проверить при загрузке страницы
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            if (allChecked) {
+                const savedDate = localStorage.getItem('backlog_completed_date');
+                if (savedDate) {
+                    showCompletedBadge(backlogCard, savedDate);
+                }
+            }
+        });
+
+        // Функция сохранения состояния чекбокса
+        function saveCheckboxState(index, date) {
+            const state = JSON.parse(localStorage.getItem('backlog_checkboxes') || '{}');
+            state[index] = {
+                checked: true,
+                date: date
+            };
+            localStorage.setItem('backlog_checkboxes', JSON.stringify(state));
+            
+            // Проверить, все ли отмечены
+            const checkboxes = document.querySelectorAll('.backlog-content input[type="checkbox"]');
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            
+            if (allChecked) {
+                localStorage.setItem('backlog_completed_date', date);
+            }
+        }
+
+        // Функция удаления состояния чекбокса
+        function removeCheckboxState(index) {
+            const state = JSON.parse(localStorage.getItem('backlog_checkboxes') || '{}');
+            delete state[index];
+            localStorage.setItem('backlog_checkboxes', JSON.stringify(state));
+            localStorage.removeItem('backlog_completed_date');
+        }
+
+        // Функция загрузки состояния чекбоксов
+        function loadCheckboxState() {
+            const state = JSON.parse(localStorage.getItem('backlog_checkboxes') || '{}');
+            const checkboxes = document.querySelectorAll('.backlog-content input[type="checkbox"]');
+            
+            checkboxes.forEach((checkbox, index) => {
+                if (state[index] && state[index].checked) {
+                    checkbox.checked = true;
+                }
+            });
+        }
+
+        // Функция показа бейджа "Выполнено"
+        function showCompletedBadge(card, date) {
+            // Проверить, есть ли уже бейдж
+            let completedBadge = card.querySelector('.badge-completed');
+            
+            if (!completedBadge) {
+                // Создать новый бейдж
+                completedBadge = document.createElement('span');
+                completedBadge.className = 'badge badge-completed';
+                completedBadge.style.cssText = `
+                    position: absolute;
+                    top: 50px;
+                    right: 10px;
+                    background: linear-gradient(135deg, #10b981, #059669);
+                    color: white;
+                    padding: 0.35rem 0.75rem;
+                    border-radius: 20px;
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+                    z-index: 10;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.25rem;
+                    animation: slideInRight 0.5s ease;
+                `;
+                completedBadge.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    <span>Выполнено ${date}</span>
+                `;
+                
+                card.appendChild(completedBadge);
+            } else {
+                // Обновить дату
+                completedBadge.querySelector('span').textContent = `Выполнено ${date}`;
+            }
+        }
+
+        // Функция удаления бейджа "Выполнено"
+        function removeCompletedBadge(card) {
+            const completedBadge = card.querySelector('.badge-completed');
+            if (completedBadge) {
+                completedBadge.remove();
+            }
+        }
+
+        // Добавить CSS анимацию
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    opacity: 0;
+                    transform: translateX(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+            
+            .badge-completed {
+                transition: all 0.3s ease;
+            }
+            
+            .badge-completed:hover {
+                transform: scale(1.05);
+                box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4) !important;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+    
     <script src="js/script.js"></script>
 </body>
 </html>

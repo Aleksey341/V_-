@@ -2322,3 +2322,18 @@ html, body {
     margin: 1rem 0 !important;
     padding: 1rem !important;
 }
+/* ========================================
+   Ультра-компактный заголовок h2
+======================================== */
+
+/* Уменьшаем h2 еще на 30% */
+#status h2.section-title {
+    font-size: 1.4rem !important; /* Было 2rem, теперь -30% */
+    margin-bottom: 0.5rem !important; /* Было 0.75rem, теперь -33% */
+    padding: 0.35rem 0 !important; /* Было 0.5rem, теперь -30% */
+    line-height: 1.2 !important;
+}
+
+#status h2.section-title i {
+    font-size: 1.2rem !important; /* Пропорционально уменьшаем иконку */
+}

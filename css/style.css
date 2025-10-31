@@ -1957,3 +1957,127 @@ body {
         font-size: 1.25rem !important;
     }
 }
+
+/* ========================================
+   Fixed Page - No Global Scroll
+   Только прокрутка внутри колонок
+======================================== */
+
+/* Фиксируем высоту body и убираем глобальный скролл */
+html, body {
+    height: 100vh !important;
+    overflow: hidden !important;
+}
+
+/* Секции занимают всю доступную высоту */
+.section {
+    height: calc(100vh - 180px) !important; /* Вычитаем высоту hero + nav */
+    overflow: hidden !important;
+    padding-bottom: 0 !important;
+}
+
+/* Контейнер секции на всю высоту */
+.section .container {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* Section title фиксированный */
+.section .section-title {
+    flex-shrink: 0 !important;
+}
+
+/* Контейнер колонок занимает оставшееся пространство */
+.realized-container {
+    flex: 1 !important;
+    margin-top: 0 !important;
+    height: 100% !important;
+    overflow: hidden !important;
+}
+
+/* Колонки с правильной высотой и padding-bottom */
+.realized-column {
+    height: 100% !important;
+    max-height: 100% !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    scroll-behavior: smooth !important;
+    padding-bottom: 3rem !important; /* Чтобы последняя карточка выходила полностью */
+}
+
+/* Контент внутри колонок с дополнительным отступом снизу */
+.realized-column .card-grid:last-child,
+.realized-column .subsection:last-child,
+.realized-column .methodology-content:last-child {
+    margin-bottom: 2rem !important;
+}
+
+/* Для секции статус (без колонок) */
+#status {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
+
+#status .container {
+    height: auto !important;
+    overflow: visible !important;
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 968px) {
+    .section {
+        height: calc(100vh - 155px) !important; /* Меньшая высота nav на мобильных */
+    }
+    
+    .realized-column {
+        padding-bottom: 2rem !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .section {
+        height: calc(100vh - 135px) !important;
+    }
+}
+
+/* Убираем scroll-margin-top у секций (больше не нужно) */
+#realized,
+#improvements,
+#development,
+#methodology {
+    scroll-margin-top: 0 !important;
+}
+
+/* Плавная прокрутка внутри колонок */
+.realized-column::-webkit-scrollbar {
+    width: 10px !important;
+}
+
+.realized-column-left::-webkit-scrollbar-track {
+    background: rgba(119, 0, 255, 0.05) !important;
+    border-radius: 10px !important;
+}
+
+.realized-column-left::-webkit-scrollbar-thumb {
+    background: rgba(119, 0, 255, 0.4) !important;
+    border-radius: 10px !important;
+}
+
+.realized-column-left::-webkit-scrollbar-thumb:hover {
+    background: rgba(119, 0, 255, 0.6) !important;
+}
+
+.realized-column-right::-webkit-scrollbar-track {
+    background: rgba(16, 185, 129, 0.05) !important;
+    border-radius: 10px !important;
+}
+
+.realized-column-right::-webkit-scrollbar-thumb {
+    background: rgba(16, 185, 129, 0.4) !important;
+    border-radius: 10px !important;
+}
+
+.realized-column-right::-webkit-scrollbar-thumb:hover {
+    background: rgba(16, 185, 129, 0.6) !important;
+}

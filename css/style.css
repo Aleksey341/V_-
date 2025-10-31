@@ -2298,3 +2298,7 @@ html, body {
 #status > .container > div[style*="background: rgba(255,255,255,0.95)"]:last-of-type > div > div {
     padding: 0.75rem !important; /* Было 15px */
 }
+
+.section-title{font-size:1.5rem!important;padding:.5rem 1rem!important;margin-bottom:0!important;gap:.5rem!important}
+.section-title i{font-size:1.5rem!important}
+.section .container{padding-top:.75rem!important}

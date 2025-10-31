@@ -1860,3 +1860,100 @@ body {
         gap: 1rem;
     }
 }
+
+/* ========================================
+   Full Width Column Titles - КЗ и HRS
+   Раздвинуты на всю ширину колонок и прижаты к верху
+======================================== */
+
+/* Убираем верхний padding у колонок */
+.realized-column {
+    padding-top: 0 !important;
+}
+
+/* Заголовки колонок на всю ширину с negative margins */
+.realized-column-title {
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    margin-left: -2rem !important;
+    margin-right: -2rem !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding: 1.5rem 2rem !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0 !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 50 !important;
+}
+
+/* Контент колонки теперь имеет отступ сверху */
+.realized-column > *:not(.realized-column-title) {
+    margin-top: 1.5rem;
+}
+
+.realized-column .card-grid:first-of-type,
+.realized-column .subsection:first-of-type,
+.realized-column .methodology-content:first-of-type {
+    margin-top: 1.5rem !important;
+}
+
+/* Фон для левой колонки (КЗ) - фиолетовый */
+.realized-column-left .realized-column-title {
+    background: rgba(249, 245, 255, 0.98) !important;
+    border-bottom: 3px solid rgba(119, 0, 255, 0.3) !important;
+    color: rgba(119, 0, 255, 0.9) !important;
+}
+
+/* Фон для правой колонки (HRS) - зеленый */
+.realized-column-right .realized-column-title {
+    background: rgba(240, 253, 250, 0.98) !important;
+    border-bottom: 3px solid rgba(16, 185, 129, 0.3) !important;
+    color: #10b981 !important;
+}
+
+/* Иконки в заголовках */
+.realized-column-title i {
+    font-size: 1.8rem !important;
+    opacity: 1 !important;
+}
+
+/* Для секций с with-global-headers */
+.with-global-headers .realized-column-title {
+    display: flex !important;
+    margin-left: -2rem !important;
+    margin-right: -2rem !important;
+    margin-top: 0 !important;
+    padding: 1.5rem 2rem !important;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0 !important;
+}
+
+/* Адаптивность */
+@media (max-width: 968px) {
+    .realized-column {
+        padding-left: 1.5rem !important;
+        padding-right: 1.5rem !important;
+    }
+    
+    .realized-column-title {
+        margin-left: -1.5rem !important;
+        margin-right: -1.5rem !important;
+        padding: 1.25rem 1.5rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .realized-column {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+    
+    .realized-column-title {
+        margin-left: -1rem !important;
+        margin-right: -1rem !important;
+        padding: 1rem !important;
+        font-size: 1.25rem !important;
+    }
+}

@@ -2302,3 +2302,23 @@ html, body {
 .section-title{font-size:1.5rem!important;padding:.5rem 1rem!important;margin-bottom:0!important;gap:.5rem!important}
 .section-title i{font-size:1.5rem!important}
 .section .container{padding-top:.75rem!important}
+/* ========================================
+   Дополнительное уменьшение отступов
+======================================== */
+
+/* Еще меньше отступов между заголовками */
+#status h2.section-title {
+    margin-bottom: 0.75rem !important;
+    padding: 0.5rem 0 !important;
+}
+
+#status h3 {
+    margin-top: 1rem !important; /* Было 2rem */
+    margin-bottom: 0.75rem !important;
+}
+
+/* Компактный alert-box */
+#status .alert-box {
+    margin: 1rem 0 !important;
+    padding: 1rem !important;
+}

@@ -2364,3 +2364,31 @@ html, body {
 #status h3 {
     margin-top: 0.75rem !important;
 }
+/* ========================================
+   Выпадающий бэклог для карточек
+======================================== */
+
+/* Анимация раскрытия бэклога */
+.card.expanded .backlog-content {
+    max-height: 1000px !important;
+}
+
+/* Поворот иконки при раскрытии */
+.card.expanded h4 i.fa-chevron-down {
+    transform: rotate(180deg);
+}
+
+/* Hover эффект для карточки с бэклогом */
+.card[onclick] {
+    transition: all 0.3s ease;
+}
+
+.card[onclick]:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Checkbox стили */
+.backlog-content input[type="checkbox"] {
+    cursor: not-allowed;
+    opacity: 0.6;
+}

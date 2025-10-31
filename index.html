@@ -9,7 +9,7 @@
     <title>БП Увольнение - Развитие проекта 2026</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css?v=24">
+    <link rel="stylesheet" href="css/style.css?v=26">
 </head>
 <body>
     <!-- Hero Section -->
@@ -474,11 +474,114 @@
                     <div class="card-grid">
                         <div class="card card-decision">
                             <span class="badge badge-hrs">HRS 2026</span>
+                        <div class="card card-decision" style="cursor: pointer;" onclick="this.classList.toggle('expanded')">
+                            <span class="badge badge-hrs">HRS 2026</span>
                             <div class="card-icon bg-purple"><i class="fas fa-handshake"></i></div>
-                            <h4>Соглашение сторон</h4>
+                            <h4 style="display: flex; align-items: center; justify-content: space-between;">
+                                Соглашение сторон
+                                <i class="fas fa-chevron-down" style="font-size: 0.8rem; transition: transform 0.3s ease;"></i>
+                            </h4>
                             <p>Запрос на подготовку СС, шаблон вводных данных</p>
+                            
+                            <!-- Выпадающий бэклог -->
+                            <div class="backlog-content" style="max-height: 0; overflow: hidden; transition: max-height 0.5s ease; margin-top: 1rem;">
+                                <div style="border-top: 2px solid rgba(119, 0, 255, 0.2); padding-top: 1rem; margin-top: 0.5rem;">
+                                    <h5 style="color: #667eea; font-size: 0.95rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                                        <i class="fas fa-list-ul"></i> Бэклог задач:
+                                    </h5>
+                                    
+                                    <!-- Задачи из переписки -->
+                                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                        
+                                        <!-- Задача 1: Интеграция OTRS-R12 -->
+                                        <div style="background: #f0f9ff; padding: 0.75rem; border-radius: 8px; border-left: 3px solid #3b82f6;">
+                                            <div style="display: flex; align-items: start; gap: 0.5rem;">
+                                                <input type="checkbox" disabled style="margin-top: 0.25rem;">
+                                                <div style="flex: 1;">
+                                                    <strong style="color: #1e40af; font-size: 0.85rem;">Интеграция OTRS-R12</strong>
+                                                    <p style="margin: 0.25rem 0 0 0; font-size: 0.8rem; color: #64748b;">
+                                                        Реализовать функционал ответа на запрос HR BP из R12 (запрос ТМЦ при увольнении)
+                                                    </p>
+                                                    <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                                        <span style="background: #dbeafe; color: #1e40af; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem;">
+                                                            <i class="fas fa-user"></i> А. Денисов
+                                                        </span>
+                                                        <span style="background: #fee2e2; color: #991b1b; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem;">
+                                                            <i class="fas fa-calendar"></i> 14.02.2025
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Задача 2: Определить владельца процесса -->
+                                        <div style="background: #fef3c7; padding: 0.75rem; border-radius: 8px; border-left: 3px solid #f59e0b;">
+                                            <div style="display: flex; align-items: start; gap: 0.5rem;">
+                                                <input type="checkbox" disabled style="margin-top: 0.25rem;">
+                                                <div style="flex: 1;">
+                                                    <strong style="color: #92400e; font-size: 0.85rem;">Определить владельца процесса</strong>
+                                                    <p style="margin: 0.25rem 0 0 0; font-size: 0.8rem; color: #64748b;">
+                                                        Назначить ответственного от ТМЦ за процесс при внедрении робота
+                                                    </p>
+                                                    <div style="margin-top: 0.5rem;">
+                                                        <span style="background: #fef3c7; color: #92400e; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem;">
+                                                            <i class="fas fa-exclamation-triangle"></i> Требует согласования
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Задача 3: Оценка емкости процесса -->
+                                        <div style="background: #fce7f3; padding: 0.75rem; border-radius: 8px; border-left: 3px solid #ec4899;">
+                                            <div style="display: flex; align-items: start; gap: 0.5rem;">
+                                                <input type="checkbox" disabled style="margin-top: 0.25rem;">
+                                                <div style="flex: 1;">
+                                                    <strong style="color: #9f1239; font-size: 0.85rem;">Оценка емкости процесса</strong>
+                                                    <p style="margin: 0.25rem 0 0 0; font-size: 0.8rem; color: #64748b;">
+                                                        Рассчитать объем работ и целесообразность роботизации
+                                                    </p>
+                                                    <div style="margin-top: 0.5rem;">
+                                                        <span style="background: #fce7f3; color: #9f1239; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem;">
+                                                            <i class="fas fa-chart-line"></i> Команда RPA
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Задача 4: Условие роботизации -->
+                                        <div style="background: #f3f4f6; padding: 0.75rem; border-radius: 8px; border-left: 3px solid #6b7280;">
+                                            <div style="display: flex; align-items: start; gap: 0.5rem;">
+                                                <input type="checkbox" disabled style="margin-top: 0.25rem;">
+                                                <div style="flex: 1;">
+                                                    <strong style="color: #374151; font-size: 0.85rem;">Условие для роботизации</strong>
+                                                    <p style="margin: 0.25rem 0 0 0; font-size: 0.8rem; color: #64748b;">
+                                                        Разработка робота целесообразна только при невозможности интеграции с R12
+                                                    </p>
+                                                    <div style="margin-top: 0.5rem;">
+                                                        <span style="background: #e5e7eb; color: #374151; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem;">
+                                                            <i class="fas fa-info-circle"></i> Н. Баландина (RPA)
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    
+                                    <!-- Источник информации -->
+                                    <div style="margin-top: 1rem; padding: 0.75rem; background: #f8fafc; border-radius: 6px; border-left: 3px solid #94a3b8;">
+                                        <p style="margin: 0; font-size: 0.75rem; color: #64748b; line-height: 1.4;">
+                                            <i class="fas fa-envelope" style="color: #94a3b8;"></i> 
+                                            <strong>Источник:</strong> Email-переписка (06.02.2025 - 30.10.2025)<br>
+                                            <strong>Участники:</strong> А. Денисов, И. Полякова, Н. Баландина, Д. Парамонов
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
-                        <div class="card card-decision">
                             <span class="badge badge-hrs">HRS 2026</span>
                             <div class="card-icon bg-red"><i class="fas fa-stethoscope"></i></div>
                             <h4>По медицинским основаниям</h4>

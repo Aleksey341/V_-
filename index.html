@@ -1279,6 +1279,10 @@
                 checkbox.addEventListener('change', function(e) {
                     e.stopPropagation(); // Предотвратить сворачивание карточки при клике на checkbox
                     
+                    // Найти родительский контейнер задачи
+                    const taskContainer = this.closest('div[style*="background"]');
+                    const contentDiv = this.nextElementSibling; // div с flex: 1
+                    
                     if (this.checked) {
                         // Получить текущую дату
                         const currentDate = new Date().toLocaleDateString('ru-RU', {
@@ -1290,34 +1294,61 @@
                         // Сохранить состояние в localStorage
                         saveCheckboxState(index, currentDate);
                         
-                        // Проверить, все ли чекбоксы отмечены
-                        const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                        // Скрыть описание и теги
+                        const description = contentDiv.querySelector('p');
+                        const tagsContainer = contentDiv.querySelector('div[style*="margin-top: 0.5rem"]');
                         
-                        if (allChecked) {
-                            // Все задачи выполнены - свернуть карточку и показать бейдж
-                            setTimeout(() => {
-                                backlogCard.classList.remove('expanded');
-                                showCompletedBadge(backlogCard, currentDate);
-                            }, 300);
+                        if (description) {
+                            description.style.display = 'none';
                         }
+                        if (tagsContainer) {
+                            tagsContainer.style.display = 'none';
+                        }
+                        
+                        // Добавить бейдж "Выполнено"
+                        showCompletedBadge(contentDiv, currentDate);
+                        
                     } else {
                         // Убрать из localStorage
                         removeCheckboxState(index);
                         
-                        // Убрать бейдж "Выполнено", если он есть
-                        removeCompletedBadge(backlogCard);
+                        // Показать описание и теги
+                        const description = contentDiv.querySelector('p');
+                        const tagsContainer = contentDiv.querySelector('div[style*="margin-top: 0.5rem"]');
+                        
+                        if (description) {
+                            description.style.display = 'block';
+                        }
+                        if (tagsContainer) {
+                            tagsContainer.style.display = 'flex';
+                        }
+                        
+                        // Убрать бейдж "Выполнено"
+                        removeCompletedBadge(contentDiv);
                     }
                 });
-            });
-            
-            // Проверить при загрузке страницы
-            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
-            if (allChecked) {
-                const savedDate = localStorage.getItem('backlog_completed_date');
-                if (savedDate) {
-                    showCompletedBadge(backlogCard, savedDate);
+                
+                // Применить сохранённое состояние при загрузке
+                const state = JSON.parse(localStorage.getItem('backlog_checkboxes') || '{}');
+                if (state[index] && state[index].checked) {
+                    checkbox.checked = true;
+                    
+                    // Скрыть описание и теги
+                    const contentDiv = checkbox.nextElementSibling;
+                    const description = contentDiv.querySelector('p');
+                    const tagsContainer = contentDiv.querySelector('div[style*="margin-top: 0.5rem"]');
+                    
+                    if (description) {
+                        description.style.display = 'none';
+                    }
+                    if (tagsContainer) {
+                        tagsContainer.style.display = 'none';
+                    }
+                    
+                    // Показать бейдж
+                    showCompletedBadge(contentDiv, state[index].date);
                 }
-            }
+            });
         });
 
         // Функция сохранения состояния чекбокса
@@ -1328,14 +1359,6 @@
                 date: date
             };
             localStorage.setItem('backlog_checkboxes', JSON.stringify(state));
-            
-            // Проверить, все ли отмечены
-            const checkboxes = document.querySelectorAll('.backlog-content input[type="checkbox"]');
-            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
-            
-            if (allChecked) {
-                localStorage.setItem('backlog_completed_date', date);
-            }
         }
 
         // Функция удаления состояния чекбокса
@@ -1343,7 +1366,6 @@
             const state = JSON.parse(localStorage.getItem('backlog_checkboxes') || '{}');
             delete state[index];
             localStorage.setItem('backlog_checkboxes', JSON.stringify(state));
-            localStorage.removeItem('backlog_completed_date');
         }
 
         // Функция загрузки состояния чекбоксов
@@ -1359,37 +1381,38 @@
         }
 
         // Функция показа бейджа "Выполнено"
-        function showCompletedBadge(card, date) {
+        function showCompletedBadge(contentDiv, date) {
             // Проверить, есть ли уже бейдж
-            let completedBadge = card.querySelector('.badge-completed');
+            let completedBadge = contentDiv.querySelector('.task-completed-badge');
             
             if (!completedBadge) {
                 // Создать новый бейдж
                 completedBadge = document.createElement('span');
-                completedBadge.className = 'badge badge-completed';
+                completedBadge.className = 'task-completed-badge';
                 completedBadge.style.cssText = `
-                    position: absolute;
-                    top: 50px;
-                    right: 10px;
-                    background: linear-gradient(135deg, #10b981, #059669);
-                    color: white;
-                    padding: 0.35rem 0.75rem;
-                    border-radius: 20px;
-                    font-size: 0.75rem;
-                    font-weight: 600;
-                    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
-                    z-index: 10;
-                    display: flex;
+                    display: inline-flex;
                     align-items: center;
                     gap: 0.25rem;
-                    animation: slideInRight 0.5s ease;
+                    background: linear-gradient(135deg, #10b981, #059669);
+                    color: white;
+                    padding: 0.25rem 0.5rem;
+                    border-radius: 12px;
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                    margin-left: 0.5rem;
+                    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
+                    animation: fadeInScale 0.3s ease;
                 `;
                 completedBadge.innerHTML = `
                     <i class="fas fa-check-circle"></i>
                     <span>Выполнено ${date}</span>
                 `;
                 
-                card.appendChild(completedBadge);
+                // Добавить бейдж после названия задачи
+                const taskTitle = contentDiv.querySelector('strong');
+                if (taskTitle) {
+                    taskTitle.appendChild(completedBadge);
+                }
             } else {
                 // Обновить дату
                 completedBadge.querySelector('span').textContent = `Выполнено ${date}`;
@@ -1397,8 +1420,8 @@
         }
 
         // Функция удаления бейджа "Выполнено"
-        function removeCompletedBadge(card) {
-            const completedBadge = card.querySelector('.badge-completed');
+        function removeCompletedBadge(contentDiv) {
+            const completedBadge = contentDiv.querySelector('.task-completed-badge');
             if (completedBadge) {
                 completedBadge.remove();
             }
@@ -1407,28 +1430,29 @@
         // Добавить CSS анимацию
         const style = document.createElement('style');
         style.textContent = `
-            @keyframes slideInRight {
+            @keyframes fadeInScale {
                 from {
                     opacity: 0;
-                    transform: translateX(20px);
+                    transform: scale(0.8);
                 }
                 to {
                     opacity: 1;
-                    transform: translateX(0);
+                    transform: scale(1);
                 }
             }
             
-            .badge-completed {
-                transition: all 0.3s ease;
+            .task-completed-badge {
+                transition: all 0.2s ease;
             }
             
-            .badge-completed:hover {
+            .task-completed-badge:hover {
                 transform: scale(1.05);
-                box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4) !important;
+                box-shadow: 0 3px 10px rgba(16, 185, 129, 0.4) !important;
             }
         `;
         document.head.appendChild(style);
     </script>
+
     
     <script src="js/script.js"></script>
 </body>

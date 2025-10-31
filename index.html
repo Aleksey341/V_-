@@ -1257,7 +1257,8 @@
         // Логика для чекбоксов в бэклоге задач
         document.addEventListener('DOMContentLoaded', function() {
             // Найти карточку "Соглашение сторон"
-            const backlogCard = document.querySelector('.card.card-decision[onclick*="expanded"]');
+            // Найти карточку с бэклогом (у которой есть .backlog-content)
+            const backlogCard = document.querySelector('.card.card-decision .backlog-content')?.closest('.card');
             
             if (!backlogCard) return;
             

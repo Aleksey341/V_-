@@ -472,10 +472,10 @@
                     </h3>
                     
                     <div class="card-grid">
-                        <div class="card card-decision" style="cursor: pointer;" onclick="this.classList.toggle('expanded')">
+                        <div class="card card-decision">
                             <span class="badge badge-hrs">HRS 2026</span>
                             <div class="card-icon bg-purple"><i class="fas fa-handshake"></i></div>
-                            <h4 style="display: flex; align-items: center; justify-content: space-between;">
+                            <h4 style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" onclick="this.closest('.card').classList.toggle('expanded')">
                                 Соглашение сторон
                                 <i class="fas fa-chevron-down" style="font-size: 0.8rem; transition: transform 0.3s ease;"></i>
                             </h4>

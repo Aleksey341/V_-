@@ -2368,9 +2368,20 @@ html, body {
    Выпадающий бэклог для карточек
 ======================================== */
 
+/* Базовые стили бэклога */
+.backlog-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.5s ease;
+}
+
+.backlog-content > div {
+    overflow: hidden;
+}
+
 /* Анимация раскрытия бэклога */
 .card.expanded .backlog-content {
-    max-height: 1000px !important;
+    grid-template-rows: 1fr;
 }
 
 /* Поворот иконки при раскрытии */

@@ -1761,3 +1761,102 @@ body {
         font-size: 0.75rem !important;
     }
 }
+
+/* ========================================
+   Methodology Section Styles
+======================================== */
+
+.section-methodology {
+    background: linear-gradient(to bottom, #fef3c7, #fde68a);
+}
+
+.methodology-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Иконки для китайских знаков зодиака */
+.fa-dragon,
+.fa-snake {
+    color: #7700FF !important;
+}
+
+.fa-horse,
+.fa-horse-head {
+    color: #10b981 !important;
+}
+
+/* Карточки методологии с расширенным контентом */
+.methodology-content .card {
+    min-height: auto;
+}
+
+.methodology-content .card ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.methodology-content .card ul li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.methodology-content .card ul li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: var(--color-primary);
+    font-weight: bold;
+}
+
+/* Специальные цвета для года Змеи (2025) */
+.realized-column-left .methodology-content .card-icon {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(56, 142, 60, 0.08)) !important;
+    color: #4CAF50 !important; /* Зеленый для Деревянной Змеи */
+}
+
+/* Специальные цвета для года Лошади (2026) */
+.realized-column-right .methodology-content .card-icon {
+    background: linear-gradient(135deg, rgba(244, 67, 54, 0.15), rgba(211, 47, 47, 0.08)) !important;
+    color: #F44336 !important; /* Красный для Огненной Лошади */
+}
+
+/* Переопределение для специфичных иконок */
+.realized-column-left .methodology-content .bg-purple {
+    background: linear-gradient(135deg, rgba(119, 0, 255, 0.15), rgba(119, 0, 255, 0.08)) !important;
+    color: #7700FF !important;
+}
+
+.realized-column-left .methodology-content .bg-blue {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(37, 99, 235, 0.08)) !important;
+    color: #3b82f6 !important;
+}
+
+.realized-column-left .methodology-content .bg-teal {
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.15), rgba(13, 148, 136, 0.08)) !important;
+    color: #14b8a6 !important;
+}
+
+.realized-column-right .methodology-content .bg-orange {
+    background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(234, 88, 12, 0.08)) !important;
+    color: #f97316 !important;
+}
+
+.realized-column-right .methodology-content .bg-purple {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(124, 58, 237, 0.08)) !important;
+    color: #8b5cf6 !important;
+}
+
+.realized-column-right .methodology-content .bg-blue {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(37, 99, 235, 0.08)) !important;
+    color: #3b82f6 !important;
+}
+
+/* Адаптивность */
+@media (max-width: 968px) {
+    .methodology-content {
+        gap: 1rem;
+    }
+}

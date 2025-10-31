@@ -2384,7 +2384,13 @@ html, body {
 
 /* Убираем overflow: hidden у карточки с бэклогом */
 .card[onclick] {
-    overflow: visible;
+    overflow: visible !important;
+}
+
+/* Карточка с раскрытым бэклогом должна расширяться */
+.card.expanded {
+    overflow: visible !important;
+    min-height: fit-content !important;
 }
 
 /* Поворот иконки при раскрытии */

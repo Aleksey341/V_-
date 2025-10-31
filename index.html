@@ -1386,6 +1386,24 @@
             let completedBadge = contentDiv.querySelector('.task-completed-badge');
             
             if (!completedBadge) {
+                // Создать контейнер для заголовка с flex-разметкой
+                const taskTitle = contentDiv.querySelector('strong');
+                if (!taskTitle) return;
+                
+                // Обернуть strong в flex контейнер, если еще не обёрнут
+                if (!taskTitle.parentElement.classList.contains('task-title-wrapper')) {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'task-title-wrapper';
+                    wrapper.style.cssText = `
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        width: 100%;
+                    `;
+                    taskTitle.parentElement.insertBefore(wrapper, taskTitle);
+                    wrapper.appendChild(taskTitle);
+                }
+                
                 // Создать новый бейдж
                 completedBadge = document.createElement('span');
                 completedBadge.className = 'task-completed-badge';
@@ -1399,20 +1417,18 @@
                     border-radius: 12px;
                     font-size: 0.75rem;
                     font-weight: 600;
-                    margin-left: 0.5rem;
                     box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
                     animation: fadeInScale 0.3s ease;
+                    flex-shrink: 0;
                 `;
                 completedBadge.innerHTML = `
                     <i class="fas fa-check-circle"></i>
                     <span>Выполнено ${date}</span>
                 `;
                 
-                // Добавить бейдж после названия задачи
-                const taskTitle = contentDiv.querySelector('strong');
-                if (taskTitle) {
-                    taskTitle.appendChild(completedBadge);
-                }
+                // Добавить бейдж в wrapper справа
+                const wrapper = taskTitle.parentElement;
+                wrapper.appendChild(completedBadge);
             } else {
                 // Обновить дату
                 completedBadge.querySelector('span').textContent = `Выполнено ${date}`;

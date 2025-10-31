@@ -2370,18 +2370,21 @@ html, body {
 
 /* Базовые стили бэклога */
 .backlog-content {
-    display: grid;
-    grid-template-rows: 0fr;
-    transition: grid-template-rows 0.5s ease;
-}
-
-.backlog-content > div {
+    max-height: 0;
     overflow: hidden;
+    transition: max-height 0.5s ease, opacity 0.3s ease;
+    opacity: 0;
 }
 
 /* Анимация раскрытия бэклога */
 .card.expanded .backlog-content {
-    grid-template-rows: 1fr;
+    max-height: 2000px;
+    opacity: 1;
+}
+
+/* Убираем overflow: hidden у карточки с бэклогом */
+.card[onclick] {
+    overflow: visible;
 }
 
 /* Поворот иконки при раскрытии */
